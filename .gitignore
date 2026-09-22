@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# Documentación privada
+DOCS.md
+
 # Datos de prueba (no son parte del paquete)
 *.par
 *.txt
