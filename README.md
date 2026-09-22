@@ -95,6 +95,12 @@ If you use HITRAN data in your work, please cite:
 > J. Quant. Spectrosc. Radiat. Transfer **277**, 107949 (2022).
 > https://doi.org/10.1016/j.jqsrt.2021.107949
 
+If you use `from_hapi()` to download data, also cite:
+
+> R.V. Kochanov et al., *HITRAN Application Programming Interface (HAPI)*,
+> J. Quant. Spectrosc. Radiat. Transfer **177**, 15–30 (2016).
+> https://doi.org/10.1016/j.jqsrt.2016.03.005
+
 ---
 
 ## License
