@@ -1,0 +1,23 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+
+# Datos de prueba (no son parte del paquete)
+*.par
+*.txt
+
+# Distribución
+dist/
+build/
+*.egg-info/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Credenciales
+credentials.json
