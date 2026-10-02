@@ -13,6 +13,7 @@ from .spectral_data import SpectralData
 from .hitran_manager import (
     save_credentials,
     load_credentials,
+    get_molar_mass,
     cache_status,
     list_cached,
     is_cached,
@@ -24,7 +25,7 @@ from .hitran_manager import (
     HITRANDataError,
 )
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     # Carga de datos
@@ -34,6 +35,7 @@ __all__ = [
     # Utilidades HITRAN
     "save_credentials",
     "load_credentials",
+    "get_molar_mass",
     "cache_status",
     "list_cached",
     "is_cached",

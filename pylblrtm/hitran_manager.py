@@ -100,6 +100,21 @@ MOLECULE_IDS: Dict[str, int] = {
     "CH3F": 52,"GeH4": 53,"CS2": 54, "CH3I": 55,"NF3": 56,
 }
 
+# Lookup case-insensitive: "HCL" → "HCl", "GEH4" → "GeH4", etc.
+_MOL_LOOKUP: Dict[str, str] = {k.upper(): k for k in MOLECULE_IDS}
+
+
+def _resolve_mol_name(molecule: str) -> str:
+    """Return the canonical MOLECULE_IDS key, accepting any case."""
+    canonical = _MOL_LOOKUP.get(molecule.upper().strip())
+    if canonical is None:
+        raise ValueError(
+            f"Unknown molecule: '{molecule}'.\n"
+            "Call list_molecules() to see all available molecules."
+        )
+    return canonical
+
+
 # Fórmula del isotopólogo 1 (el más abundante) para las moléculas principales
 _ISO1_FORMULA: Dict[int, str] = {
     1: "H2(16O)", 2: "(12C)(16O2)", 3: "(16O3)",   4: "(14N2)(16O)",
@@ -346,11 +361,53 @@ def _classify_error(exc: Exception, mol_name: str) -> None:
 
 # ─── API principal ────────────────────────────────────────────────────────────
 
+def _fetch_single_iso(
+    mol_name: str,
+    mol_id: int,
+    iso_id: int,
+    nu_min: float,
+    nu_max: float,
+    cache_dir: Path,
+    force_download: bool,
+) -> Dict[str, np.ndarray]:
+    """Download or load from cache the line parameters for one isotopologue."""
+    table = _table_name(mol_name, iso_id, nu_min, nu_max)
+    _get_hapi().db_begin(str(cache_dir))
+
+    if is_cached(table, cache_dir) and not force_download:
+        logger.info("[cache] %s — no download needed", table)
+        return _extract_line_data(table, mol_id, iso_id)
+
+    if not _can_reach_hitran():
+        if is_cached(table, cache_dir):
+            logger.warning("No internet — using existing cache for %s", table)
+            return _extract_line_data(table, mol_id, iso_id)
+        raise HITRANConnectionError(
+            f"No connection to hitran.org and '{table}' is not in the local cache.\n"
+            f"Cache at: {cache_dir}\n"
+            "Options:\n"
+            "  · Connect to the internet and try again\n"
+            "  · Provide a pre-downloaded cache with the cache_dir parameter"
+        )
+
+    # HAPI 1.3 fetch() — descarga anónima. Credenciales guardadas para versiones futuras.
+    logger.info("[download] %s  %.1f–%.1f cm⁻¹  iso=%d", mol_name, nu_min, nu_max, iso_id)
+    try:
+        _get_hapi().fetch(table, mol_id, iso_id, nu_min, nu_max)
+        _write_metadata(table, cache_dir, mol_name, mol_id, iso_id, nu_min, nu_max)
+    except (HITRANConnectionError, HITRANCredentialError, HITRANDataError):
+        raise
+    except Exception as exc:
+        _classify_error(exc, mol_name)
+
+    return _extract_line_data(table, mol_id, iso_id)
+
+
 def get_line_parameters(
     molecule: str,
     nu_min: float,
     nu_max: float,
-    iso_id: int = 1,
+    iso_id: "int | list[int] | str" = 1,
     cache_dir: Optional[Path] = None,
     force_download: bool = False,
 ) -> Dict[str, np.ndarray]:
@@ -367,8 +424,13 @@ def get_line_parameters(
         Call list_molecules() to see all available molecules.
     nu_min, nu_max : float
         Spectral range in cm⁻¹.
-    iso_id : int
-        Isotopologue ID (1 = most abundant). Default: 1.
+    iso_id : int, list of int, or 'all'
+        Isotopologue ID(s) to download.
+        - int: single isotopologue (1 = most abundant). Default: 1.
+        - list[int]: specific isotopologues, e.g. [1, 2, 3].
+        - 'all': all isotopologues available for the molecule.
+        When multiple isotopologues are requested, the returned arrays are
+        concatenated in ascending iso_id order.
     cache_dir : Path, optional
         Cache directory. Default: ~/.pylblrtm/hitran_cache.
     force_download : bool
@@ -383,26 +445,25 @@ def get_line_parameters(
     Raises
     ------
     ValueError
-        If the molecule name is not in the HITRAN catalogue.
+        If the molecule name is not in the HITRAN catalogue, or if iso_id
+        is an unrecognised string (only 'all' is accepted).
     HITRANConnectionError
         If there is no internet and no local cache exists.
     HITRANCredentialError
         If HITRAN requires authentication and the credentials are invalid.
     HITRANDataError
-        If the requested range has no lines or the data is corrupted.
+        If the requested range has no lines, the data is corrupted, or no
+        isotopologues are found for the molecule.
 
     Examples
     --------
     >>> data = get_line_parameters("H2O", 700, 1400)
+    >>> data = get_line_parameters("H2O", 700, 1400, iso_id=[1, 2, 3])
+    >>> data = get_line_parameters("H2O", 700, 1400, iso_id="all")
     >>> data = get_line_parameters("CO2", 700, 1400, iso_id=2)
     >>> data = get_line_parameters("CH4", 1200, 1400, cache_dir=Path("/tmp/hapi"))
     """
-    mol_name = molecule.upper().strip()
-    if mol_name not in MOLECULE_IDS:
-        raise ValueError(
-            f"Unknown molecule: '{molecule}'.\n"
-            f"Call list_molecules() to see all available molecules."
-        )
+    mol_name = _resolve_mol_name(molecule)
     mol_id = MOLECULE_IDS[mol_name]
 
     if cache_dir is None:
@@ -410,43 +471,34 @@ def get_line_parameters(
     cache_dir = Path(cache_dir)
     cache_dir.mkdir(parents=True, exist_ok=True)
 
-    table = _table_name(mol_name, iso_id, nu_min, nu_max)
+    # ── Resolver lista de isotopólogos ────────────────────────────────────────
+    if isinstance(iso_id, str):
+        if iso_id.lower() != "all":
+            raise ValueError(f"iso_id string must be 'all', got '{iso_id}'.")
+        iso_ids = sorted(i for (m, i) in _get_hapi().ISO if m == mol_id)
+    elif isinstance(iso_id, int):
+        iso_ids = [iso_id]
+    else:
+        iso_ids = list(iso_id)
 
-    _get_hapi().db_begin(str(cache_dir))
-
-    # ── Caché hit ────────────────────────────────────────────────────────────
-    if is_cached(table, cache_dir) and not force_download:
-        logger.info("[cache] %s — no download needed", table)
-        return _extract_line_data(table, mol_id, iso_id)
-
-    # ── Verificar conectividad antes de intentar descarga ────────────────────
-    if not _can_reach_hitran():
-        if is_cached(table, cache_dir):
-            logger.warning("No internet — using existing cache for %s", table)
-            return _extract_line_data(table, mol_id, iso_id)
-        raise HITRANConnectionError(
-            f"No connection to hitran.org and '{table}' is not in the local cache.\n"
-            f"Cache at: {cache_dir}\n"
-            "Options:\n"
-            "  · Connect to the internet and try again\n"
-            "  · Provide a pre-downloaded cache with the cache_dir parameter"
+    if not iso_ids:
+        raise HITRANDataError(
+            f"No isotopologues found for '{mol_name}' (mol_id={mol_id})."
         )
 
-    # ── Descarga ─────────────────────────────────────────────────────────────
-    # HAPI 1.3 fetch() signature: (TableName, M, I, numin, numax, ParameterGroups, Parameters)
-    # No acepta Username/AccessToken — la descarga es anónima en esta versión.
-    # Las credenciales quedan guardadas para cuando HITRAN las requiera (futuras versiones).
-    logger.info("[download] %s  %.1f–%.1f cm⁻¹  iso=%d", mol_name, nu_min, nu_max, iso_id)
-    try:
-        _get_hapi().fetch(table, mol_id, iso_id, nu_min, nu_max)
-        _write_metadata(table, cache_dir, mol_name, mol_id, iso_id, nu_min, nu_max)
+    # ── Descarga / caché por isotopólogo ─────────────────────────────────────
+    results = [
+        _fetch_single_iso(mol_name, mol_id, i, nu_min, nu_max, cache_dir, force_download)
+        for i in iso_ids
+    ]
 
-    except (HITRANConnectionError, HITRANCredentialError, HITRANDataError):
-        raise
-    except Exception as exc:
-        _classify_error(exc, mol_name)
+    if len(results) == 1:
+        return results[0]
 
-    return _extract_line_data(table, mol_id, iso_id)
+    return {
+        key: np.concatenate([r[key] for r in results])
+        for key in results[0]
+    }
 
 
 # ─── Funciones de partición (TIPS) ───────────────────────────────────────────
@@ -457,7 +509,50 @@ def get_line_parameters(
 _TIPS_VERSIONS = (2025, 2021, 2017, 2011)
 
 
-def get_partition_sum(
+def get_molar_mass(molecule: str, iso_id: int = 1) -> float:
+    """
+    Return the molar mass [g/mol] for a given molecule and isotopologue.
+
+    Queries HAPI's internal ISO table, which covers all HITRAN isotopologues.
+    HAPI is a required dependency — it is always available.
+
+    Parameters
+    ----------
+    molecule : str
+        Molecule name, e.g. 'H2O', 'CO2'.
+    iso_id : int
+        Isotopologue ID (1 = most abundant). Default: 1.
+
+    Returns
+    -------
+    float
+        Molar mass in g/mol.
+
+    Raises
+    ------
+    HITRANDataError
+        If the molecule or isotopologue is not found in HAPI's catalogue.
+
+    Examples
+    --------
+    >>> get_molar_mass('H2O', 1)   # H2-16O → 18.010565
+    >>> get_molar_mass('H2O', 2)   # H2-18O → 20.014811
+    >>> get_molar_mass('CO2', 1)   # 12C-16O2 → 43.989830
+    """
+    mol_name = _resolve_mol_name(molecule)
+    mol_id = MOLECULE_IDS.get(mol_name)
+    if mol_id is None:
+        raise HITRANDataError(f"Unknown molecule: '{molecule}'.")
+    record = _get_hapi().ISO.get((mol_id, iso_id))
+    if record is None:
+        raise HITRANDataError(
+            f"Isotopologue not found: {molecule} iso_id={iso_id}. "
+            "Check list_molecules() for valid IDs."
+        )
+    return float(record[3])  # ISO[(mol_id, iso_id)] = [global_id, name, abundance, mass, mol_name]
+
+
+def get_tips(
     molecule: str,
     iso_id: int,
     T: float,
@@ -488,13 +583,11 @@ def get_partition_sum(
 
     Examples
     --------
-    >>> Q296 = get_partition_sum('H2O', 1, 296.0)
-    >>> Q300 = get_partition_sum('H2O', 1, 300.0)
+    >>> Q296 = get_tips('H2O', 1, 296.0)
+    >>> Q300 = get_tips('H2O', 1, 300.0)
     >>> ratio = Q296 / Q300   # partition ratio for scaling S_ref
     """
-    mol_name = molecule.upper().strip()
-    if mol_name not in MOLECULE_IDS:
-        raise ValueError(f"Unknown molecule: '{molecule}'.")
+    mol_name = _resolve_mol_name(molecule)
     mol_id = MOLECULE_IDS[mol_name]
 
     if version not in _TIPS_VERSIONS:
@@ -509,7 +602,7 @@ def get_partition_sum(
         ) from exc
 
 
-def get_partition_sum_table(
+def get_tips_table(
     molecule: str,
     iso_id: int,
     T_min: float = 1.0,
@@ -519,7 +612,7 @@ def get_partition_sum_table(
     """
     Return the full Q(T) table over [T_min, T_max] at 1 K steps.
 
-    Useful for interpolating Q(T) instead of calling get_partition_sum()
+    Useful for interpolating Q(T) instead of calling get_tips()
     at every temperature step.
 
     Parameters
@@ -542,12 +635,10 @@ def get_partition_sum_table(
 
     Examples
     --------
-    >>> T, Q = get_partition_sum_table('H2O', 1, T_min=150, T_max=400)
+    >>> T, Q = get_tips_table('H2O', 1, T_min=150, T_max=400)
     >>> Q_at_280 = float(np.interp(280.0, T, Q))
     """
-    mol_name = molecule.upper().strip()
-    if mol_name not in MOLECULE_IDS:
-        raise ValueError(f"Unknown molecule: '{molecule}'.")
+    mol_name = _resolve_mol_name(molecule)
     mol_id = MOLECULE_IDS[mol_name]
 
     if version not in _TIPS_VERSIONS:
@@ -630,9 +721,7 @@ def hapi_to_par(
     Path
         Path of the written .par file.
     """
-    mol_name = molecule.upper().strip()
-    if mol_name not in MOLECULE_IDS:
-        raise ValueError(f"Unknown molecule: '{molecule}'.")
+    mol_name = _resolve_mol_name(molecule)
     mol_id = MOLECULE_IDS[mol_name]
 
     if cache_dir is None:
@@ -796,7 +885,7 @@ def tips_to_txt(
 
     The output format (T  Q, one row per integer Kelvin, no header) is
     identical to the file downloaded from HITRANonline, and can be read
-    back with txt_to_partition_table().
+    back with txt_to_tips().
 
     Parameters
     ----------
@@ -816,7 +905,7 @@ def tips_to_txt(
     Path
         Path of the written .txt file.
     """
-    T_arr, Q_arr = get_partition_sum_table(molecule, iso_id, T_min, T_max, version)
+    T_arr, Q_arr = get_tips_table(molecule, iso_id, T_min, T_max, version)
     output_path = Path(output_path)
     with output_path.open("w", encoding="utf-8") as f:
         for T, Q in zip(T_arr, Q_arr):
@@ -825,7 +914,7 @@ def tips_to_txt(
     return output_path
 
 
-def txt_to_partition_table(txt_path: "str | Path") -> Tuple[np.ndarray, np.ndarray]:
+def txt_to_tips(txt_path: "str | Path") -> Tuple[np.ndarray, np.ndarray]:
     """
     Read a TIPS .txt file (two columns: T and Q) and return numpy arrays.
 
@@ -846,7 +935,7 @@ def txt_to_partition_table(txt_path: "str | Path") -> Tuple[np.ndarray, np.ndarr
 
     Examples
     --------
-    >>> T, Q = txt_to_partition_table("H2O_tips.txt")
+    >>> T, Q = txt_to_tips("H2O_tips.txt")
     >>> Q_at_280 = float(np.interp(280.0, T, Q))
     """
     txt_path = Path(txt_path)
@@ -876,9 +965,35 @@ def txt_to_partition_table(txt_path: "str | Path") -> Tuple[np.ndarray, np.ndarr
 
 def list_molecules() -> None:
     """Print the catalogue of molecules available in HITRAN."""
-    print(f"\n{'ID':>4}  {'Name':<12}  Principal isotopologue")
-    print("-" * 50)
-    for name, mid in sorted(MOLECULE_IDS.items(), key=lambda x: x[1]):
-        formula = _ISO1_FORMULA.get(mid, "see hitran.org/docs/iso-meta/")
-        print(f"{mid:>4}  {name:<12}  {formula}")
+    iso_dict = _get_hapi().ISO
+    iso_counts = {}
+    for mol_id, iso_id in iso_dict:
+        iso_counts[mol_id] = iso_counts.get(mol_id, 0) + 1
+
+    rows = [
+        (mid, name, iso_counts.get(mid, 0))
+        for name, mid in sorted(MOLECULE_IDS.items(), key=lambda x: x[1])
+    ]
+
+    N_COLS = 3
+    n_rows = (len(rows) + N_COLS - 1) // N_COLS
+    groups = [rows[i * n_rows:(i + 1) * n_rows] for i in range(N_COLS)]
+
+    # Each column: " ID  Name      Isos" — 18 chars wide
+    header = f"{'ID':>2}  {'Name':<8}  {'Isos':>4}"
+    sep    = "-" * len(header)
+    gap    = "    "
+
+    print()
+    print(gap.join([header] * N_COLS))
+    print(gap.join([sep]    * N_COLS))
+    for i in range(n_rows):
+        parts = []
+        for g in groups:
+            if i < len(g):
+                mid, name, count = g[i]
+                parts.append(f"{mid:>2}  {name:<8}  {count:>4}")
+            else:
+                parts.append(" " * len(header))
+        print(gap.join(parts))
     print()

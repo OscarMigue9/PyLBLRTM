@@ -4,7 +4,7 @@
 
 PyLBLRTM computes monochromatic atmospheric transmittance and radiance from HITRAN spectral line parameters. It is designed to be transparent, well-documented, and usable as a standalone forward model or as a component in a retrieval system.
 
-> Status: v0.1.0 — data layer complete. Forward model in active development.
+> Status: v0.1.1 — data layer complete. Forward model in active development.
 
 ---
 
@@ -17,7 +17,7 @@ PyLBLRTM is structured in two layers:
 ```
 Data layer (done)
 ─────────────────
-  SpectralData  ←  HITRAN line parameters + TIPS partition sums
+  SpectralData  ←  HITRAN line parameters + TIPS partition sums + molar masses
 
 Forward model (in development)
 ──────────────────────────────
@@ -30,12 +30,9 @@ Forward model (in development)
 
 ```bash
 pip install pylblrtm
-
-# Optional: HITRAN download support
-pip install "pylblrtm[hapi]"
 ```
 
-**Requirements:** Python ≥ 3.9, numpy ≥ 1.24
+**Requirements:** Python ≥ 3.9, numpy ≥ 1.24, hitran-api ≥ 1.3
 
 ---
 
@@ -43,30 +40,68 @@ pip install "pylblrtm[hapi]"
 
 The data layer loads HITRAN spectral line parameters into a `SpectralData` object — the input the forward model will receive.
 
-Two ways to get data:
+### Loading via HAPI (recommended)
 
 ```python
-from pylblrtm import from_hapi, from_files
+from pylblrtm import from_hapi
 
-# Download from HITRAN (requires pip install "pylblrtm[hapi]")
-data = from_hapi('H2O', nu_min=700, nu_max=1400)
+# Single isotopologue (default: most abundant)
+sd = from_hapi('H2O', nu_min=1000, nu_max=2500)
 
-# Or load your own files (.par + TIPS .txt)
-data = from_files('H2O_700_1400.par', 'H2O_tips.txt')
+# Specific isotopologues
+sd = from_hapi('CO2', nu_min=1000, nu_max=2500, iso_id=[1, 2, 3])
+
+# All available isotopologues
+sd = from_hapi('O3', nu_min=1000, nu_max=2500, iso_id='all')
 ```
 
-Both return the same object:
+Data is downloaded from HITRAN on the first call and cached locally. Subsequent calls read from cache — no internet required.
+
+### Loading from files
 
 ```python
-print(data)
-# SpectralData(H2O iso1, 3889 lines, nu=[700.0, 1399.9] cm-1, Wg=18.010565 g/mol)
+from pylblrtm import from_files
 
-data.nu0          # line centres [cm⁻¹]
-data.Sref         # line intensities at T_ref = 296 K
-data.g_air        # air-broadened half-widths
-data.Elow         # lower state energies
-data.molar_mass   # molar mass [g/mol] — for Doppler width
-data.Q(T)         # partition sum interpolated to temperature T [K]
+# .par may contain multiple molecules and isotopologues
+sd = from_files(
+    'mezcla.par',
+    tips={(1, 1): 'H2O_iso1.txt', (1, 2): 'H2O_iso2.txt',
+          (2, 1): 'CO2_iso1.txt'},
+)
+```
+
+`tips` is a dict keyed by `(mol_id, iso_id)`. Values can be paths to two-column TIPS `.txt` files or `(T_arr, Q_arr)` numpy arrays already in memory. Molar masses are looked up automatically from HAPI if not provided.
+
+### SpectralData
+
+Both paths return the same `SpectralData` object:
+
+```python
+sd.lines              # dict of numpy arrays: nu0, Sref, g_air, g_self,
+                      #   Elow, n_air, shift, mol_id, iso_id, ...
+sd.molar_masses       # {(mol_id, iso_id): float [g/mol]}
+sd.tips               # {(mol_id, iso_id): (T_arr, Q_arr)}
+sd.Q(T, mol_id, iso_id)  # partition sum interpolated at temperature T [K]
+```
+
+Quick access to line arrays:
+
+```python
+sd.lines['nu0']       # line centres [cm⁻¹]
+sd.lines['Sref']      # intensities at T_ref = 296 K
+sd.lines['Elow']      # lower-state energies [cm⁻¹]
+sd.lines['g_air']     # air-broadened half-widths [cm⁻¹/atm]
+sd.lines['mol_id']    # HITRAN molecule ID per line
+sd.lines['iso_id']    # isotopologue ID per line
+```
+
+### Supported molecules
+
+55 molecules from the HITRAN database, accessed by name (case-insensitive):
+
+```python
+from pylblrtm import list_molecules
+list_molecules()
 ```
 
 ---
@@ -80,7 +115,11 @@ pylblrtm/
 ├── data_loader.py       from_hapi / from_files → SpectralData
 └── spectral_data.py     SpectralData dataclass
 
-workflow_test.ipynb      end-to-end test of all public methods
+tests/
+├── test_hitran_manager.py
+├── test_data_loader.py
+└── test_spectral_data.py
+
 DOCS.md                  full API reference
 pyproject.toml
 ```
@@ -95,7 +134,7 @@ If you use HITRAN data in your work, please cite:
 > J. Quant. Spectrosc. Radiat. Transfer **277**, 107949 (2022).
 > https://doi.org/10.1016/j.jqsrt.2021.107949
 
-If you use `from_hapi()` to download data, also cite:
+Also cite HAPI, which is used internally:
 
 > R.V. Kochanov et al., *HITRAN Application Programming Interface (HAPI)*,
 > J. Quant. Spectrosc. Radiat. Transfer **177**, 15–30 (2016).
