@@ -1,0 +1,52 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  pylblrtm — Forward Model Configuration
+#
+#  Edita este archivo y pásalo a run_forward():
+#
+#      from pylblrtm import from_hapi, run_forward, us_standard_atmosphere
+#
+#      sd      = from_hapi("CO2", 700, 760, iso_id=1)
+#      profile = us_standard_atmosphere(gases=["CO2"])
+#      result  = run_forward(sd, profile, "forward_config.yaml")
+#
+#  Los datos espectrales (sd) y el perfil atmosférico (profile) siempre se
+#  pasan como objetos Python — este YAML solo controla parámetros de cálculo
+#  y qué outputs se quieren.
+# ─────────────────────────────────────────────────────────────────────────────
+
+spectral:
+  nu_min_cm1: 700.0     # Límite inferior del rango espectral [cm-1]
+  nu_max_cm1: 750.0     # Límite superior del rango espectral [cm-1]
+  step_cm1:   0.001     # Resolución de la grilla [cm-1]
+                        #   0.001 → alta resolución, ~50k pts por 50 cm-1 (lento)
+                        #   0.005 → balance bueno para prototipado
+                        #   0.01  → 10x más rápido, bueno para validación visual
+
+
+calculation:
+  mu_view: 1.0          # cos(ángulo cenital de visión)
+                        #   1.0 = nadir (vertical, mínima longitud de camino)
+                        #   0.5 = 60° desde nadir (longitud de camino 2x)
+                        #   0.3 = ~73° (casi horizontal, longitud 3.3x)
+
+  line_cutoff_cm1: 25.0 # Distancia máxima desde el centro de cada línea [cm-1]
+                        # Líneas más lejanas se ignoran. 25 es el estándar AER/LBLRTM.
+
+  tile_width_cm1: 2.0   # Ancho de tile interno [cm-1]
+                        # Solo afecta uso de memoria, no el resultado físico.
+                        # Subir a 5-10 puede ayudar si hay pocas líneas densas.
+
+
+output:
+  transmittance: true          # T(ν) ∈ [0,1] — la firma espectral principal
+  optical_depth: false         # τ(ν) total de columna = -ln(T) / mu_view
+  optical_depth_layers: false  # τ(ν) por capa [n_capas × n_ν] — array grande,
+                               # útil para funciones de peso / análisis de sensibilidad
+
+  save:
+    enabled: false             # true → guarda automáticamente al terminar
+    path: "results/"           # Directorio de salida (se crea si no existe)
+    format: npz                # npz   → numpy comprimido (recomendado)
+                               # csv   → texto separado por comas
+                               # txt   → texto separado por tabulaciones
+    prefix: "forward"          # Nombre del archivo: {prefix}.{format}
