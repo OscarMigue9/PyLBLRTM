@@ -19,6 +19,10 @@ build/
 venv/
 env/
 
+# Notebooks y scripts de prueba (uso local, no son parte del paquete)
+*.ipynb
+benchmark_*.py
+
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
