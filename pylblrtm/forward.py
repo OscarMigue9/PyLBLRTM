@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import math
 import os
+import threading
 import warnings
 from concurrent.futures import ThreadPoolExecutor
-from functools import partial
 from typing import Optional, Tuple
 
 import numpy as np
@@ -132,8 +132,8 @@ def compute_transmittance(
         within 1e-4 relative of wofz (needs ``pip install pylblrtm[fast]``).
     n_jobs : int
         Threads used in parallel. 1 (default) runs serially; -1 uses every core.
-        Threads take whole layers, or the spectral tiles of each layer when
-        there are fewer layers than threads (a single-layer standoff path).
+        Threads take the spectral tiles of every layer from one shared queue,
+        so a single-layer standoff path uses them all just like a full column.
         The result does not depend on it: every value is summed exactly as in
         the serial loop.
     wing_tolerance : float, optional
@@ -222,11 +222,11 @@ def _build_optical_depth(
     multiplied back at every frequency after the tile loop, matching the
     LBLRTM convention.
 
-    With n_jobs > 1 the work runs on a thread pool, split by layer when there
-    are at least as many layers as threads and by spectral tile otherwise (a
-    single-layer standoff path, say). Both write disjoint slices of the stack,
-    both Voigt backends release the GIL, and every slice is summed in the same
-    order as the serial loop.
+    With n_jobs > 1 every (layer, spectral tile) pair is a task on a thread
+    pool, so a single-layer standoff path keeps every thread as busy as a full
+    column does. Tasks write disjoint slices of the stack, both Voigt backends
+    release the GIL, and every slice is summed in the same order as the serial
+    loop.
     """
     voigt_fn = get_voigt(voigt)
     # Humlicek adds each tile's lines straight into od, without the phi matrix
@@ -251,7 +251,7 @@ def _build_optical_depth(
         # concern, and the result does not depend on the tiling.
         tile_samples = max(tile_samples, 128 * levels[-1][0])
     tile_starts = range(0, n_nu, tile_samples)
-    n_workers = min(_resolve_n_jobs(n_jobs), max(n_layers, len(tile_starts), 1))
+    n_workers = min(_resolve_n_jobs(n_jobs), max(n_layers * len(tile_starts), 1))
 
     # Pull line arrays out of SpectralData once
     nu0     = sd.lines["nu0"]       # line centres [cm⁻¹]
@@ -418,21 +418,42 @@ def _build_optical_depth(
             _tile(k, groups, t0)
         _finish(k, T)
 
-    # ── Main loop: serial, threads over layers, or threads over tiles ──────────
+    # ── Main loop: serial, or one queue of (layer, tile) tasks on threads ──────
     if n_workers == 1:
         for k in range(n_layers):
             _layer(k)
-    elif n_layers >= n_workers:
-        # Enough layers to keep every thread busy: one whole layer per task.
-        with ThreadPoolExecutor(max_workers=n_workers) as pool:
-            list(pool.map(_layer, range(n_layers)))   # list() re-raises worker errors
-    else:
-        # Fewer layers than threads (a single-layer standoff path, say): the
-        # tiles of each layer are the tasks, one layer after another.
-        with ThreadPoolExecutor(max_workers=n_workers) as pool:
-            for k in range(n_layers):
-                T, groups = _layer_lines(k)
-                list(pool.map(partial(_tile, k, groups), tile_starts))
-                _finish(k, T)
+        return od
+
+    # Every tile of every layer is a task, queued layer after layer, so no
+    # thread waits for another until the end, whatever the number of layers.
+    # The first task of a layer prepares its lines and the last one to finish
+    # applies the radiation term and frees them: only the layers in progress
+    # hold their lines in memory.
+    layer_locks = [threading.Lock() for _ in range(n_layers)]
+    lines_of = [None] * n_layers
+    tiles_left = [len(tile_starts)] * n_layers
+    count_lock = threading.Lock()
+
+    def _task(task: Tuple[int, int]) -> None:
+        k, t0 = task
+        with layer_locks[k]:
+            if lines_of[k] is None:
+                lines_of[k] = _layer_lines(k)
+            T, groups = lines_of[k]
+        _tile(k, groups, t0)
+        with count_lock:
+            tiles_left[k] -= 1
+            last = tiles_left[k] == 0
+        if last:
+            lines_of[k] = None
+            _finish(k, T)
+
+    tasks = [(k, t0) for k in range(n_layers) for t0 in tile_starts]
+    with ThreadPoolExecutor(max_workers=n_workers) as pool:
+        try:
+            list(pool.map(_task, tasks))   # list() re-raises worker errors
+        except BaseException:
+            pool.shutdown(cancel_futures=True)   # skip the tasks not yet started
+            raise
 
     return od

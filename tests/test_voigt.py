@@ -232,7 +232,7 @@ class TestCutoff:
 class TestForwardOptions:
 
     def test_n_jobs_does_not_change_the_result(self):
-        """Threads only change who computes each layer: bit-identical stack."""
+        """Threads only change who computes each tile: bit-identical stack."""
         sd, profile = _make_sd(), _make_profile()
         serial = run_forward(sd, profile, _config(n_jobs=1))
         threaded = run_forward(sd, profile, _config(n_jobs=3))
@@ -241,10 +241,11 @@ class TestForwardOptions:
         np.testing.assert_array_equal(every_core.optical_depth_layers, serial.optical_depth_layers)
 
     @pytest.mark.parametrize("n_levels, n_jobs", [
-        (5, 2),   # 4 layers ≥ 2 threads → threads over layers
-        (2, 4),   # 1 layer  < 4 threads → threads over the tiles of the layer
+        (5, 2),    # 4 layers, 2 threads
+        (2, 4),    # 1 layer (standoff), 4 threads
+        (10, 4),   # 9 layers, 4 threads: layers do not split evenly
     ])
-    def test_both_splits_are_bit_identical(self, n_levels, n_jobs):
+    def test_every_layer_and_thread_count_is_bit_identical(self, n_levels, n_jobs):
         sd = _make_sd()
         profile = AtmosphericProfile(
             pressure_hpa=np.geomspace(1.0, 1013.25, n_levels),

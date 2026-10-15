@@ -97,9 +97,9 @@ nu, T = compute_transmittance(sd, profile, 710, 740, voigt="humlicek", n_jobs=-1
   the Humlicek W4 approximation compiled with numba and adds the lines straight into the
   optical depth: tens of times faster than `wofz` and within 1e-4 relative of it. It
   needs `pip install pylblrtm[fast]`.
-- `n_jobs` runs on that many threads (`-1` = every core). Threads take whole layers, or
-  the spectral tiles of each layer when there are fewer layers than threads (a
-  single-layer standoff path). The result is bit-identical to `n_jobs=1`.
+- `n_jobs` runs on that many threads (`-1` = every core). Threads take the spectral tiles
+  of every layer from one shared queue, so a single-layer standoff path uses them all
+  just like a full column. The result is bit-identical to `n_jobs=1`.
 
 - `wing_tolerance=1e-4` (with `voigt="humlicek"`) computes the far wings on grids 4, 16
   and 64 times coarser and interpolates them, keeping the optical depth within that
