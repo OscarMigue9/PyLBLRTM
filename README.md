@@ -101,7 +101,12 @@ nu, T = compute_transmittance(sd, profile, 710, 740, voigt="humlicek", n_jobs=-1
   the spectral tiles of each layer when there are fewer layers than threads (a
   single-layer standoff path). The result is bit-identical to `n_jobs=1`.
 
-The same two keys exist under `calculation:` in `forward_config.yaml`.
+- `wing_tolerance=1e-4` (with `voigt="humlicek"`) computes the far wings on grids 4, 16
+  and 64 times coarser and interpolates them, keeping the optical depth within that
+  relative error of the exact result; line cores and the 25 cm⁻¹ cutoff stay exact.
+  Several times faster again. Default `None`: everything on the fine grid.
+
+The same keys exist under `calculation:` in `forward_config.yaml`.
 
 ### Custom atmospheric profile
 

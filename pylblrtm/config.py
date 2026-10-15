@@ -16,7 +16,7 @@ import numpy as np
 
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile
-from .forward import _build_optical_depth, _resolve_n_jobs
+from .forward import _build_optical_depth, _check_wing_tolerance, _resolve_n_jobs
 from .voigt import VOIGT_BACKENDS
 
 
@@ -33,6 +33,7 @@ _DEFAULTS: dict = {
         "tile_width_cm1": 2.0,
         "voigt": "wofz",
         "n_jobs": 1,
+        "wing_tolerance": None,
     },
     "output": {
         "transmittance": True,
@@ -123,6 +124,10 @@ def _validate(cfg: dict) -> None:
             f"calculation.n_jobs must be a positive integer or -1 (all cores); "
             f"got {ca['n_jobs']!r}"
         ) from None
+    try:
+        _check_wing_tolerance(ca["wing_tolerance"], ca["voigt"])
+    except ValueError as err:
+        raise ValueError(f"calculation.{err}") from None
 
     requested = [out["transmittance"], out["optical_depth"], out["optical_depth_layers"]]
     if not any(requested):
@@ -272,6 +277,7 @@ def run_forward(
         tile_width_cm1=float(ca["tile_width_cm1"]),
         voigt=ca["voigt"],
         n_jobs=ca["n_jobs"],
+        wing_tolerance=ca["wing_tolerance"],
     )
 
     mu = float(ca["mu_view"])

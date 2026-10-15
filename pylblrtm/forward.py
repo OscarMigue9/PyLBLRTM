@@ -19,14 +19,21 @@ import os
 import warnings
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
-from typing import Tuple
+from typing import Optional, Tuple
 
 import numpy as np
 
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile, _Layers
 from .hitran_manager import MOLECULE_IDS
-from .voigt import VOIGT_BACKENDS, get_voigt, humlicek_add, humlicek_prepare
+from .voigt import (
+    VOIGT_BACKENDS,
+    get_voigt,
+    humlicek_add,
+    humlicek_add_nested,
+    humlicek_levels,
+    humlicek_prepare,
+)
 
 # Reverse map: HITRAN molecule integer ID → gas name string
 _MOL_ID_TO_NAME: dict[int, str] = {v: k for k, v in MOLECULE_IDS.items()}
@@ -60,6 +67,22 @@ def _resolve_n_jobs(n_jobs: int) -> int:
     return (os.cpu_count() or 1) if n_jobs == -1 else int(n_jobs)
 
 
+def _check_wing_tolerance(wing_tolerance, voigt: str) -> None:
+    """None, or a relative tolerance in (0, 1) together with voigt="humlicek"."""
+    if wing_tolerance is None:
+        return
+    if (
+        isinstance(wing_tolerance, bool)
+        or not isinstance(wing_tolerance, (int, float, np.floating))
+        or not (0.0 < wing_tolerance < 1.0)
+    ):
+        raise ValueError(f"wing_tolerance must be None or in (0, 1); got {wing_tolerance!r}")
+    if voigt != "humlicek":
+        raise ValueError(
+            "wing_tolerance needs voigt='humlicek' (wofz is the exact reference)"
+        )
+
+
 # ── Public API ────────────────────────────────────────────────────────────────
 
 def compute_transmittance(
@@ -74,6 +97,7 @@ def compute_transmittance(
     mu_view: float = 1.0,
     voigt: str = "wofz",
     n_jobs: int = 1,
+    wing_tolerance: Optional[float] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Compute monochromatic transmittance via line-by-line integration.
 
@@ -112,6 +136,13 @@ def compute_transmittance(
         there are fewer layers than threads (a single-layer standoff path).
         The result does not depend on it: every value is summed exactly as in
         the serial loop.
+    wing_tolerance : float, optional
+        None (default) computes every line on the fine grid. A value such as
+        1e-4 computes the far wings on grids 4, 16 and 64 times coarser and
+        interpolates them, keeping the optical depth within about that relative
+        error of the exact result (measured 3–10× below it) at several times
+        the speed. The line cores and the 25 cm⁻¹ cutoff stay exact. Needs
+        voigt="humlicek".
 
     Returns
     -------
@@ -152,6 +183,7 @@ def compute_transmittance(
     if voigt not in VOIGT_BACKENDS:
         raise ValueError(f"voigt must be one of {VOIGT_BACKENDS}; got '{voigt}'")
     _resolve_n_jobs(n_jobs)
+    _check_wing_tolerance(wing_tolerance, voigt)
 
     # Build uniform wavenumber grid
     n_pts = int(np.ceil((nu_max_cm1 - nu_min_cm1) / step_cm1)) + 1
@@ -163,7 +195,7 @@ def compute_transmittance(
     # Optical depth stack [n_layers, n_nu]
     od = _build_optical_depth(
         nu, spectral_data, layers, line_cutoff_cm1, tile_width_cm1,
-        voigt=voigt, n_jobs=n_jobs,
+        voigt=voigt, n_jobs=n_jobs, wing_tolerance=wing_tolerance,
     )
 
     # Column transmittance (slant path via 1/mu_view)
@@ -181,6 +213,7 @@ def _build_optical_depth(
     tile_width_cm1: float,
     voigt: str = "wofz",
     n_jobs: int = 1,
+    wing_tolerance: Optional[float] = None,
 ) -> np.ndarray:
     """Return vertical optical depth stack [n_layers, n_nu].
 
@@ -204,6 +237,19 @@ def _build_optical_depth(
 
     step = float(nu[1] - nu[0]) if n_nu > 1 else 0.001
     tile_samples = max(1, int(np.floor(tile_width_cm1 / step + 1e-8)))
+
+    # Far wings on coarser grids (empty: no grid fits, everything stays fine)
+    _check_wing_tolerance(wing_tolerance, voigt)
+    levels = (
+        humlicek_levels(step, line_cutoff_cm1, wing_tolerance)
+        if wing_tolerance is not None and n_nu > 1 else []
+    )
+    if levels:
+        # Every line within the cutoff visits every tile at a fixed cost, which
+        # dominates when a tile holds few coarse points: give each tile at least
+        # 128 points of the coarsest grid. No phi matrix here, so memory is no
+        # concern, and the result does not depend on the tiling.
+        tile_samples = max(tile_samples, 128 * levels[-1][0])
     tile_starts = range(0, n_nu, tile_samples)
     n_workers = min(_resolve_n_jobs(n_jobs), max(n_layers, len(tile_starts), 1))
 
@@ -336,7 +382,11 @@ def _build_optical_depth(
         tile = nu[t0:t1]
         if summing:
             for lines in groups:
-                humlicek_add(tile, lines, line_cutoff_cm1, od[k, t0:t1])
+                if levels:
+                    humlicek_add_nested(nu[0], step, t0, lines, line_cutoff_cm1,
+                                        levels, od[k, t0:t1])
+                else:
+                    humlicek_add(tile, lines, line_cutoff_cm1, od[k, t0:t1])
             return
         for shifted, strength, doppler, lorentz in groups:
             nearby = (

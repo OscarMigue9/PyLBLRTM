@@ -299,3 +299,71 @@ class TestConfigOptions:
     def test_invalid_n_jobs_in_yaml_raises(self):
         with pytest.raises(ValueError, match="calculation.n_jobs"):
             load_config({"calculation": {"n_jobs": 0}})
+
+
+# ── wing_tolerance: far wings on coarser grids ────────────────────────────────
+
+class TestWingTolerance:
+
+    @pytest.fixture(autouse=True)
+    def _needs_numba(self):
+        pytest.importorskip("numba")
+
+    @staticmethod
+    def _profile(p_top, p_bottom, n_levels=3):
+        return AtmosphericProfile(
+            pressure_hpa=np.geomspace(p_top, p_bottom, n_levels),
+            temperature_k=np.linspace(220.0, 288.0, n_levels),
+            vmr={"CO2": [4.15e-4] * n_levels},
+        )
+
+    @staticmethod
+    def _tau(sd, profile, step=0.002, **calculation):
+        cfg = {"spectral": {"nu_min_cm1": 700.0, "nu_max_cm1": 720.0, "step_cm1": step},
+               "calculation": {"voigt": "humlicek", **calculation},
+               "output": {"transmittance": True, "optical_depth_layers": True}}
+        return run_forward(sd, profile, cfg).optical_depth_layers
+
+    @pytest.mark.parametrize("tol", [1e-3, 1e-4])
+    @pytest.mark.parametrize("p_top, p_bottom", [
+        (500.0, 1013.25),   # Lorentz-dominated, near the surface (standoff-like)
+        (1.0, 20.0),        # Doppler-dominated, upper atmosphere
+    ])
+    def test_error_within_tolerance(self, tol, p_top, p_bottom):
+        sd, profile = _make_sd(400), self._profile(p_top, p_bottom)
+        exact = self._tau(sd, profile)
+        got = self._tau(sd, profile, wing_tolerance=tol)
+        assert np.max(np.abs(got - exact) / exact) <= tol
+
+    def test_tile_width_and_threads_do_not_change_it(self):
+        sd, profile = _make_sd(400), self._profile(500.0, 1013.25)
+        ref = self._tau(sd, profile, wing_tolerance=1e-4)
+        for extra in ({"tile_width_cm1": 0.37}, {"tile_width_cm1": 5.0}, {"n_jobs": 3}):
+            got = self._tau(sd, profile, wing_tolerance=1e-4, **extra)
+            np.testing.assert_allclose(got, ref, rtol=1e-12)
+
+    def test_no_coarse_grid_fits_falls_back_to_exact(self):
+        assert vg.humlicek_levels(0.5, 25.0, 1e-4) == []
+        sd, profile = _make_sd(), self._profile(500.0, 1013.25)
+        np.testing.assert_array_equal(
+            self._tau(sd, profile, step=0.5, wing_tolerance=1e-4),
+            self._tau(sd, profile, step=0.5),
+        )
+
+
+class TestWingToleranceValidation:
+
+    def test_needs_humlicek(self):
+        with pytest.raises(ValueError, match="voigt='humlicek'"):
+            compute_transmittance(_make_sd(), _make_profile(), 700.0, 720.0, wing_tolerance=1e-4)
+
+    @pytest.mark.parametrize("bad", [0.0, 1.0, -1e-4, True, "1e-4"])
+    def test_out_of_range(self, bad):
+        with pytest.raises(ValueError, match="wing_tolerance"):
+            compute_transmittance(_make_sd(), _make_profile(), 700.0, 720.0,
+                                  voigt="humlicek", wing_tolerance=bad)
+
+    def test_config(self):
+        assert load_config({})["calculation"]["wing_tolerance"] is None
+        with pytest.raises(ValueError, match="calculation.wing_tolerance"):
+            load_config({"calculation": {"wing_tolerance": 1e-4}})

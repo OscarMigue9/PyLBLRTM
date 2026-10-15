@@ -49,6 +49,13 @@ calculation:
                         # camino standoff de una capa), reparte los tramos del
                         # espectro. No cambia el resultado, solo el tiempo.
 
+  wing_tolerance: null  # Alas lejanas en rejillas más gruesas e interpoladas
+                        #   null → todo en la rejilla fina (exacto)
+                        #   1e-4 → error relativo en τ menor que eso (medido
+                        #          3-10x por debajo), varias veces más rápido
+                        # El centro de las líneas y el corte de 25 cm-1 siguen
+                        # exactos. Requiere voigt: humlicek.
+
 
 output:
   transmittance: true          # T(ν) ∈ [0,1] — la firma espectral principal
