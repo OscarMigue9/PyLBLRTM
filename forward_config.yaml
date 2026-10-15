@@ -36,6 +36,19 @@ calculation:
                         # Solo afecta uso de memoria, no el resultado físico.
                         # Subir a 5-10 puede ayudar si hay pocas líneas densas.
 
+  voigt: wofz           # Cómo se evalúa el perfil de Voigt
+                        #   wofz     → scipy, exacto (referencia)
+                        #   humlicek → Humlicek W4 con numba, decenas de veces
+                        #              más rápido; difiere < 1e-4 de wofz
+                        #              requiere: pip install pylblrtm[fast]
+
+  n_jobs: 1             # Hilos para calcular en paralelo
+                        #   1  → secuencial
+                        #   -1 → todos los núcleos
+                        # Reparte capas; si hay menos capas que hilos (p. ej. un
+                        # camino standoff de una capa), reparte los tramos del
+                        # espectro. No cambia el resultado, solo el tiempo.
+
 
 output:
   transmittance: true          # T(ν) ∈ [0,1] — la firma espectral principal
