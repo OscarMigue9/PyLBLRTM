@@ -146,14 +146,23 @@ def _profile_matrix(nu, centers, inv_doppler, y, scale, out):
             out[i, j] = _re_w(x, y[j]) * scale[j]
 
 
+@_jit(inline="always", fastmath=True, error_model="numpy")
+def _index_at(nu0, step, n, value):
+    """Grid index nearest *value*, clamped to [0, n] (safe for ±inf)."""
+    f = min(max((value - nu0) / step, -1.0), n + 1.0)
+    return min(max(int(math.floor(f)), 0), n)
+
+
 @_jit(cache=True, nogil=True, fastmath=True, error_model="numpy")
-def _add_lines(nu, centers, c, y, weight, out):
-    """out[i] += Σ_j weight_j · Re w(c_j·(nu_i − centre_j), y_j), straight into *out*.
+def _add_lines(nu, centers, c, y, weight, cutoff, out):
+    """out[i] += Σ_j weight_j · Re w(c_j·(nu_i − centre_j), y_j), straight into *out*,
+    over the points with |nu_i − centre_j| ≤ cutoff.
 
     No profile matrix: the running sum stays in cache. *nu* must be a uniform
     grid. Per line, two passes with the same region test as :func:`_re_w`:
 
-    1. every point, region I in closed real form, branch-free so it vectorises:
+    1. every point within the cutoff, region I in closed real form, branch-free
+       so it vectorises:
        Re[T·K1/(0.5 + T²)] = K1·y·(0.5 + y² + x²) / ((0.5 + y² − x²)² + 4y²x²),
        kept only where |x| + y ≥ 15 (a select, not a branch);
     2. the few points near the centre where |x| + y < 15, four-region Humlicek.
@@ -171,18 +180,29 @@ def _add_lines(nu, centers, c, y, weight, out):
         q  = 4.0 * yj * yj
         x_far = _REGION_I - yj                         # region I ⇔ |x| ≥ 15 − y
 
-        for i in range(n):
-            x  = cj * (nu[i] - cen)
+        # Points within the cutoff, [first, last): an estimate from the uniform
+        # grid, then settled with the exact test |nu − centre| ≤ cutoff
+        first = max(_index_at(nu0, step, n, cen - cutoff) - 2, 0)
+        while first < n and cen - nu[first] > cutoff:
+            first += 1
+        last = min(_index_at(nu0, step, n, cen + cutoff) + 3, n)
+        while last > first and nu[last - 1] - cen > cutoff:
+            last -= 1
+
+        # Views from index 0, so numba needs no negative-index check and vectorises
+        nu_w, out_w = nu[first:last], out[first:last]
+        for i in range(nu_w.shape[0]):
+            x  = cj * (nu_w[i] - cen)
             x2 = x * x
             a  = p - x2
             far = wk * (p + x2) / (a * a + q * x2)
-            out[i] += far if abs(x) >= x_far else 0.0
+            out_w[i] += far if abs(x) >= x_far else 0.0
 
         if x_far > 0.0:
             # |nu − centre| < x_far / c, padded two points against rounding
             half = x_far / cj
-            lo = min(max(int(math.floor((cen - half - nu0) / step)) - 2, 0), n)
-            hi = min(max(int(math.ceil((cen + half - nu0) / step)) + 3, lo), n)
+            lo = min(max(_index_at(nu0, step, n, cen - half) - 2, first), last)
+            hi = min(max(_index_at(nu0, step, n, cen + half) + 3, lo), last)
             wj = weight[j]
             for i in range(lo, hi):
                 x = cj * (nu[i] - cen)
@@ -230,21 +250,22 @@ def humlicek_prepare(
 def humlicek_add(
     nu: np.ndarray,
     lines: Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray],
-    center_min: float,
-    center_max: float,
+    cutoff: float,
     out: np.ndarray,
 ) -> None:
-    """out += Σ strength·φ(nu) over the prepared lines centred in [center_min, center_max].
+    """out += Σ strength·φ(nu) over the prepared lines, each one only where
+    |nu − centre| ≤ cutoff.
 
     *nu* must be a uniform grid and *out* a contiguous float64 array of the same
     length (a row slice of the optical depth stack works).
     """
     _require_numba()
+    cutoff = min(float(cutoff), 1e100)   # the kernels assume finite numbers (fastmath)
     centers, c, y, weight = lines
-    j0 = int(np.searchsorted(centers, center_min, side="left"))
-    j1 = int(np.searchsorted(centers, center_max, side="right"))
+    j0 = int(np.searchsorted(centers, nu[0] - cutoff, side="left"))
+    j1 = int(np.searchsorted(centers, nu[-1] + cutoff, side="right"))
     if j1 > j0:
-        _add_lines(nu, centers[j0:j1], c[j0:j1], y[j0:j1], weight[j0:j1], out)
+        _add_lines(nu, centers[j0:j1], c[j0:j1], y[j0:j1], weight[j0:j1], cutoff, out)
 
 
 # ── Backend selection ─────────────────────────────────────────────────────────

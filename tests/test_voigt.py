@@ -136,7 +136,7 @@ class TestGetVoigt:
         with pytest.raises(ImportError, match=r"pylblrtm\[fast\]"):
             vg.get_voigt("humlicek")
         with pytest.raises(ImportError, match=r"pylblrtm\[fast\]"):
-            vg.humlicek_add(np.zeros(3), (np.zeros(1),) * 4, 0.0, 1.0, np.zeros(3))
+            vg.humlicek_add(np.zeros(3), (np.zeros(1),) * 4, 25.0, np.zeros(3))
 
 
 class TestHumlicekSumming:
@@ -165,27 +165,66 @@ class TestHumlicekSumming:
         ref = vg.voigt_humlicek(nu, shifted, doppler, lorentz) @ strength
         got = np.zeros_like(nu)
         vg.humlicek_add(nu, vg.humlicek_prepare(shifted, strength, doppler, lorentz),
-                        -np.inf, np.inf, got)
+                        np.inf, got)
         np.testing.assert_allclose(got, ref, rtol=1e-12)
 
-    def test_only_lines_centred_in_range(self):
+    def test_cutoff_point_by_point(self):
+        """Each line only where |nu − centre| ≤ cutoff, the same test as the wofz path."""
         nu = 700.0 + np.arange(2001) * 0.001
         shifted, strength, doppler, lorentz = self._lines(300, 1.0)
-        keep = (shifted >= 695.0) & (shifted <= 705.0)
-        ref = vg.voigt_humlicek(nu, shifted[keep], doppler[keep], lorentz[keep]) @ strength[keep]
+        phi = vg.voigt_humlicek(nu, shifted, doppler, lorentz)
+        phi[np.abs(nu[:, None] - shifted) > 3.0] = 0.0
         got = np.zeros_like(nu)
         vg.humlicek_add(nu, vg.humlicek_prepare(shifted, strength, doppler, lorentz),
-                        695.0, 705.0, got)
-        np.testing.assert_allclose(got, ref, rtol=1e-12)
+                        3.0, got)
+        np.testing.assert_allclose(got, phi @ strength, rtol=1e-12)
 
     def test_adds_to_what_is_there(self):
         nu = 700.0 + np.arange(101) * 0.01
         lines = vg.humlicek_prepare(*self._lines(20, 1.0))
         once = np.zeros_like(nu)
-        vg.humlicek_add(nu, lines, -np.inf, np.inf, once)
+        vg.humlicek_add(nu, lines, np.inf, once)
         twice = once.copy()
-        vg.humlicek_add(nu, lines, -np.inf, np.inf, twice)
+        vg.humlicek_add(nu, lines, np.inf, twice)
         np.testing.assert_allclose(twice, 2.0 * once, rtol=1e-15)
+
+
+# ── Line cutoff ───────────────────────────────────────────────────────────────
+
+def _backends():
+    return ["wofz", pytest.param("humlicek", marks=pytest.mark.skipif(
+        vg.numba is None, reason="needs numba"))]
+
+
+class TestCutoff:
+
+    @pytest.mark.parametrize("voigt", _backends())
+    def test_nothing_beyond_cutoff(self, voigt):
+        """One line at 700 cm⁻¹: τ > 0 up to 725 cm⁻¹ and exactly 0 past it."""
+        T = np.arange(150.0, 401.0)
+        one = lambda v: np.array([v], dtype=np.float64)
+        sd = SpectralData(
+            lines={"nu0": one(700.0), "Sref": one(1e-19), "g_air": one(0.07),
+                   "g_self": one(0.1), "Elow": one(100.0), "n_air": one(0.75),
+                   "shift": one(0.0), "mol_id": np.array([2]), "iso_id": np.array([1])},
+            tips={(2, 1): (T, T * 2.0)}, molar_masses={(2, 1): 44.0}, molecule="CO2",
+        )
+        cfg = {"spectral": {"nu_min_cm1": 720.0, "nu_max_cm1": 730.0, "step_cm1": 0.001},
+               "calculation": {"voigt": voigt},
+               "output": {"transmittance": True, "optical_depth": True}}
+        res = run_forward(sd, _make_profile(), cfg)
+        nu, tau = res.wavenumber_cm1, res.optical_depth
+        assert np.all(tau[nu > 725.0 + 1e-9] == 0.0)
+        assert np.all(tau[nu < 725.0 - 1e-9] > 0.0)
+
+    @pytest.mark.parametrize("voigt", _backends())
+    def test_tile_width_does_not_change_the_result(self, voigt):
+        sd, profile = _make_sd(), _make_profile()
+        ref = run_forward(sd, profile, _config(voigt=voigt, tile_width_cm1=2.0))
+        for width in (0.37, 5.0):
+            got = run_forward(sd, profile, _config(voigt=voigt, tile_width_cm1=width))
+            np.testing.assert_allclose(got.optical_depth_layers, ref.optical_depth_layers,
+                                       rtol=1e-12)
 
 
 # ── Forward model: voigt and n_jobs ───────────────────────────────────────────

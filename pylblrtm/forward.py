@@ -93,10 +93,12 @@ def compute_transmittance(
     step_cm1 : float
         Wavenumber grid spacing [cm⁻¹]. Default 0.001 cm⁻¹ (~0.3 GHz).
     line_cutoff_cm1 : float
-        Wing truncation radius per line [cm⁻¹]. Default 25 cm⁻¹.
+        Wing truncation radius per line [cm⁻¹], applied at every frequency:
+        a line adds nothing where |nu − centre| > cutoff. Default 25 cm⁻¹.
     tile_width_cm1 : float
         Width of each spectral tile for the inner Voigt loop [cm⁻¹]. Default 2.
-        Larger tiles use more memory; smaller tiles do more overhead.
+        Larger tiles use more memory; smaller tiles do more overhead. It does
+        not change the result.
     mu_view : float
         Cosine of the viewing zenith angle. 1.0 = nadir (vertical). Default 1.0.
     voigt : {"wofz", "humlicek"}
@@ -333,10 +335,8 @@ def _build_optical_depth(
         t1   = min(t0 + tile_samples, n_nu)
         tile = nu[t0:t1]
         if summing:
-            # Same lines as the masks below: centre within the cutoff of the tile
             for lines in groups:
-                humlicek_add(tile, lines, tile[0] - line_cutoff_cm1,
-                             tile[-1] + line_cutoff_cm1, od[k, t0:t1])
+                humlicek_add(tile, lines, line_cutoff_cm1, od[k, t0:t1])
             return
         for shifted, strength, doppler, lorentz in groups:
             nearby = (
@@ -350,6 +350,9 @@ def _build_optical_depth(
             for b0 in range(0, nb.size, 256):
                 b = nb[b0 : b0 + 256]
                 phi = voigt_fn(tile, shifted[b], doppler[b], lorentz[b])
+                # Cutoff at every frequency, not per tile: the result must not
+                # depend on tile_width_cm1, which only bounds memory
+                phi[np.abs(tile[:, None] - shifted[b]) > line_cutoff_cm1] = 0.0
                 od[k, t0:t1] += phi @ strength[b]
 
     def _finish(k: int, T: float) -> None:
