@@ -16,7 +16,8 @@ import numpy as np
 
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile
-from .forward import _build_optical_depth
+from .forward import _build_optical_depth, _check_wing_tolerance, _resolve_n_jobs
+from .voigt import VOIGT_BACKENDS
 
 
 # ── Default values for every config key ──────────────────────────────────────
@@ -30,6 +31,9 @@ _DEFAULTS: dict = {
         "mu_view": 1.0,
         "line_cutoff_cm1": 25.0,
         "tile_width_cm1": 2.0,
+        "voigt": "wofz",
+        "n_jobs": 1,
+        "wing_tolerance": None,
     },
     "output": {
         "transmittance": True,
@@ -109,6 +113,21 @@ def _validate(cfg: dict) -> None:
         raise ValueError("calculation.line_cutoff_cm1 must be positive")
     if not (0.0 < ca["mu_view"] <= 1.0):
         raise ValueError("calculation.mu_view must be in (0, 1]")
+    if ca["voigt"] not in VOIGT_BACKENDS:
+        raise ValueError(
+            f"calculation.voigt must be one of {VOIGT_BACKENDS}; got '{ca['voigt']}'"
+        )
+    try:
+        _resolve_n_jobs(ca["n_jobs"])
+    except ValueError:
+        raise ValueError(
+            f"calculation.n_jobs must be a positive integer or -1 (all cores); "
+            f"got {ca['n_jobs']!r}"
+        ) from None
+    try:
+        _check_wing_tolerance(ca["wing_tolerance"], ca["voigt"])
+    except ValueError as err:
+        raise ValueError(f"calculation.{err}") from None
 
     requested = [out["transmittance"], out["optical_depth"], out["optical_depth_layers"]]
     if not any(requested):
@@ -256,6 +275,9 @@ def run_forward(
         layers,
         line_cutoff_cm1=float(ca["line_cutoff_cm1"]),
         tile_width_cm1=float(ca["tile_width_cm1"]),
+        voigt=ca["voigt"],
+        n_jobs=ca["n_jobs"],
+        wing_tolerance=ca["wing_tolerance"],
     )
 
     mu = float(ca["mu_view"])

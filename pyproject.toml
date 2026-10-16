@@ -19,6 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 plot = ["matplotlib>=3.7"]
+fast = ["numba>=0.59"]
 dev  = ["pytest>=7", "sphinx>=7", "sphinx-rtd-theme"]
 
 [project.urls]

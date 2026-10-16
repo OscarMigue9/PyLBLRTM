@@ -87,6 +87,27 @@ profile = us_standard_atmosphere(gases=["CO2"])
 nu, T = compute_transmittance(sd, profile, 710, 740, step_cm1=0.005)
 ```
 
+### Speed: Voigt backend and threads
+
+```python
+nu, T = compute_transmittance(sd, profile, 710, 740, voigt="humlicek", n_jobs=-1)
+```
+
+- `voigt="wofz"` (default) uses scipy's exact Faddeeva function. `voigt="humlicek"` uses
+  the Humlicek W4 approximation compiled with numba and adds the lines straight into the
+  optical depth: tens of times faster than `wofz` and within 1e-4 relative of it. It
+  needs `pip install pylblrtm[fast]`.
+- `n_jobs` runs on that many threads (`-1` = every core). Threads take the spectral tiles
+  of every layer from one shared queue, so a single-layer standoff path uses them all
+  just like a full column. The result is bit-identical to `n_jobs=1`.
+
+- `wing_tolerance=1e-4` (with `voigt="humlicek"`) computes the far wings on grids 4, 16
+  and 64 times coarser and interpolates them, keeping the optical depth within that
+  relative error of the exact result; line cores and the 25 cm⁻¹ cutoff stay exact.
+  Several times faster again. Default `None`: everything on the fine grid.
+
+The same keys exist under `calculation:` in `forward_config.yaml`.
+
 ### Custom atmospheric profile
 
 ```python
@@ -182,12 +203,14 @@ pylblrtm/
 ├── atmosphere.py        AtmosphericProfile: levels → hydrostatic layers
 ├── profiles.py          us_standard_atmosphere (USSA76 + AFGL VMR)
 ├── forward.py           compute_transmittance: Voigt LBL by layer
+├── voigt.py             Voigt backends: wofz (scipy), humlicek (numba)
 └── config.py            run_forward, load_config, ForwardResult
 
 tests/
 ├── test_hitran_manager.py
 ├── test_data_loader.py
 ├── test_spectral_data.py
+├── test_voigt.py
 ├── test_atmosphere.py
 └── test_forward.py
 

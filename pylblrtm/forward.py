@@ -2,7 +2,7 @@
 forward.py — Line-by-line transmittance forward model.
 
 Physics reference: AER line-by-line (LBLRTM JRAD=0 convention).
-  - Voigt profile via Faddeeva function (scipy).
+  - Voigt profile via the Faddeeva function: scipy wofz or Humlicek W4 (voigt.py).
   - HITRAN line-strength temperature scaling with partition function ratio.
   - Radiation term nu·tanh(c₂·nu / 2T) applied at each frequency (JRAD=0).
   - No line mixing; no continuum (pure line absorption).
@@ -15,15 +15,25 @@ parameters and TIPS tables; the profile carries pressures, temperatures, and VMR
 from __future__ import annotations
 
 import math
+import os
+import threading
 import warnings
-from typing import Tuple
+from concurrent.futures import ThreadPoolExecutor
+from typing import Optional, Tuple
 
 import numpy as np
-from scipy.special import wofz
 
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile, _Layers
 from .hitran_manager import MOLECULE_IDS
+from .voigt import (
+    VOIGT_BACKENDS,
+    get_voigt,
+    humlicek_add,
+    humlicek_add_nested,
+    humlicek_levels,
+    humlicek_prepare,
+)
 
 # Reverse map: HITRAN molecule integer ID → gas name string
 _MOL_ID_TO_NAME: dict[int, str] = {v: k for k, v in MOLECULE_IDS.items()}
@@ -32,8 +42,6 @@ _MOL_ID_TO_NAME: dict[int, str] = {v: k for k, v in MOLECULE_IDS.items()}
 _T_REF    = 296.0       # HITRAN reference temperature [K]
 _C2       = 1.4387752   # second radiation constant [cm K]
 _DOPPLER  = 3.5810e-7   # sqrt(2R / (Na·c²)) [cm⁻¹ / sqrt(K·mol·g⁻¹)]
-_SQRT_LN2 = math.sqrt(math.log(2.0))
-_VOIGT_K  = _SQRT_LN2 / math.sqrt(math.pi)
 
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
@@ -48,18 +56,31 @@ def _radiation_term(nu: np.ndarray, T: float) -> np.ndarray:
     return nu * np.tanh(0.5 * _C2 * nu / T)
 
 
-def _voigt(
-    nu: np.ndarray,
-    centers: np.ndarray,
-    doppler: np.ndarray,
-    lorentz: np.ndarray,
-) -> np.ndarray:
-    """Voigt profile matrix [n_nu × n_lines] via Faddeeva function.
+def _resolve_n_jobs(n_jobs: int) -> int:
+    """Number of worker threads: *n_jobs* itself if ≥ 1, every core if -1."""
+    if (
+        isinstance(n_jobs, bool)
+        or not isinstance(n_jobs, (int, np.integer))
+        or not (n_jobs == -1 or n_jobs >= 1)
+    ):
+        raise ValueError(f"n_jobs must be a positive integer or -1 (all cores); got {n_jobs!r}")
+    return (os.cpu_count() or 1) if n_jobs == -1 else int(n_jobs)
 
-    Units: [cm⁻¹]⁻¹ per line, normalised over infinite support.
-    """
-    z = _SQRT_LN2 * ((nu[:, None] - centers) + 1j * lorentz) / doppler
-    return wofz(z).real * (_VOIGT_K / doppler)
+
+def _check_wing_tolerance(wing_tolerance, voigt: str) -> None:
+    """None, or a relative tolerance in (0, 1) together with voigt="humlicek"."""
+    if wing_tolerance is None:
+        return
+    if (
+        isinstance(wing_tolerance, bool)
+        or not isinstance(wing_tolerance, (int, float, np.floating))
+        or not (0.0 < wing_tolerance < 1.0)
+    ):
+        raise ValueError(f"wing_tolerance must be None or in (0, 1); got {wing_tolerance!r}")
+    if voigt != "humlicek":
+        raise ValueError(
+            "wing_tolerance needs voigt='humlicek' (wofz is the exact reference)"
+        )
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
@@ -74,6 +95,9 @@ def compute_transmittance(
     line_cutoff_cm1: float = 25.0,
     tile_width_cm1: float = 2.0,
     mu_view: float = 1.0,
+    voigt: str = "wofz",
+    n_jobs: int = 1,
+    wing_tolerance: Optional[float] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Compute monochromatic transmittance via line-by-line integration.
 
@@ -93,12 +117,32 @@ def compute_transmittance(
     step_cm1 : float
         Wavenumber grid spacing [cm⁻¹]. Default 0.001 cm⁻¹ (~0.3 GHz).
     line_cutoff_cm1 : float
-        Wing truncation radius per line [cm⁻¹]. Default 25 cm⁻¹.
+        Wing truncation radius per line [cm⁻¹], applied at every frequency:
+        a line adds nothing where |nu − centre| > cutoff. Default 25 cm⁻¹.
     tile_width_cm1 : float
         Width of each spectral tile for the inner Voigt loop [cm⁻¹]. Default 2.
-        Larger tiles use more memory; smaller tiles do more overhead.
+        Larger tiles use more memory; smaller tiles do more overhead. It does
+        not change the result.
     mu_view : float
         Cosine of the viewing zenith angle. 1.0 = nadir (vertical). Default 1.0.
+    voigt : {"wofz", "humlicek"}
+        Voigt line-shape backend. "wofz" (default) is scipy's exact Faddeeva
+        function; "humlicek" is the Humlicek W4 approximation compiled with
+        numba, summing the lines straight into the optical depth — much faster,
+        within 1e-4 relative of wofz (needs ``pip install pylblrtm[fast]``).
+    n_jobs : int
+        Threads used in parallel. 1 (default) runs serially; -1 uses every core.
+        Threads take the spectral tiles of every layer from one shared queue,
+        so a single-layer standoff path uses them all just like a full column.
+        The result does not depend on it: every value is summed exactly as in
+        the serial loop.
+    wing_tolerance : float, optional
+        None (default) computes every line on the fine grid. A value such as
+        1e-4 computes the far wings on grids 4, 16 and 64 times coarser and
+        interpolates them, keeping the optical depth within about that relative
+        error of the exact result (measured 3–10× below it) at several times
+        the speed. The line cores and the 25 cm⁻¹ cutoff stay exact. Needs
+        voigt="humlicek".
 
     Returns
     -------
@@ -136,6 +180,10 @@ def compute_transmittance(
         raise ValueError("step_cm1 must be positive")
     if not (0.0 < mu_view <= 1.0):
         raise ValueError("mu_view must be in (0, 1]")
+    if voigt not in VOIGT_BACKENDS:
+        raise ValueError(f"voigt must be one of {VOIGT_BACKENDS}; got '{voigt}'")
+    _resolve_n_jobs(n_jobs)
+    _check_wing_tolerance(wing_tolerance, voigt)
 
     # Build uniform wavenumber grid
     n_pts = int(np.ceil((nu_max_cm1 - nu_min_cm1) / step_cm1)) + 1
@@ -145,7 +193,10 @@ def compute_transmittance(
     layers = profile.build_layers()
 
     # Optical depth stack [n_layers, n_nu]
-    od = _build_optical_depth(nu, spectral_data, layers, line_cutoff_cm1, tile_width_cm1)
+    od = _build_optical_depth(
+        nu, spectral_data, layers, line_cutoff_cm1, tile_width_cm1,
+        voigt=voigt, n_jobs=n_jobs, wing_tolerance=wing_tolerance,
+    )
 
     # Column transmittance (slant path via 1/mu_view)
     transmittance = np.exp(-od.sum(axis=0) / mu_view)
@@ -160,6 +211,9 @@ def _build_optical_depth(
     layers: _Layers,
     line_cutoff_cm1: float,
     tile_width_cm1: float,
+    voigt: str = "wofz",
+    n_jobs: int = 1,
+    wing_tolerance: Optional[float] = None,
 ) -> np.ndarray:
     """Return vertical optical depth stack [n_layers, n_nu].
 
@@ -167,13 +221,37 @@ def _build_optical_depth(
     The JRAD=0 radiation term is divided out at shifted line centres and
     multiplied back at every frequency after the tile loop, matching the
     LBLRTM convention.
+
+    With n_jobs > 1 every (layer, spectral tile) pair is a task on a thread
+    pool, so a single-layer standoff path keeps every thread as busy as a full
+    column does. Tasks write disjoint slices of the stack, both Voigt backends
+    release the GIL, and every slice is summed in the same order as the serial
+    loop.
     """
+    voigt_fn = get_voigt(voigt)
+    # Humlicek adds each tile's lines straight into od, without the phi matrix
+    summing = voigt == "humlicek"
     n_layers = layers.n_layers
     n_nu = nu.size
     od = np.zeros((n_layers, n_nu), dtype=np.float64)
 
     step = float(nu[1] - nu[0]) if n_nu > 1 else 0.001
     tile_samples = max(1, int(np.floor(tile_width_cm1 / step + 1e-8)))
+
+    # Far wings on coarser grids (empty: no grid fits, everything stays fine)
+    _check_wing_tolerance(wing_tolerance, voigt)
+    levels = (
+        humlicek_levels(step, line_cutoff_cm1, wing_tolerance)
+        if wing_tolerance is not None and n_nu > 1 else []
+    )
+    if levels:
+        # Every line within the cutoff visits every tile at a fixed cost, which
+        # dominates when a tile holds few coarse points: give each tile at least
+        # 128 points of the coarsest grid. No phi matrix here, so memory is no
+        # concern, and the result does not depend on the tiling.
+        tile_samples = max(tile_samples, 128 * levels[-1][0])
+    tile_starts = range(0, n_nu, tile_samples)
+    n_workers = min(_resolve_n_jobs(n_jobs), max(n_layers * len(tile_starts), 1))
 
     # Pull line arrays out of SpectralData once
     nu0     = sd.lines["nu0"]       # line centres [cm⁻¹]
@@ -244,10 +322,12 @@ def _build_optical_depth(
     if not prepared:
         return od
 
-    # ── Main loop: layers × isotopologues × tiles ──────────────────────────────
-    for k in range(n_layers):
+    # ── Per layer: line parameters of every isotopologue ───────────────────────
+    def _layer_lines(k: int) -> Tuple[float, list]:
+        """Layer temperature and (shifted, strength, doppler, lorentz) per isotopologue."""
         T  = float(layers.temperature_k[k])   # layer temperature [K]
         P  = float(layers.pressure_atm[k])    # layer pressure [atm]
+        groups = []
 
         for mol_id, iso_id, gas_name, line_mask, molar_mass, q_ratios in prepared:
             col = float(layers.column_cm2[gas_name][k])  # gas column [molec cm⁻²]
@@ -291,27 +371,89 @@ def _build_optical_depth(
             # ── Doppler HWHM [cm⁻¹] ────────────────────────────────────────────
             doppler = centers * _DOPPLER * math.sqrt(T / molar_mass)
 
-            # ── Tile loop (memory-bounded Voigt evaluation) ────────────────────
-            for t0 in range(0, n_nu, tile_samples):
-                t1   = min(t0 + tile_samples, n_nu)
-                tile = nu[t0:t1]
-                nearby = (
-                    (shifted >= tile[0] - line_cutoff_cm1)
-                    & (shifted <= tile[-1] + line_cutoff_cm1)
-                )
-                if not nearby.any():
-                    continue
-                nb = np.flatnonzero(nearby)
-                # Block Voigt to limit peak memory usage (~256 lines at a time)
-                for b0 in range(0, nb.size, 256):
-                    b = nb[b0 : b0 + 256]
-                    phi = _voigt(tile, shifted[b], doppler[b], lorentz[b])
-                    od[k, t0:t1] += phi @ strength[b]
+            lines = (shifted, strength, doppler, lorentz)
+            groups.append(humlicek_prepare(*lines) if summing else lines)
 
+        return T, groups
+
+    # ── One tile of one layer (memory-bounded Voigt evaluation) ────────────────
+    def _tile(k: int, groups: list, t0: int) -> None:
+        t1   = min(t0 + tile_samples, n_nu)
+        tile = nu[t0:t1]
+        if summing:
+            for lines in groups:
+                if levels:
+                    humlicek_add_nested(nu[0], step, t0, lines, line_cutoff_cm1,
+                                        levels, od[k, t0:t1])
+                else:
+                    humlicek_add(tile, lines, line_cutoff_cm1, od[k, t0:t1])
+            return
+        for shifted, strength, doppler, lorentz in groups:
+            nearby = (
+                (shifted >= tile[0] - line_cutoff_cm1)
+                & (shifted <= tile[-1] + line_cutoff_cm1)
+            )
+            if not nearby.any():
+                continue
+            nb = np.flatnonzero(nearby)
+            # Block Voigt to limit peak memory usage (~256 lines at a time)
+            for b0 in range(0, nb.size, 256):
+                b = nb[b0 : b0 + 256]
+                phi = voigt_fn(tile, shifted[b], doppler[b], lorentz[b])
+                # Cutoff at every frequency, not per tile: the result must not
+                # depend on tile_width_cm1, which only bounds memory
+                phi[np.abs(tile[:, None] - shifted[b]) > line_cutoff_cm1] = 0.0
+                od[k, t0:t1] += phi @ strength[b]
+
+    def _finish(k: int, T: float) -> None:
         # Apply JRAD=0 radiation term at layer temperature for all frequencies
         od[k] *= _radiation_term(nu, T)
 
         if not np.isfinite(od[k]).all():
             raise FloatingPointError(f"Layer {k}: non-finite optical depth after radiation term")
+
+    def _layer(k: int) -> None:
+        T, groups = _layer_lines(k)
+        for t0 in tile_starts:
+            _tile(k, groups, t0)
+        _finish(k, T)
+
+    # ── Main loop: serial, or one queue of (layer, tile) tasks on threads ──────
+    if n_workers == 1:
+        for k in range(n_layers):
+            _layer(k)
+        return od
+
+    # Every tile of every layer is a task, queued layer after layer, so no
+    # thread waits for another until the end, whatever the number of layers.
+    # The first task of a layer prepares its lines and the last one to finish
+    # applies the radiation term and frees them: only the layers in progress
+    # hold their lines in memory.
+    layer_locks = [threading.Lock() for _ in range(n_layers)]
+    lines_of = [None] * n_layers
+    tiles_left = [len(tile_starts)] * n_layers
+    count_lock = threading.Lock()
+
+    def _task(task: Tuple[int, int]) -> None:
+        k, t0 = task
+        with layer_locks[k]:
+            if lines_of[k] is None:
+                lines_of[k] = _layer_lines(k)
+            T, groups = lines_of[k]
+        _tile(k, groups, t0)
+        with count_lock:
+            tiles_left[k] -= 1
+            last = tiles_left[k] == 0
+        if last:
+            lines_of[k] = None
+            _finish(k, T)
+
+    tasks = [(k, t0) for k in range(n_layers) for t0 in tile_starts]
+    with ThreadPoolExecutor(max_workers=n_workers) as pool:
+        try:
+            list(pool.map(_task, tasks))   # list() re-raises worker errors
+        except BaseException:
+            pool.shutdown(cancel_futures=True)   # skip the tasks not yet started
+            raise
 
     return od
