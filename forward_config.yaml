@@ -15,9 +15,9 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 spectral:
-  nu_min_cm1: 700.0     # Límite inferior del rango espectral [cm-1]
-  nu_max_cm1: 750.0     # Límite superior del rango espectral [cm-1]
-  step_cm1:   0.001     # Resolución de la grilla [cm-1]
+  nu_min_cm1: 714.0     # Límite inferior del rango espectral [cm-1]
+  nu_max_cm1: 1250.0     # Límite superior del rango espectral [cm-1]
+  step_cm1:   0.1     # Resolución de la grilla [cm-1]
                         #   0.001 → alta resolución, ~50k pts por 50 cm-1 (lento)
                         #   0.005 → balance bueno para prototipado
                         #   0.01  → 10x más rápido, bueno para validación visual
