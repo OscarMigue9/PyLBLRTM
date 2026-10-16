@@ -67,6 +67,7 @@ STAGES = ("catalog", "download", "validate", "molar_mass", "tips", "from_hapi")
 OK = "OK"
 WARN = "ADVERTENCIA"        # pasó, pero los datos tienen algo raro
 NO_LINES = "SIN_LINEAS"     # HITRAN no tiene líneas en el rango (no es bug)
+NOT_SERVED = "NO_DISPONIBLE"  # HITRANonline no sirve el isotopólogo por la API
 ERROR = "ERROR"
 
 
@@ -118,9 +119,13 @@ def _short(exc: BaseException) -> str:
     return msg[:500]
 
 
-def _is_no_lines(exc: BaseException) -> bool:
-    """True si el error significa 'no hay líneas en el rango', no un bug."""
-    return isinstance(exc, hm.HITRANDataError) and "is empty" in str(exc)
+def _download_status(exc: BaseException) -> str:
+    """Estado de un fallo de descarga: los que no son bugs no cuentan como ERROR."""
+    if isinstance(exc, hm.HITRANNoLinesError):
+        return NO_LINES
+    if isinstance(exc, hm.HITRANNotAvailableError):
+        return NOT_SERVED
+    return ERROR
 
 
 def _validate(data: dict, nu_min: float, nu_max: float) -> List[str]:
@@ -205,7 +210,9 @@ def check_isotopologue(mol: str, mol_id: int, iso: int, nu_min: float, nu_max: f
         res.error_type = type(exc).__name__
         res.error_message = _short(exc)
         res.traceback = traceback.format_exc()
-        res.status = NO_LINES if (stage == "download" and _is_no_lines(exc)) else ERROR
+        res.status = _download_status(exc) if stage == "download" else ERROR
+        if res.status != ERROR:
+            res.traceback = ""
     finally:
         res.seconds = round(time.perf_counter() - t0, 2)
         text = hapi_out.getvalue()
@@ -277,13 +284,15 @@ def _write_reports(out: Path, results: List[Result], meta: dict, interrupted: bo
     problems = [r for r in results if r.status == ERROR]
     warned = [r for r in results if r.status == WARN]
     empty = [r for r in results if r.status == NO_LINES]
+    not_served = [r for r in results if r.status == NOT_SERVED]
     ok = [r for r in results if r.status == OK]
 
     (out / "errores.json").write_text(
         json.dumps({"meta": meta,
                     "errores": [asdict(r) for r in problems],
                     "advertencias": [asdict(r) for r in warned],
-                    "sin_lineas": [asdict(r) for r in empty]},
+                    "sin_lineas": [asdict(r) for r in empty],
+                    "no_disponible": [asdict(r) for r in not_served]},
                    indent=2, ensure_ascii=False, default=str),
         encoding="utf-8",
     )
@@ -303,6 +312,7 @@ def _write_reports(out: Path, results: List[Result], meta: dict, interrupted: bo
         f"| OK | {len(ok)} |",
         f"| ADVERTENCIA (pasó con datos raros) | {len(warned)} |",
         f"| SIN_LINEAS (HITRAN no tiene líneas en el rango) | {len(empty)} |",
+        f"| NO_DISPONIBLE (HITRANonline no lo sirve por la API) | {len(not_served)} |",
         f"| **ERROR** | **{len(problems)}** |",
         "",
     ]
@@ -313,11 +323,7 @@ def _write_reports(out: Path, results: List[Result], meta: dict, interrupted: bo
             msg = r.error_message.replace("|", "\\|")
             md.append(f"| {r.molecule} | {r.iso_id} | {r.failed_stage} | "
                       f"{r.error_type} | {msg} |")
-        md += ["", "Traceback completo de cada uno en `errores.json` y `test.log`.", "",
-               "> Nota: `Failed to retrieve data for given parameters` es el mensaje "
-               "genérico de HAPI para cualquier error HTTP de hitran.org; suele significar "
-               "que el isotopólogo no tiene líneas en el rango o que HITRANonline no lo "
-               "sirve, pero hay que confirmarlo caso por caso.", ""]
+        md += ["", "Traceback completo de cada uno en `errores.json` y `test.log`.", ""]
 
         md += ["### Errores agrupados por mensaje", ""]
         groups: dict = {}
@@ -334,7 +340,13 @@ def _write_reports(out: Path, results: List[Result], meta: dict, interrupted: bo
         md.append("")
     if empty:
         md += ["## Sin líneas en el rango", "",
+               "HITRAN tiene líneas de estos isotopólogos, pero no en esta ventana.", "",
                ", ".join(f"{r.molecule}/{r.iso_id}" for r in empty), ""]
+    if not_served:
+        md += ["## No disponibles en HITRANonline", "",
+               "La API responde 404 en todo el rango 0–100000 cm⁻¹ (pueden existir solo "
+               "como secciones eficaces o en listas suplementarias).", "",
+               ", ".join(f"{r.molecule}/{r.iso_id}" for r in not_served), ""]
     md += ["## Moléculas OK", "",
            ", ".join(sorted({r.molecule for r in ok if r.iso_id != "all"})) or "—", ""]
     (out / "RESUMEN.md").write_text("\n".join(md), encoding="utf-8")
@@ -474,6 +486,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     log.info(f"OK: {sum(r.status == OK for r in results)}   "
              f"ADVERTENCIA: {sum(r.status == WARN for r in results)}   "
              f"SIN_LINEAS: {sum(r.status == NO_LINES for r in results)}   "
+             f"NO_DISPONIBLE: {sum(r.status == NOT_SERVED for r in results)}   "
              f"ERROR: {n_err}")
     log.info(f"Reporte: {out / 'RESUMEN.md'}")
     return 1 if n_err else 0

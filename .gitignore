@@ -35,3 +35,4 @@ resultados_test_hapi/
 # Logs de SLURM
 scripts/logs/*
 !scripts/logs/.gitkeep
+resultados_test_tips/

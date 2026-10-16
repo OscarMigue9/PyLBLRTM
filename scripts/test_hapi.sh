@@ -22,10 +22,13 @@
 
 cd "${SLURM_SUBMIT_DIR:-$(dirname "$0")/..}" || exit 1
 
-# Activar el entorno de Python (descomentar el que aplique)
-# source .venv/bin/activate
-# module load python/3.11
-# conda activate pylblrtm
+# Entorno de Python: .venv del repo, creado una sola vez con
+#   python -m venv .venv && .venv/bin/python -m pip install -e .
+if [ -f .venv/bin/activate ]; then
+    source .venv/bin/activate
+else
+    echo "AVISO: no existe .venv en $(pwd); se usa el python del sistema" >&2
+fi
 
 export PYTHONUNBUFFERED=1   # que el progreso aparezca en el .out en tiempo real
 
