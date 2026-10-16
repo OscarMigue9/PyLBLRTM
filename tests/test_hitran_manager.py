@@ -241,3 +241,117 @@ class TestGetLineParameters:
         with patch.object(hm, "_get_hapi", return_value=mock_hapi):
             with pytest.raises(hm.HITRANDataError, match="No isotopologues"):
                 hm.get_line_parameters("H2O", 700, 1400, iso_id="all", cache_dir=tmp_path)
+
+
+# ── "Failed to retrieve data" → error específico ──────────────────────────────
+
+class TestNoDataErrors:
+    """HITRAN answers 404 both for an empty range and for an unserved isotopologue."""
+
+    def _fetch_failing(self, tmp_path, mock_hapi, serves):
+        mock_hapi.ISO = {(1, 1): [1, "H2(16O)", 0.997, 18.01, "H2O"]}
+        mock_hapi.fetch.side_effect = Exception("Failed to retrieve data for given parameters.")
+        with patch.object(hm, "_get_hapi", return_value=mock_hapi), \
+             patch.object(hm, "is_cached", return_value=False), \
+             patch.object(hm, "_can_reach_hitran", return_value=True), \
+             patch.object(hm, "_hitran_serves", return_value=serves):
+            hm._fetch_single_iso("H2O", 1, 1, 714.0, 1250.0, tmp_path, False)
+
+    def test_served_elsewhere_is_no_lines(self, tmp_path, mock_hapi):
+        with pytest.raises(hm.HITRANNoLinesError, match="no lines"):
+            self._fetch_failing(tmp_path, mock_hapi, serves=True)
+
+    def test_not_served_at_all(self, tmp_path, mock_hapi):
+        with pytest.raises(hm.HITRANNotAvailableError, match="does not serve"):
+            self._fetch_failing(tmp_path, mock_hapi, serves=False)
+
+    def test_unknown_stays_generic_data_error(self, tmp_path, mock_hapi):
+        with pytest.raises(hm.HITRANDataError) as info:
+            self._fetch_failing(tmp_path, mock_hapi, serves=None)
+        assert not isinstance(info.value, (hm.HITRANNoLinesError, hm.HITRANNotAvailableError))
+
+    def test_new_errors_are_data_errors(self):
+        """Code that catches HITRANDataError keeps working."""
+        assert issubclass(hm.HITRANNoLinesError, hm.HITRANDataError)
+        assert issubclass(hm.HITRANNotAvailableError, hm.HITRANDataError)
+
+
+# ── TIPS: rango de la tabla y versión de respaldo ─────────────────────────────
+
+@pytest.fixture
+def tips_hapi():
+    """HAPI mock: (1,1) has TIPS-2021 up to 1000 K; (1,2) only has TIPS-2025."""
+    m = MagicMock()
+    m.TIPS_2021_ISOT_HASH = {(1, 1): np.arange(1.0, 1001.0)}
+    m.TIPS_2025_ISOT_HASH = {(1, 1): np.arange(1.0, 1001.0), (1, 2): np.arange(1.0, 3001.0)}
+    m.TIPS_2017_ISOT_HASH = {}
+    m.partitionSum.side_effect = lambda M, I, T, version=2021: float(T)
+    return m
+
+
+class TestTipsTable:
+
+    def test_clipped_to_table_max(self, tips_hapi):
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            T, Q = hm.get_tips_table("H2O", 1, T_min=150, T_max=3000)
+        assert T[0] == 150.0 and T[-1] == 1000.0
+        assert np.array_equal(T, Q)
+
+    def test_inside_table_unchanged(self, tips_hapi):
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            T, _ = hm.get_tips_table("H2O", 1, T_min=150, T_max=400)
+        assert T[0] == 150.0 and T[-1] == 400.0 and len(T) == 251
+
+    def test_fractional_t_min_never_passes_table(self, tips_hapi):
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            T, _ = hm.get_tips_table("H2O", 1, T_min=150.5, T_max=3000)
+        assert T[-1] <= 1000.0
+
+    def test_no_overlap_raises(self, tips_hapi):
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            with pytest.raises(hm.HITRANDataError, match="does not overlap"):
+                hm.get_tips_table("H2O", 1, T_min=1500, T_max=3000)
+
+    def test_falls_back_to_other_version(self, tips_hapi):
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            T, _ = hm.get_tips_table("H2O", 2, T_min=150, T_max=3000, version=2021)
+        assert T[-1] == 3000.0
+        assert tips_hapi.partitionSum.call_args.kwargs["version"] == 2025
+
+    def test_no_version_has_table_raises(self, tips_hapi):
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            with pytest.raises(hm.HITRANDataError, match="No TIPS table"):
+                hm.get_tips_table("H2O", 3)
+
+    def test_get_tips_falls_back_too(self, tips_hapi):
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            assert hm.get_tips("H2O", 2, 296.0, version=2021) == 296.0
+        assert tips_hapi.partitionSum.call_args.kwargs["version"] == 2025
+
+
+# ── TIPS con el HAPI real (offline: las tablas vienen dentro de HAPI) ─────────
+
+def _real_hapi_available() -> bool:
+    try:
+        hm._get_hapi()
+        return True
+    except ImportError:
+        return False
+
+
+@pytest.mark.skipif(not _real_hapi_available(), reason="hitran-api not installed")
+class TestTipsRealHapi:
+    """The isotopologues that broke from_hapi in the 8–14 µm download test."""
+
+    @pytest.mark.parametrize("mol,iso,t_max", [
+        ("O3", 1, 1000.0), ("NO2", 1, 1000.0), ("CH4", 1, 2500.0),
+    ])
+    def test_default_from_hapi_range_works(self, mol, iso, t_max):
+        T, Q = hm.get_tips_table(mol, iso, T_min=150.0, T_max=3000.0)
+        assert T[0] == 150.0 and T[-1] == t_max
+        assert np.all(np.isfinite(Q)) and np.all(Q > 0)
+
+    @pytest.mark.parametrize("mol,iso", [("SO", 2), ("NF3", 1)])
+    def test_missing_tips2021_uses_another_version(self, mol, iso):
+        T, Q = hm.get_tips_table(mol, iso, T_min=150.0, T_max=400.0)
+        assert np.all(np.isfinite(Q)) and np.all(Q > 0)

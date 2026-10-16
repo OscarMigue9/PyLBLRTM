@@ -49,6 +49,12 @@ class SpectralData:
                 f"Available: {sorted(self.tips.keys())}"
             )
         T_arr, Q_arr = self.tips[key]
+        # np.interp would silently return the edge value outside the table
+        if not (T_arr[0] <= T <= T_arr[-1]):
+            raise ValueError(
+                f"T={T:.2f} K is outside the TIPS table of (mol_id={mol_id}, "
+                f"iso_id={iso_id}): {T_arr[0]:.1f}–{T_arr[-1]:.1f} K"
+            )
         return float(np.interp(T, T_arr, Q_arr))
 
     # ── Quick access ──────────────────────────────────────────────────────────

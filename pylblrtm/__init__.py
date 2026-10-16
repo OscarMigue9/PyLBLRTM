@@ -35,6 +35,8 @@ from .hitran_manager import (
     HITRANConnectionError,
     HITRANCredentialError,
     HITRANDataError,
+    HITRANNoLinesError,
+    HITRANNotAvailableError,
 )
 
 __version__ = "0.1.2"
@@ -69,4 +71,6 @@ __all__ = [
     "HITRANConnectionError",
     "HITRANCredentialError",
     "HITRANDataError",
+    "HITRANNoLinesError",
+    "HITRANNotAvailableError",
 ]

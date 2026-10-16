@@ -114,3 +114,21 @@ class TestSpectralDataRepr:
             molecule=None,
         )
         assert "multi-molecule" in repr(sd)
+
+
+class TestQOutsideTable:
+
+    def test_Q_above_table_raises(self, single_iso_sd):
+        T_max = single_iso_sd.tips[(1, 1)][0][-1]
+        with pytest.raises(ValueError, match="outside the TIPS table"):
+            single_iso_sd.Q(T_max + 1.0, 1, 1)
+
+    def test_Q_below_table_raises(self, single_iso_sd):
+        T_min = single_iso_sd.tips[(1, 1)][0][0]
+        with pytest.raises(ValueError, match="outside the TIPS table"):
+            single_iso_sd.Q(T_min - 1.0, 1, 1)
+
+    def test_Q_at_table_edges_ok(self, single_iso_sd):
+        T_arr = single_iso_sd.tips[(1, 1)][0]
+        single_iso_sd.Q(float(T_arr[0]), 1, 1)
+        single_iso_sd.Q(float(T_arr[-1]), 1, 1)

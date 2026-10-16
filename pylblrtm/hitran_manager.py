@@ -134,6 +134,12 @@ class HITRANCredentialError(PermissionError):
 class HITRANDataError(ValueError):
     """HITRAN returned empty or unexpected data."""
 
+class HITRANNoLinesError(HITRANDataError):
+    """The isotopologue has no lines in the requested range (HITRAN serves it elsewhere)."""
+
+class HITRANNotAvailableError(HITRANDataError):
+    """HITRANonline does not serve this isotopologue through the API in any range."""
+
 
 # ─── Gestión de credenciales ─────────────────────────────────────────────────
 
@@ -278,6 +284,52 @@ def _can_reach_hitran(timeout: int = 5) -> bool:
         return False
 
 
+def _hitran_serves(global_iso_id: int, timeout: int = 30) -> Optional[bool]:
+    """
+    Whether HITRANonline serves any line of this isotopologue (0–100000 cm⁻¹).
+
+    HITRAN answers 404 both when a range holds no lines and when the
+    isotopologue is not served at all, and HAPI turns either into the same
+    "Failed to retrieve data" message. Only the status is read, not the body.
+    Returns None when the answer is unknown (network error).
+    """
+    import urllib.error
+    import urllib.request
+
+    url = (f"{_get_hapi().VARIABLES['GLOBAL_HOST']}/lbl/api?"
+           f"iso_ids_list={global_iso_id}&numin=0&numax=100000")
+    try:
+        with urllib.request.urlopen(url, timeout=timeout):
+            return True
+    except urllib.error.HTTPError as err:
+        return False if err.code == 404 else None
+    except OSError:
+        return None
+
+
+def _no_data_error(mol_name: str, mol_id: int, iso_id: int,
+                   nu_min: float, nu_max: float, exc: Exception) -> HITRANDataError:
+    """Turn HAPI's generic 'Failed to retrieve data' into a specific error."""
+    record = _get_hapi().ISO.get((mol_id, iso_id))
+    serves = _hitran_serves(record[0]) if record else None
+    where = f"{mol_name} iso {iso_id} in {nu_min:.3f}–{nu_max:.3f} cm⁻¹"
+    if serves is True:
+        return HITRANNoLinesError(
+            f"HITRAN has no lines for {where}. "
+            "The isotopologue has lines in other ranges; this one is empty."
+        )
+    if serves is False:
+        return HITRANNotAvailableError(
+            f"HITRANonline does not serve {mol_name} iso {iso_id} through the API "
+            "in any range (it may exist only as cross-sections or in a "
+            "supplemental line list)."
+        )
+    return HITRANDataError(
+        f"HITRAN returned no data for {where}: either there are no lines in "
+        f"that range or the isotopologue is not served. HAPI said: {exc}"
+    )
+
+
 # ─── Descarga y extracción ───────────────────────────────────────────────────
 
 def _extract_line_data(
@@ -306,7 +358,7 @@ def _extract_line_data(
 
     n = len(cols[0])
     if n == 0:
-        raise HITRANDataError(
+        raise HITRANNoLinesError(
             f"Table '{table}' is empty. "
             "Check the wavenumber range (there may be no lines in that range)."
         )
@@ -398,6 +450,9 @@ def _fetch_single_iso(
     except (HITRANConnectionError, HITRANCredentialError, HITRANDataError):
         raise
     except Exception as exc:
+        # HAPI's message for any HTTP error other than 403 (HITRAN sends 404)
+        if "failed to retrieve data" in str(exc).lower():
+            raise _no_data_error(mol_name, mol_id, iso_id, nu_min, nu_max, exc) from exc
         _classify_error(exc, mol_name)
 
     return _extract_line_data(table, mol_id, iso_id)
@@ -507,6 +562,45 @@ def get_line_parameters(
 # Referencia: Gamache et al. 2021, JQSRT 271, 107713.
 
 _TIPS_VERSIONS = (2025, 2021, 2017, 2011)
+# Versions tried, in order, when the requested one has no table for an isotopologue
+_TIPS_FALLBACK = (2025, 2021, 2017)
+
+
+def _tips_range(mol_id: int, iso_id: int, version: int) -> Optional[Tuple[float, float]]:
+    """(T_min, T_max) [K] of HAPI's TIPS table, or None if the version lacks it."""
+    if version == 2011:
+        return (70.0, 3000.0)   # TIPS-2011 is a fixed-range polynomial, no per-iso table
+    table = getattr(_get_hapi(), f"TIPS_{version}_ISOT_HASH", {}).get((mol_id, iso_id))
+    if table is None or len(table) == 0:
+        return None
+    return float(table[0]), float(table[-1])
+
+
+def _resolve_tips_version(
+    mol_name: str, mol_id: int, iso_id: int, version: int
+) -> Tuple[int, Tuple[float, float]]:
+    """
+    The TIPS version to use and its temperature range.
+
+    Returns *version* when it has a table for the isotopologue; otherwise the
+    first of 2025, 2021, 2017 that does, with a warning (e.g. SO iso 2 and
+    NF3 have no TIPS-2021 table).
+    """
+    rng = _tips_range(mol_id, iso_id, version)
+    if rng is not None:
+        return version, rng
+    for alt in _TIPS_FALLBACK:
+        if alt == version:
+            continue
+        rng = _tips_range(mol_id, iso_id, alt)
+        if rng is not None:
+            logger.warning("TIPS-%d has no table for %s iso %d; using TIPS-%d",
+                           version, mol_name, iso_id, alt)
+            return alt, rng
+    raise HITRANDataError(
+        f"No TIPS table for {mol_name} iso {iso_id} in any version "
+        f"{(version,) + tuple(v for v in _TIPS_FALLBACK if v != version)}."
+    )
 
 
 def get_molar_mass(molecule: str, iso_id: int = 1) -> float:
@@ -592,6 +686,7 @@ def get_tips(
 
     if version not in _TIPS_VERSIONS:
         raise ValueError(f"version must be one of {_TIPS_VERSIONS}.")
+    version, _ = _resolve_tips_version(mol_name, mol_id, iso_id, version)
 
     try:
         return float(_get_hapi().partitionSum(mol_id, iso_id, T, version=version))
@@ -622,9 +717,11 @@ def get_tips_table(
     iso_id : int
         Isotopologue ID.
     T_min, T_max : float
-        Temperature range in Kelvin.
+        Temperature range in Kelvin. Clipped, with a warning, to the range the
+        TIPS table covers (e.g. O3 and NO2 stop at 1000 K, CH4 at 2500 K).
     version : int
-        TIPS version: 2011, 2017, 2021, or 2025.
+        TIPS version: 2011, 2017, 2021, or 2025. If it has no table for the
+        isotopologue, the first of 2025, 2021, 2017 that does is used instead.
 
     Returns
     -------
@@ -643,8 +740,22 @@ def get_tips_table(
 
     if version not in _TIPS_VERSIONS:
         raise ValueError(f"version must be one of {_TIPS_VERSIONS}.")
+    version, (tab_min, tab_max) = _resolve_tips_version(mol_name, mol_id, iso_id, version)
 
-    T_arr = np.arange(max(1.0, T_min), min(T_max, 9999.0) + 1.0, 1.0)
+    lo = max(1.0, T_min, tab_min)
+    hi = min(T_max, 9999.0, tab_max)
+    if hi < lo:
+        raise HITRANDataError(
+            f"TIPS-{version} for {mol_name} iso {iso_id} covers {tab_min:.0f}–{tab_max:.0f} K, "
+            f"which does not overlap the requested {T_min:.0f}–{T_max:.0f} K."
+        )
+    if lo > max(1.0, T_min) or hi < min(T_max, 9999.0):
+        # Expected (from_hapi asks up to 3000 K); SpectralData.Q refuses any T outside
+        logger.info("TIPS-%d for %s iso %d covers %.0f–%.0f K; table clipped to %.0f–%.0f K",
+                    version, mol_name, iso_id, tab_min, tab_max, lo, hi)
+
+    T_arr = np.arange(lo, hi + 1.0, 1.0)
+    T_arr = T_arr[T_arr <= hi]   # a fractional lo would put the last step past the table
     try:
         Q_arr = np.array([
             _get_hapi().partitionSum(mol_id, iso_id, float(t), version=version)
