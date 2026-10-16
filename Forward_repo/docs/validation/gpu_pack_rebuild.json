@@ -1,0 +1,33 @@
+{
+  "all_outputs_byte_identical": true,
+  "builder_sha256": "68b23f35361c0cfdda839b32b38544e88c93e26d69154f8a70b5edf9f92e7f34",
+  "command": "python -m pipelines.generation --cache data_cache build-gpu-pack --output-dir runs/gpu_pack_rebuild",
+  "historical_co2_partition_assignment_preserved": true,
+  "inputs_sha256": {
+    "aer_coupling": "5b26c87b4623cedbd58557c0265033cdf1bac6e1616eb979519421c391386bcf",
+    "aer_lines": "898c856b07b298d85a8e0bc788ab388ce7391417fb9a0276b44d62c874c457b2",
+    "bh": "d68c8b3c7b51cf0c7ba6b8ed587ed55c547da75e899db54cf64d19c84d34152d",
+    "co2": "14c2ba73ababd6d274832b76815d825157eab3fae91e1c14485732adc94b5057",
+    "h2o": "dcb38f99a7deb7f1335b032e84ff1ed54074e20786c742960d50426a07b123a6",
+    "o2n2": "fe938dba504fc114e6dd85ebbe4cb73df6302ab82002d1d51a0392ab270d1d81",
+    "tips_manifest": "bcba451462cc69b3814f013d789b730aad3a200cddc8cf35ffd108e57def80a5"
+  },
+  "outputs": {
+    "cont.npz": {
+      "byte_identical_to_archive": true,
+      "bytes": 66757,
+      "sha256": "e8f18089c28d103e96c12ea2d7aa2ac7190e19cb095ab0a0de8cb7635c1e30f5"
+    },
+    "lineas.npz": {
+      "byte_identical_to_archive": true,
+      "bytes": 19363092,
+      "sha256": "7dcc80ab21284b64d691b87c04e3375e425ecdba4d3a8014f4ff8d6b3e1867ac"
+    },
+    "qtab.npz": {
+      "byte_identical_to_archive": true,
+      "bytes": 202701,
+      "sha256": "99c09e782fadc315727d5adbcd3190451ef8ea3d399bdd6ce6f07f45aee92d9a"
+    }
+  },
+  "schema_version": 1
+}

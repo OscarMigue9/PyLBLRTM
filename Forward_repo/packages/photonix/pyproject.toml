@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "photonix"
+version = "0.2.0"
+description = "Thermal radiative transfer and a versioned Torch retrieval backend"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "numba>=0.59"]
+readme = "README.md"
+
+[project.optional-dependencies]
+torch = ["torch>=2.2"]
+dev = ["pytest>=8", "ruff>=0.6", "build>=1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["photonix*"]
+
+[tool.setuptools.package-data]
+photonix = [
+    "resources/**/*.npz",
+    "resources/**/*.json",
+    "resources/**/*.txt",
+    "torch_legacy/continuum_tables.npz",
+]

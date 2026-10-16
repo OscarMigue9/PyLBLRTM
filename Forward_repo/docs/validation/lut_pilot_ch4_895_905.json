@@ -1,0 +1,35 @@
+{
+  "archive_sha256": "57c0883c1e72f84638702c66b5273eafad813d332c1ec488d049603a85e0f6b9",
+  "build": {
+    "negative_fraction": 0.0,
+    "output": "/tmp/lut-pilot-jren_tx4/candidate/lut_CH4_895_905.npz",
+    "rms_log": 8.234238106491696e-05,
+    "sha256": "67c24b16d696d8250c29f7b088b9b44f215d49e3cc34062094ffcf674c46219c",
+    "status": "candidate_historical_source_unverified"
+  },
+  "candidate_sha256": "67c24b16d696d8250c29f7b088b9b44f215d49e3cc34062094ffcf674c46219c",
+  "comparison": {
+    "archived_sha256": "57c0883c1e72f84638702c66b5273eafad813d332c1ec488d049603a85e0f6b9",
+    "candidate_sha256": "67c24b16d696d8250c29f7b088b9b44f215d49e3cc34062094ffcf674c46219c",
+    "max_abs_log10_sigma": 2.913225216616411e-13,
+    "rms_log10_sigma": 6.683481215511576e-15,
+    "status": "comparison_only_no_scientific_acceptance_threshold"
+  },
+  "gas": "CH4",
+  "gate": {
+    "comparison_grid": "20 deterministic state indices x 301 deterministic channel indices",
+    "max_abs_log10_sigma_limit": 0.00025,
+    "passed": true,
+    "rms_log10_sigma_limit": 2.5e-05,
+    "scope": "one CH4 895-905 cm^-1 candidate block only"
+  },
+  "generator_sha256": "9021ca785b1e7f20be707656c3b2dfbd10dd53236ec7a075ea2df6e73d4857e5",
+  "inputs_sha256": {
+    "cont.npz": "e8f18089c28d103e96c12ea2d7aa2ac7190e19cb095ab0a0de8cb7635c1e30f5",
+    "lineas.npz": "7dcc80ab21284b64d691b87c04e3375e425ecdba4d3a8014f4ff8d6b3e1867ac",
+    "lut_CH4_895_905.npz": "57c0883c1e72f84638702c66b5273eafad813d332c1ec488d049603a85e0f6b9",
+    "qtab.npz": "99c09e782fadc315727d5adbcd3190451ef8ea3d399bdd6ce6f07f45aee92d9a"
+  },
+  "kernel_sha256": "282c8156b295561e7cb206ab1746e9f74c12e7b049555c430e3bac988f6a19f3",
+  "status": "candidate_pilot_comparison_only"
+}

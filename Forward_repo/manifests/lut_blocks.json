@@ -1,0 +1,2540 @@
+{
+  "schema_version": 1,
+  "scientific_status": "historical_source_revision_unverified",
+  "hash_algorithm": "sha256",
+  "grid": {
+    "start_cm1": 635,
+    "stop_cm1": 1265,
+    "block_width_cm1": 10
+  },
+  "gases": [
+    "H2O",
+    "CO2",
+    "O3",
+    "N2O",
+    "CH4"
+  ],
+  "total_blocks": 315,
+  "blocks": [
+    {
+      "gas": "H2O",
+      "lower_cm1": 635,
+      "upper_cm1": 645,
+      "filename": "lut_H2O_635_645.npz",
+      "bytes": 3114104,
+      "sha256": "d75cd8e0294f3098818692a68a33b792d3c85e7b3a7b59037909d217f92420ec"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 645,
+      "upper_cm1": 655,
+      "filename": "lut_H2O_645_655.npz",
+      "bytes": 3113492,
+      "sha256": "4f86362c57dda9c24ed0c586b0c80dfc93e045797db1b9974a2f342a30c5f41c"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 655,
+      "upper_cm1": 665,
+      "filename": "lut_H2O_655_665.npz",
+      "bytes": 3103999,
+      "sha256": "6bd46ac39a41776450dbdac769398104fb0c1f183fdfe277dca19487e39c1609"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 665,
+      "upper_cm1": 675,
+      "filename": "lut_H2O_665_675.npz",
+      "bytes": 3114824,
+      "sha256": "8261c7fa86d4c15e1f546ca5a7106ed96b7ca15128e8c418e3592525e0968b4a"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 675,
+      "upper_cm1": 685,
+      "filename": "lut_H2O_675_685.npz",
+      "bytes": 3096657,
+      "sha256": "d053891fbbb0d169449210d164196d3de0b1e6ab39442353334af2b654ff5873"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 685,
+      "upper_cm1": 695,
+      "filename": "lut_H2O_685_695.npz",
+      "bytes": 3106380,
+      "sha256": "a2987d065e5c536f9605c5497ee8c72a8e611240acb6667bb8f85463c400e364"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 695,
+      "upper_cm1": 705,
+      "filename": "lut_H2O_695_705.npz",
+      "bytes": 3113740,
+      "sha256": "e06c66c23aa260486db86d0f3a806a0525bc65a01d54ffd6d2bc5beb42b137c7"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 705,
+      "upper_cm1": 715,
+      "filename": "lut_H2O_705_715.npz",
+      "bytes": 3112185,
+      "sha256": "9ee4bebea605838f8d2d8a0699254d26e7b015beccbb1417ca000b3a2fa06766"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 715,
+      "upper_cm1": 725,
+      "filename": "lut_H2O_715_725.npz",
+      "bytes": 3111284,
+      "sha256": "bc8ac78c6ea9070423466f97eae399a8d6689f9a4c8e2289c412ac906b23b143"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 725,
+      "upper_cm1": 735,
+      "filename": "lut_H2O_725_735.npz",
+      "bytes": 3111997,
+      "sha256": "2cf5876c9e06ab2530da99664c0ed0ff86b2ea2035227ca52961fb48c56d2dbf"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 735,
+      "upper_cm1": 745,
+      "filename": "lut_H2O_735_745.npz",
+      "bytes": 3110602,
+      "sha256": "c1a7e44504aaab9767a41057bcbaf2b6dfbe59b6753faa998773dd2ff6c3bd34"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 745,
+      "upper_cm1": 755,
+      "filename": "lut_H2O_745_755.npz",
+      "bytes": 3105647,
+      "sha256": "2dcdb18b8dc2195af66fe53faeb129e99f3dbf70e35886ff4de95f9bdc699860"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 755,
+      "upper_cm1": 765,
+      "filename": "lut_H2O_755_765.npz",
+      "bytes": 3108663,
+      "sha256": "119854479820448e8731f98883c6669192decf99c84e2b15ac3ff1518cdae4d8"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 765,
+      "upper_cm1": 775,
+      "filename": "lut_H2O_765_775.npz",
+      "bytes": 3103451,
+      "sha256": "390a6f5bedcb9b17ce69114ea2c8b1d96e4bf910a45ab4e9009ebd1f3ea7cd95"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 775,
+      "upper_cm1": 785,
+      "filename": "lut_H2O_775_785.npz",
+      "bytes": 3099234,
+      "sha256": "ada6189c44d7ada2342760171bab69634a8f38ba54d37de17fd1e33d9270e8af"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 785,
+      "upper_cm1": 795,
+      "filename": "lut_H2O_785_795.npz",
+      "bytes": 3103736,
+      "sha256": "8fbab78f3b94e8be07413c429ec52f5228a3393a1b0cdd57420ec4aa7345fc0b"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 795,
+      "upper_cm1": 805,
+      "filename": "lut_H2O_795_805.npz",
+      "bytes": 3110956,
+      "sha256": "45a10fd52810efa958a9077d02e232836af524719c0963093466a813dc875603"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 805,
+      "upper_cm1": 815,
+      "filename": "lut_H2O_805_815.npz",
+      "bytes": 3103740,
+      "sha256": "48d23b144573f4605c587bace7f1eef6ac203178a3bf0b26adecfa0e65c87db1"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 815,
+      "upper_cm1": 825,
+      "filename": "lut_H2O_815_825.npz",
+      "bytes": 3097413,
+      "sha256": "b4038427a60c212adf59a14e396a227918e4e2d5d991d9b294e3de10c7c85afa"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 825,
+      "upper_cm1": 835,
+      "filename": "lut_H2O_825_835.npz",
+      "bytes": 3109587,
+      "sha256": "4a89b41096ab0627b8b3554f94a69d792d0ad26bb727ebc90b3fa40f524d19d2"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 835,
+      "upper_cm1": 845,
+      "filename": "lut_H2O_835_845.npz",
+      "bytes": 3108257,
+      "sha256": "8d1447a79895e9416264e6ab766876d47b8e867c524a46344e0a8654d486cfe5"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 845,
+      "upper_cm1": 855,
+      "filename": "lut_H2O_845_855.npz",
+      "bytes": 3104653,
+      "sha256": "bf506b27c45960079b620ab08e6ac004ea0b494ca76385896920ca6dbbca8329"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 855,
+      "upper_cm1": 865,
+      "filename": "lut_H2O_855_865.npz",
+      "bytes": 3111359,
+      "sha256": "0408e11ea7bb4e13d01394191e8bc8134ca8bb32171bb79a8200161be2383683"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 865,
+      "upper_cm1": 875,
+      "filename": "lut_H2O_865_875.npz",
+      "bytes": 3101168,
+      "sha256": "382dcbd1c3d101345b25a38ac66566826911ebc3eb51d926b482b6c2b7220050"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 875,
+      "upper_cm1": 885,
+      "filename": "lut_H2O_875_885.npz",
+      "bytes": 3121551,
+      "sha256": "d10dd12693a53abb2bf2e55f623ae01ce9bc915ebec410ed2fb49cd61f8063be"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 885,
+      "upper_cm1": 895,
+      "filename": "lut_H2O_885_895.npz",
+      "bytes": 3108590,
+      "sha256": "95fb6d3b7651fba2b99ef36443c491445e3a4658ccc1eedf0999fb02264f1b2a"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 895,
+      "upper_cm1": 905,
+      "filename": "lut_H2O_895_905.npz",
+      "bytes": 3118151,
+      "sha256": "704a60cb2f37e047babbd52d2caf0b4de03cfbbbdf2fc61dac3083d415ac3813"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 905,
+      "upper_cm1": 915,
+      "filename": "lut_H2O_905_915.npz",
+      "bytes": 3123272,
+      "sha256": "0afa2c88b7e2d5d6254e405b30041f4458c86fd42e82c04ae7c3f49cdb240ee9"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 915,
+      "upper_cm1": 925,
+      "filename": "lut_H2O_915_925.npz",
+      "bytes": 3110480,
+      "sha256": "e5da555001ebb61a88e3de911c81847caa674d667d7bc6898177bde3238f2996"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 925,
+      "upper_cm1": 935,
+      "filename": "lut_H2O_925_935.npz",
+      "bytes": 3114087,
+      "sha256": "2b6e4beb46d3491a58f675922453ac07f5b4d0b7994f8b34c8182ec6fb90c0da"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 935,
+      "upper_cm1": 945,
+      "filename": "lut_H2O_935_945.npz",
+      "bytes": 3122117,
+      "sha256": "88e62c47f89c8844995f631baa9a77acb298f4ba5964c22921f2ce871071c4d3"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 945,
+      "upper_cm1": 955,
+      "filename": "lut_H2O_945_955.npz",
+      "bytes": 3105087,
+      "sha256": "38d1281c20e52383847fecb90ed7c22d5e576142977d7ba6ffc62ee820cb2636"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 955,
+      "upper_cm1": 965,
+      "filename": "lut_H2O_955_965.npz",
+      "bytes": 3116889,
+      "sha256": "4af4e6040837370f670fb81fdd43d0c6f6bd16c9baccdf4f8d23ace4f310a3c2"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 965,
+      "upper_cm1": 975,
+      "filename": "lut_H2O_965_975.npz",
+      "bytes": 3119678,
+      "sha256": "fbe2a24f7516db94545819065f91cda70b2c166307e8086f2cf008b9d4f07426"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 975,
+      "upper_cm1": 985,
+      "filename": "lut_H2O_975_985.npz",
+      "bytes": 3113610,
+      "sha256": "7194d18f72e2e137a0eb6c93569230e8af9683158f0b31b043775458ed5699e9"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 985,
+      "upper_cm1": 995,
+      "filename": "lut_H2O_985_995.npz",
+      "bytes": 3119696,
+      "sha256": "d4115977a49151f2cd41365c43c306f681b11e37d56cea183419ecde2d66c65b"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 995,
+      "upper_cm1": 1005,
+      "filename": "lut_H2O_995_1005.npz",
+      "bytes": 3114672,
+      "sha256": "8423caf9d5b0eade64d32a2b05e669d07e7daedf1bbb8b8d864b0db729494d4c"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1005,
+      "upper_cm1": 1015,
+      "filename": "lut_H2O_1005_1015.npz",
+      "bytes": 3115799,
+      "sha256": "340387ec02f47540312838f4c15fafca7c802cf0fa70e597ea925c269bc1b407"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1015,
+      "upper_cm1": 1025,
+      "filename": "lut_H2O_1015_1025.npz",
+      "bytes": 3104438,
+      "sha256": "83792b93565da2ebfe9e29fe07efc13514d07fdec77fdfc8c945b86eb9ba07af"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1025,
+      "upper_cm1": 1035,
+      "filename": "lut_H2O_1025_1035.npz",
+      "bytes": 3114850,
+      "sha256": "3d1bdf466f49967d89df660581a0b179e1af915e22aa64b1d6438681e2b349c4"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1035,
+      "upper_cm1": 1045,
+      "filename": "lut_H2O_1035_1045.npz",
+      "bytes": 3120380,
+      "sha256": "638be96da5b8b556a03e4edf654602049116cba33ed9fbc81ecab23058f94e44"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1045,
+      "upper_cm1": 1055,
+      "filename": "lut_H2O_1045_1055.npz",
+      "bytes": 3107849,
+      "sha256": "ac3f26292d57b6977995681fb5aff842c79d0298db7dc10689eb6f6e7f198b1d"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1055,
+      "upper_cm1": 1065,
+      "filename": "lut_H2O_1055_1065.npz",
+      "bytes": 3116624,
+      "sha256": "bf5836f0387239ec257d57eaaa6f5bdeaae3b7df91e53ea114381e8f0b7014ec"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1065,
+      "upper_cm1": 1075,
+      "filename": "lut_H2O_1065_1075.npz",
+      "bytes": 3111969,
+      "sha256": "48fad0c06dde2f0faedfe9d8ffba61c89a2bf710ac70d0e91a2e3a6122152c77"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1075,
+      "upper_cm1": 1085,
+      "filename": "lut_H2O_1075_1085.npz",
+      "bytes": 3117583,
+      "sha256": "f3471a21ebbafa5e0e70d59b42bc5941ea5a89f5cd008a1ecded0b178a123ec0"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1085,
+      "upper_cm1": 1095,
+      "filename": "lut_H2O_1085_1095.npz",
+      "bytes": 3112006,
+      "sha256": "a7b41bf64613f0e117e9e8c47bbd4c5bc9d9f53494061dd2d80ca39a878f4ef8"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1095,
+      "upper_cm1": 1105,
+      "filename": "lut_H2O_1095_1105.npz",
+      "bytes": 3113052,
+      "sha256": "fbc88c8d31cd9f2d1786f033a9521686279b63c92fd3be1f109bc1c08733f913"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1105,
+      "upper_cm1": 1115,
+      "filename": "lut_H2O_1105_1115.npz",
+      "bytes": 3116548,
+      "sha256": "d6692d96e6ed5eede718da6f7227552cf09fe349d135be19a421e96d83887c94"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1115,
+      "upper_cm1": 1125,
+      "filename": "lut_H2O_1115_1125.npz",
+      "bytes": 3112641,
+      "sha256": "dc59aeab72e9b13c4aff0d36169dca4d19bc0e564841ce7779d2ba761b8cc0ae"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1125,
+      "upper_cm1": 1135,
+      "filename": "lut_H2O_1125_1135.npz",
+      "bytes": 3119883,
+      "sha256": "3e55887b99153ab8fc64ca08943e3a537627e2e7034b056d61746da99bc6808f"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1135,
+      "upper_cm1": 1145,
+      "filename": "lut_H2O_1135_1145.npz",
+      "bytes": 3107086,
+      "sha256": "58d50bd290382f45df81190d099974618e511859c9ae444840e8a1a19bf35251"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1145,
+      "upper_cm1": 1155,
+      "filename": "lut_H2O_1145_1155.npz",
+      "bytes": 3119049,
+      "sha256": "971d6caa0a7cd6c0a52130c64f1039e6da5eacc9a2639a2273bd8cc209e76ec5"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1155,
+      "upper_cm1": 1165,
+      "filename": "lut_H2O_1155_1165.npz",
+      "bytes": 3112817,
+      "sha256": "d16aa7d7e3eb98e3b47da4b1c1bb19f5cbf5c9e0946176b94b3a2703b1f584c4"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1165,
+      "upper_cm1": 1175,
+      "filename": "lut_H2O_1165_1175.npz",
+      "bytes": 3117459,
+      "sha256": "625fdf6898980c7f44a73ca9a821be4152b455969949afd8e3f3b611a1686d26"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1175,
+      "upper_cm1": 1185,
+      "filename": "lut_H2O_1175_1185.npz",
+      "bytes": 3111782,
+      "sha256": "b837910a3d0827230be8a1f14f31045a5d44d45a3a62c97806442c4dc6628021"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1185,
+      "upper_cm1": 1195,
+      "filename": "lut_H2O_1185_1195.npz",
+      "bytes": 3115856,
+      "sha256": "167e808c6a4f354f6a4fec1d5a4cc0ebdb41611edfc89d3e84fca99cdf56a303"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1195,
+      "upper_cm1": 1205,
+      "filename": "lut_H2O_1195_1205.npz",
+      "bytes": 3115465,
+      "sha256": "b13f2fa6df83dbf9f551fa55ae346057071bc0a785c3adaefbba4cfeadccb587"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1205,
+      "upper_cm1": 1215,
+      "filename": "lut_H2O_1205_1215.npz",
+      "bytes": 3118495,
+      "sha256": "0b4e40507e100bf8e3932cb63d6f05c2a146557e6ae8dde4d6e645f807f14b79"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1215,
+      "upper_cm1": 1225,
+      "filename": "lut_H2O_1215_1225.npz",
+      "bytes": 3125403,
+      "sha256": "ee6cfc7dd5e327ffd30b210326b9b9195baf5c197dc74e6e3361c021dcd449f9"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1225,
+      "upper_cm1": 1235,
+      "filename": "lut_H2O_1225_1235.npz",
+      "bytes": 3122608,
+      "sha256": "39710b35dd73ff90e62219cd9202809ff80eecacfbf2825109b4b556d52acace"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1235,
+      "upper_cm1": 1245,
+      "filename": "lut_H2O_1235_1245.npz",
+      "bytes": 3119757,
+      "sha256": "dbf50f2e0c20de5fec925956262e357920276a0863d9d8b3135dc928f928c9d5"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1245,
+      "upper_cm1": 1255,
+      "filename": "lut_H2O_1245_1255.npz",
+      "bytes": 3117665,
+      "sha256": "a9136c2c57bc24ec4bd726d0026f7b33724df213b174e2f9a7aa34bfe143609b"
+    },
+    {
+      "gas": "H2O",
+      "lower_cm1": 1255,
+      "upper_cm1": 1265,
+      "filename": "lut_H2O_1255_1265.npz",
+      "bytes": 3121247,
+      "sha256": "976a010f66f5ae22386e2d50b879713677d88df189817b65ef7a575b6ce920d5"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 635,
+      "upper_cm1": 645,
+      "filename": "lut_CO2_635_645.npz",
+      "bytes": 3127707,
+      "sha256": "ef123d285e225308e05d76654dc980faeb24d2cb6902576a4404a51229ed14a7"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 645,
+      "upper_cm1": 655,
+      "filename": "lut_CO2_645_655.npz",
+      "bytes": 3125966,
+      "sha256": "885356f059d0ca0cba2491105165d79f5b7fae27ff6a48b7435bbcb09f36d796"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 655,
+      "upper_cm1": 665,
+      "filename": "lut_CO2_655_665.npz",
+      "bytes": 3125593,
+      "sha256": "26f8fbef2ec5284e6e6cee2b223b640d82637bdb39520aed5d5301970f1b1acb"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 665,
+      "upper_cm1": 675,
+      "filename": "lut_CO2_665_675.npz",
+      "bytes": 3123296,
+      "sha256": "ffb46257ad5ded2517d90fdf5525671f57f837428cb2b67558fea4d4cf4202e8"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 675,
+      "upper_cm1": 685,
+      "filename": "lut_CO2_675_685.npz",
+      "bytes": 3125584,
+      "sha256": "4447d5c76ca4f372410607a9f592d8ace666532eed15dc1e0de0f2d985d12215"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 685,
+      "upper_cm1": 695,
+      "filename": "lut_CO2_685_695.npz",
+      "bytes": 3125810,
+      "sha256": "bf0e696e9d5c8434a4f166d90c5b3f282600e878638eac04fd894d47e2db9d06"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 695,
+      "upper_cm1": 705,
+      "filename": "lut_CO2_695_705.npz",
+      "bytes": 3126801,
+      "sha256": "5074cc1819cc26130fb5eef56ef2012478b6a23ae4ca7887ddc94067a322dcfa"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 705,
+      "upper_cm1": 715,
+      "filename": "lut_CO2_705_715.npz",
+      "bytes": 3126579,
+      "sha256": "bce923df6941a8c7e85b266c27a146ed2cc14d8050889532c80b02a7b006a7eb"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 715,
+      "upper_cm1": 725,
+      "filename": "lut_CO2_715_725.npz",
+      "bytes": 3123850,
+      "sha256": "212d71e0e8c856446b16fee9144c9d84384e4397f6b50d74d84951b3ab306363"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 725,
+      "upper_cm1": 735,
+      "filename": "lut_CO2_725_735.npz",
+      "bytes": 3125279,
+      "sha256": "9402dad7139269d8ca4d9bef3c5af7dd87d345fef3d4095ee4da93ebdd162d6c"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 735,
+      "upper_cm1": 745,
+      "filename": "lut_CO2_735_745.npz",
+      "bytes": 3125672,
+      "sha256": "4be0db09df824531f421b512c402631c954f90903c1deff23cef729a237df567"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 745,
+      "upper_cm1": 755,
+      "filename": "lut_CO2_745_755.npz",
+      "bytes": 3125138,
+      "sha256": "35ab104d5353024fb39add7fbab1157fa7a54bae93af97eb3208d7e719ee409a"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 755,
+      "upper_cm1": 765,
+      "filename": "lut_CO2_755_765.npz",
+      "bytes": 3125305,
+      "sha256": "a864f0c6ad4bdd1e566144efffd975fc79652b44e13fec3496b3249cc2372147"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 765,
+      "upper_cm1": 775,
+      "filename": "lut_CO2_765_775.npz",
+      "bytes": 3124827,
+      "sha256": "a0e795fbfab550d3316b692040a0886a61084f1258507969c7406b8d50697a5c"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 775,
+      "upper_cm1": 785,
+      "filename": "lut_CO2_775_785.npz",
+      "bytes": 3124778,
+      "sha256": "95622341e86eebbd23b2d56cfdb08b470b9b4f0f0f3961b4f6574b985610f5fc"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 785,
+      "upper_cm1": 795,
+      "filename": "lut_CO2_785_795.npz",
+      "bytes": 3122132,
+      "sha256": "301a0a71dffdd6cde17ea5001e26fff14d66263ee9b9e727746a3b94bb119e31"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 795,
+      "upper_cm1": 805,
+      "filename": "lut_CO2_795_805.npz",
+      "bytes": 3125683,
+      "sha256": "219a8015f9baa7fa1daeed4a403c5ce8ba35d43d41f05f0775724394916ff1af"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 805,
+      "upper_cm1": 815,
+      "filename": "lut_CO2_805_815.npz",
+      "bytes": 3127533,
+      "sha256": "1229008053a44454bd8359cfef7da2bf50267b29c9d12fa12cc9705dc84d9b87"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 815,
+      "upper_cm1": 825,
+      "filename": "lut_CO2_815_825.npz",
+      "bytes": 3127223,
+      "sha256": "444b1731bf1e41b0d15e2f69898651d65958cd9724a93ae1de40d8de10901ecb"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 825,
+      "upper_cm1": 835,
+      "filename": "lut_CO2_825_835.npz",
+      "bytes": 3122487,
+      "sha256": "5342b5159a4d877c7406dd59043f33aaf31ec981e996304ca364918352cffa9e"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 835,
+      "upper_cm1": 845,
+      "filename": "lut_CO2_835_845.npz",
+      "bytes": 3127754,
+      "sha256": "07a9435a1b58ff0fbb98452859f7045b9dfc619a7771b585d622b2f9614c7832"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 845,
+      "upper_cm1": 855,
+      "filename": "lut_CO2_845_855.npz",
+      "bytes": 3126213,
+      "sha256": "df24bed9144bbf1a3fadedff0bdb89c69d508b4f8c58a713b2605d365c44ff54"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 855,
+      "upper_cm1": 865,
+      "filename": "lut_CO2_855_865.npz",
+      "bytes": 3122598,
+      "sha256": "451aa291bf095f0b439f403e11a06d2011f6a3d51128514f33aece912e6ef86f"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 865,
+      "upper_cm1": 875,
+      "filename": "lut_CO2_865_875.npz",
+      "bytes": 3125874,
+      "sha256": "35c42de02b04c1ada527e5f262a8f70f58a1178b690198dc944876af6be82685"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 875,
+      "upper_cm1": 885,
+      "filename": "lut_CO2_875_885.npz",
+      "bytes": 3125969,
+      "sha256": "f2defc8f21dc163dbaea455987e822e0d436f27dc25e675501cd77cd3726e72e"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 885,
+      "upper_cm1": 895,
+      "filename": "lut_CO2_885_895.npz",
+      "bytes": 3125571,
+      "sha256": "b57211235f2063ba91745aaa4ad1c7e248f48be45db5ddcf1a7da37ebf20b47f"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 895,
+      "upper_cm1": 905,
+      "filename": "lut_CO2_895_905.npz",
+      "bytes": 3125078,
+      "sha256": "b83f6813939124aabc568e6be8d8be09d867fae2ee3c062038ed7d44ca7f3b4d"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 905,
+      "upper_cm1": 915,
+      "filename": "lut_CO2_905_915.npz",
+      "bytes": 3126482,
+      "sha256": "a20fe33826d674c0a09170871d4ac6bd7408c8a4866e69f7ef687faef8b72cb1"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 915,
+      "upper_cm1": 925,
+      "filename": "lut_CO2_915_925.npz",
+      "bytes": 3128251,
+      "sha256": "e225c88b241bcb581f10af7e2c6564cf5ff26a879b1cae0a08bbf6c5f8cfa42f"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 925,
+      "upper_cm1": 935,
+      "filename": "lut_CO2_925_935.npz",
+      "bytes": 3127044,
+      "sha256": "34bca54df15deb6c833887550c6714742eb31a619c167a0fcb993762e5e0fd74"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 935,
+      "upper_cm1": 945,
+      "filename": "lut_CO2_935_945.npz",
+      "bytes": 3126722,
+      "sha256": "cf7adfb5158dba426b0bfe25ba9c42eb205f4fbd5edfbe64da98c614ec3a44ae"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 945,
+      "upper_cm1": 955,
+      "filename": "lut_CO2_945_955.npz",
+      "bytes": 3127550,
+      "sha256": "5f800e0e72b0f07c9c2f1868d4d56225af52d9c0592b89512298046fd2710c19"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 955,
+      "upper_cm1": 965,
+      "filename": "lut_CO2_955_965.npz",
+      "bytes": 3125942,
+      "sha256": "17c4910e9a923e8b952b3f9f9c667c354bcefc70ba5b085c79ef939b77e7a2fc"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 965,
+      "upper_cm1": 975,
+      "filename": "lut_CO2_965_975.npz",
+      "bytes": 3124753,
+      "sha256": "751c7d16078fad1138ec0ce4fa3e9ffc35bb1fd225fbc49923e92f901896b5dd"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 975,
+      "upper_cm1": 985,
+      "filename": "lut_CO2_975_985.npz",
+      "bytes": 3125149,
+      "sha256": "f0be7b86120a035510536b5a72325251f537d8ba0542cd83084b34e845e5266a"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 985,
+      "upper_cm1": 995,
+      "filename": "lut_CO2_985_995.npz",
+      "bytes": 3123827,
+      "sha256": "df9c49926627170bfdad14c6730b8861db50f5fe9c4da558ed696904f8de14a4"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 995,
+      "upper_cm1": 1005,
+      "filename": "lut_CO2_995_1005.npz",
+      "bytes": 3127560,
+      "sha256": "34201df238e0114a261be21a97b558774fe341c1a44f7958f9c66b565474b005"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1005,
+      "upper_cm1": 1015,
+      "filename": "lut_CO2_1005_1015.npz",
+      "bytes": 3128591,
+      "sha256": "65ea241ff8b2ae309a15ce814c12036c4e6128e45c4a8a633844b0c1827ded27"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1015,
+      "upper_cm1": 1025,
+      "filename": "lut_CO2_1015_1025.npz",
+      "bytes": 3125581,
+      "sha256": "780e5458af7b21644ecb6341c42986cc76988c24f1c48816421305b76c43dc30"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1025,
+      "upper_cm1": 1035,
+      "filename": "lut_CO2_1025_1035.npz",
+      "bytes": 3128506,
+      "sha256": "c6a01282714c76f76dc50171e0966197111a4d579ca174cf01d243ac3a858be8"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1035,
+      "upper_cm1": 1045,
+      "filename": "lut_CO2_1035_1045.npz",
+      "bytes": 3127371,
+      "sha256": "6481ce5cddf1b0d07a20ef69eff09641fce692dcb18f5a7734a6fc3b5f6833d9"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1045,
+      "upper_cm1": 1055,
+      "filename": "lut_CO2_1045_1055.npz",
+      "bytes": 3126808,
+      "sha256": "b135706dcea604c7f3f92bf3e42d673b47a1dc4ed8289af90d24b9e71408c750"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1055,
+      "upper_cm1": 1065,
+      "filename": "lut_CO2_1055_1065.npz",
+      "bytes": 3125446,
+      "sha256": "2773767a36f09fee999712256062a76efdf784b3a6358c3d2fc125ff5299270c"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1065,
+      "upper_cm1": 1075,
+      "filename": "lut_CO2_1065_1075.npz",
+      "bytes": 3126656,
+      "sha256": "574531550fbd51bff4ec1e46d973315ef2dc25070c847935fcdb9e886d7c74b4"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1075,
+      "upper_cm1": 1085,
+      "filename": "lut_CO2_1075_1085.npz",
+      "bytes": 3126202,
+      "sha256": "a92c241e5106dd4a4a8778c647e3bf37975b77b59c0eea94792524edfc484846"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1085,
+      "upper_cm1": 1095,
+      "filename": "lut_CO2_1085_1095.npz",
+      "bytes": 3124952,
+      "sha256": "591c1c844e8d70e780ebd555611c64900f542c47c629af61335cc341560e294b"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1095,
+      "upper_cm1": 1105,
+      "filename": "lut_CO2_1095_1105.npz",
+      "bytes": 3125150,
+      "sha256": "b0aee99f7c21ed3352f23842b951240b81124119b77aca46b1625c8604729b6b"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1105,
+      "upper_cm1": 1115,
+      "filename": "lut_CO2_1105_1115.npz",
+      "bytes": 3122070,
+      "sha256": "32921053258ec22658a6926e615db9ca168d0dee31012d4812b3be94cee10aba"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1115,
+      "upper_cm1": 1125,
+      "filename": "lut_CO2_1115_1125.npz",
+      "bytes": 3080069,
+      "sha256": "53c4500bd69e5059cfee2cafb49368c9879ac30613f387814b18c8662cd8c86b"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1125,
+      "upper_cm1": 1135,
+      "filename": "lut_CO2_1125_1135.npz",
+      "bytes": 3066823,
+      "sha256": "95329c957705759a4b5c1665b3f17cb829473749646a504235f4ba3ad2bab930"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1135,
+      "upper_cm1": 1145,
+      "filename": "lut_CO2_1135_1145.npz",
+      "bytes": 3079960,
+      "sha256": "e2eb3554b5c50af9d3df9107a5a23c7d523119ac03cb79c55813fbf291be2a85"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1145,
+      "upper_cm1": 1155,
+      "filename": "lut_CO2_1145_1155.npz",
+      "bytes": 3084485,
+      "sha256": "29536c20a45cee70dca47ca41fe3b8a8f785a18162c4c8e56cc73b9ce30c0d14"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1155,
+      "upper_cm1": 1165,
+      "filename": "lut_CO2_1155_1165.npz",
+      "bytes": 3080717,
+      "sha256": "540f91bb25e2a950818ebba38100a8d9bd65af077f2984d67136ffa4dc355248"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1165,
+      "upper_cm1": 1175,
+      "filename": "lut_CO2_1165_1175.npz",
+      "bytes": 3054934,
+      "sha256": "11d9e54ab0b378c3848f5fe298c222a9b98da94fbb90be0e2806acc37fe55c2a"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1175,
+      "upper_cm1": 1185,
+      "filename": "lut_CO2_1175_1185.npz",
+      "bytes": 3111988,
+      "sha256": "5e7da3ee79c73a6673b9af152cc2e3edf74244edcfb56768b7a811d846b754b7"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1185,
+      "upper_cm1": 1195,
+      "filename": "lut_CO2_1185_1195.npz",
+      "bytes": 3124961,
+      "sha256": "58c711a04bd6bce3a7d3fba37791b58e9a458d36498f8d0b7372bffd6b226c70"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1195,
+      "upper_cm1": 1205,
+      "filename": "lut_CO2_1195_1205.npz",
+      "bytes": 3124772,
+      "sha256": "125e70615f6833f5e6c6b24853e1ae1869702d5fe3c35be5352446bc6b1f0093"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1205,
+      "upper_cm1": 1215,
+      "filename": "lut_CO2_1205_1215.npz",
+      "bytes": 3125311,
+      "sha256": "04d98eed55121b99b7fdc334619a9ca43d2cf5ad124db4693a9725bbe091e5b5"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1215,
+      "upper_cm1": 1225,
+      "filename": "lut_CO2_1215_1225.npz",
+      "bytes": 3126890,
+      "sha256": "9dbdabaa74abbe5b097191d126c8c45b73fbc17671dfb04388edafc4b0476664"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1225,
+      "upper_cm1": 1235,
+      "filename": "lut_CO2_1225_1235.npz",
+      "bytes": 3127871,
+      "sha256": "5395227dc9217122baeffe7111914dd3525d1450665094d05ab5c90c11df9c15"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1235,
+      "upper_cm1": 1245,
+      "filename": "lut_CO2_1235_1245.npz",
+      "bytes": 3128558,
+      "sha256": "a8e7e0463d1c32eb23f00ca9525a45dc0ac9b6b87e3f4919b21e21ba50856490"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1245,
+      "upper_cm1": 1255,
+      "filename": "lut_CO2_1245_1255.npz",
+      "bytes": 3127678,
+      "sha256": "c8f512f5f888cf3037b4937bb1ab439f96c4c26b4583d49b3d7f537e2e32965a"
+    },
+    {
+      "gas": "CO2",
+      "lower_cm1": 1255,
+      "upper_cm1": 1265,
+      "filename": "lut_CO2_1255_1265.npz",
+      "bytes": 3129111,
+      "sha256": "eff80649aedb6bae45f2f94c398d0f8214f7aa6d42777a19af0f265f52154cfa"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 635,
+      "upper_cm1": 645,
+      "filename": "lut_O3_635_645.npz",
+      "bytes": 3127602,
+      "sha256": "f84c6c5b8c7ea1fe6a2da431e6c0249855209371438e0689b2f909f98c0cbc93"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 645,
+      "upper_cm1": 655,
+      "filename": "lut_O3_645_655.npz",
+      "bytes": 3126446,
+      "sha256": "9dd29a2daf2f5b333b49bc874d31a3dbedc581ab60de02f83dd56ef6918b8ecd"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 655,
+      "upper_cm1": 665,
+      "filename": "lut_O3_655_665.npz",
+      "bytes": 3125696,
+      "sha256": "dcf315a083a3e7b95f1fc533ee69eb43e62e4f38b75e81dc2e56d585a12b46d0"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 665,
+      "upper_cm1": 675,
+      "filename": "lut_O3_665_675.npz",
+      "bytes": 3126703,
+      "sha256": "c6d22628f9b89742c1fe16985488fd62f668076a8a9a1d8da2c1dc55f11d0feb"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 675,
+      "upper_cm1": 685,
+      "filename": "lut_O3_675_685.npz",
+      "bytes": 3127603,
+      "sha256": "034282f421da03422d91bc7b81ea8609b68038d873b0c278192f3fbc6d78a95e"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 685,
+      "upper_cm1": 695,
+      "filename": "lut_O3_685_695.npz",
+      "bytes": 3128610,
+      "sha256": "ef786928559c3a52c759e56058760723e8ef4693d610682a7d1f3accac8a2dc6"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 695,
+      "upper_cm1": 705,
+      "filename": "lut_O3_695_705.npz",
+      "bytes": 3127116,
+      "sha256": "f983f72def6f7a108384abe747705010cfe0e4f35de0d8d2ad8f4dc7f5686a4b"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 705,
+      "upper_cm1": 715,
+      "filename": "lut_O3_705_715.npz",
+      "bytes": 3126503,
+      "sha256": "eb0b5b09f121096bf8373bd0d3b12d6cee1a6bbcd48876888444563149a383fc"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 715,
+      "upper_cm1": 725,
+      "filename": "lut_O3_715_725.npz",
+      "bytes": 3126512,
+      "sha256": "e0075606d0d2f55eda5c9492c95bad2ff62f887fe7c69e0db10aef8853d62119"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 725,
+      "upper_cm1": 735,
+      "filename": "lut_O3_725_735.npz",
+      "bytes": 3126323,
+      "sha256": "05948c7280161b6cba508ef553fa24c71d9e403b23fa83bff2e155cd776a932a"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 735,
+      "upper_cm1": 745,
+      "filename": "lut_O3_735_745.npz",
+      "bytes": 3127085,
+      "sha256": "85932eb4de7c03bd9f94b37ac612fd26fad0334dc17ecd5b25e97ebcdcb86a9e"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 745,
+      "upper_cm1": 755,
+      "filename": "lut_O3_745_755.npz",
+      "bytes": 3127225,
+      "sha256": "2a1cbe1987bd5471595591cae134a08f53355a9b31f68c180bfa7fda9e15c320"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 755,
+      "upper_cm1": 765,
+      "filename": "lut_O3_755_765.npz",
+      "bytes": 3127925,
+      "sha256": "e5656724898e07e488263b7ce4d1f30651b3bee04c85999255338a6d83587c55"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 765,
+      "upper_cm1": 775,
+      "filename": "lut_O3_765_775.npz",
+      "bytes": 3127727,
+      "sha256": "46fa1eee8c453ee80a55852e396824536fb5a1041f0208c8f5d9383b6ae4b585"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 775,
+      "upper_cm1": 785,
+      "filename": "lut_O3_775_785.npz",
+      "bytes": 3128489,
+      "sha256": "c8acb00a970a6ad06b10e890988b81a6041333615f446a15435157df4876f064"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 785,
+      "upper_cm1": 795,
+      "filename": "lut_O3_785_795.npz",
+      "bytes": 3128729,
+      "sha256": "7ffb24c429401b35d69e775e847ff10e72d7acda6c55576f8e02e740da5ad910"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 795,
+      "upper_cm1": 805,
+      "filename": "lut_O3_795_805.npz",
+      "bytes": 3129165,
+      "sha256": "fa99993f5633d33be71bd35b5aaa3632c1dbb2b9e5d81470add224c0fbafa3c0"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 805,
+      "upper_cm1": 815,
+      "filename": "lut_O3_805_815.npz",
+      "bytes": 3128060,
+      "sha256": "0be689f76048bd79e5457c4e86a97f7ebb2f8f7a6877c4dbbab05a321dd4368c"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 815,
+      "upper_cm1": 825,
+      "filename": "lut_O3_815_825.npz",
+      "bytes": 3127569,
+      "sha256": "6c9c6ffe090bfe52390db70c3eece73fbb638f7e07a4be4f097d6e476b2848cd"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 825,
+      "upper_cm1": 835,
+      "filename": "lut_O3_825_835.npz",
+      "bytes": 3127507,
+      "sha256": "929d10fdd2cf8aa27be7931c86094696576c7f963a53710ffbe1373e1e4477be"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 835,
+      "upper_cm1": 845,
+      "filename": "lut_O3_835_845.npz",
+      "bytes": 3127324,
+      "sha256": "3674d91727b37dde551380409a0a3fedd06e66e0a87f1cab6edbb3f97222b1a3"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 845,
+      "upper_cm1": 855,
+      "filename": "lut_O3_845_855.npz",
+      "bytes": 3126849,
+      "sha256": "f3f283b5ca10f8794109a9a722867763bd4c331e6305f043fb41b1d765d6430b"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 855,
+      "upper_cm1": 865,
+      "filename": "lut_O3_855_865.npz",
+      "bytes": 3125012,
+      "sha256": "6ed44da4592704efcafdc11eca84b5135edb494e1a68aca86b2762632c1e7a18"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 865,
+      "upper_cm1": 875,
+      "filename": "lut_O3_865_875.npz",
+      "bytes": 3126229,
+      "sha256": "698c7db1513f92766feaa7dc1d4f6e12640b5e1eeb205281fc4d334de4feaf0e"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 875,
+      "upper_cm1": 885,
+      "filename": "lut_O3_875_885.npz",
+      "bytes": 3126680,
+      "sha256": "474832fdd8dd702c5c977bfbe3c356bfef082ce2492adc367c466f561d0d2d8d"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 885,
+      "upper_cm1": 895,
+      "filename": "lut_O3_885_895.npz",
+      "bytes": 3123384,
+      "sha256": "bde436d8855da0e191e1b118937d913fbc081603d17aaa136c24005edbfb49ab"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 895,
+      "upper_cm1": 905,
+      "filename": "lut_O3_895_905.npz",
+      "bytes": 3070308,
+      "sha256": "d53978f7cb2b80627eb90ce4c87056604c8d1ad08a97536df2c182f538513a30"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 905,
+      "upper_cm1": 915,
+      "filename": "lut_O3_905_915.npz",
+      "bytes": 3087807,
+      "sha256": "c092aaa30931f9644d246ec143671c01f556e78456a5c50d518e9e6eeb6e6a50"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 915,
+      "upper_cm1": 925,
+      "filename": "lut_O3_915_925.npz",
+      "bytes": 3108655,
+      "sha256": "bd5f8de7b2d1a0498dd8803323698d93952054b8024d1ee872d9f59be85d3475"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 925,
+      "upper_cm1": 935,
+      "filename": "lut_O3_925_935.npz",
+      "bytes": 3124486,
+      "sha256": "7dc7c6c63a01fbe022be3bfaa112d3f7892e30409e6303f5bf19c155185af899"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 935,
+      "upper_cm1": 945,
+      "filename": "lut_O3_935_945.npz",
+      "bytes": 3123119,
+      "sha256": "ec331ffb8c88d36058ab826ed1af42768e5d99979138454c2dabc939aff069d0"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 945,
+      "upper_cm1": 955,
+      "filename": "lut_O3_945_955.npz",
+      "bytes": 3123344,
+      "sha256": "5d7df5eb4c7be61d12b7c40c1c9779b7fb4fb6d59eb87c7b3b03d7b36c1111c4"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 955,
+      "upper_cm1": 965,
+      "filename": "lut_O3_955_965.npz",
+      "bytes": 3123336,
+      "sha256": "6c5c8a793d9542e348c464e62715b6a4dd3b4c6911d1c4a15d1bcd110b8d1c12"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 965,
+      "upper_cm1": 975,
+      "filename": "lut_O3_965_975.npz",
+      "bytes": 3123866,
+      "sha256": "de1c7ff0030193a0fcac5d42ae98b2341c22d988c46c61e67f5d7d0ebbc0c56c"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 975,
+      "upper_cm1": 985,
+      "filename": "lut_O3_975_985.npz",
+      "bytes": 3124140,
+      "sha256": "6a1efbc4380954bb03c638bbcfd4f85a9f43ec4cb7938a57676a576d9029fa42"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 985,
+      "upper_cm1": 995,
+      "filename": "lut_O3_985_995.npz",
+      "bytes": 3123488,
+      "sha256": "27052dc9398454ce6c38270a5c682833915600c0ef62e10e6999a4213cb67711"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 995,
+      "upper_cm1": 1005,
+      "filename": "lut_O3_995_1005.npz",
+      "bytes": 3123889,
+      "sha256": "486acb7bda580fb756086d37bee31e11af7f979c5def24ea88f1481872d91d74"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1005,
+      "upper_cm1": 1015,
+      "filename": "lut_O3_1005_1015.npz",
+      "bytes": 3124405,
+      "sha256": "26ccf37e2c669de2ac90597f321c5c2b7e1b69aab761030694182afa461e21ea"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1015,
+      "upper_cm1": 1025,
+      "filename": "lut_O3_1015_1025.npz",
+      "bytes": 3123308,
+      "sha256": "b3ec48e2f209258bec4631f1234901a16d93eb9b908e73beeaa1fe08e740d155"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1025,
+      "upper_cm1": 1035,
+      "filename": "lut_O3_1025_1035.npz",
+      "bytes": 3122430,
+      "sha256": "01fc7d32966f70b018aa8a06f6e61ba0c400babfbd7f6189fca8d1650e8deefb"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1035,
+      "upper_cm1": 1045,
+      "filename": "lut_O3_1035_1045.npz",
+      "bytes": 3123685,
+      "sha256": "33e2286c4953bfa13046d341ddaaf6d3664458bf452d9b8405e12e0cfb10f123"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1045,
+      "upper_cm1": 1055,
+      "filename": "lut_O3_1045_1055.npz",
+      "bytes": 3124522,
+      "sha256": "641c063363efd14a949fb28ff358b0f14043fc4cffa245c1628f63510f8bf1a8"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1055,
+      "upper_cm1": 1065,
+      "filename": "lut_O3_1055_1065.npz",
+      "bytes": 3127364,
+      "sha256": "db8fa4414bd13426a42e1667fdc3a8b6db1585fdfbae4bfc1b152a1e817c043e"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1065,
+      "upper_cm1": 1075,
+      "filename": "lut_O3_1065_1075.npz",
+      "bytes": 3124681,
+      "sha256": "93a6680d48fc67ecd7c1012285e7a5742696723d77dcef7262c8e3dc3873e23d"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1075,
+      "upper_cm1": 1085,
+      "filename": "lut_O3_1075_1085.npz",
+      "bytes": 3126541,
+      "sha256": "4d3dd80f11d5f78ea50e84d436e11fa113d529e47250073a39f796670c7a044b"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1085,
+      "upper_cm1": 1095,
+      "filename": "lut_O3_1085_1095.npz",
+      "bytes": 3126719,
+      "sha256": "cb87d63c3d4c81bd476a0c608fc161981d1566292c35c7d1f9280a7e3beaef83"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1095,
+      "upper_cm1": 1105,
+      "filename": "lut_O3_1095_1105.npz",
+      "bytes": 3126869,
+      "sha256": "0655597b5988c4bd1b804b62df662df71c393a5c81740aa48bac1d130bbce11a"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1105,
+      "upper_cm1": 1115,
+      "filename": "lut_O3_1105_1115.npz",
+      "bytes": 3125823,
+      "sha256": "7e931cb2adda0dc6b919e50a448f61f2bfb9d408e20f105d0beaa8d0c9a31e9a"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1115,
+      "upper_cm1": 1125,
+      "filename": "lut_O3_1115_1125.npz",
+      "bytes": 3126392,
+      "sha256": "63c219b34d4518db9dbb1fcb6bc05a3f368aae98da8a3aa0a04003f298db4a78"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1125,
+      "upper_cm1": 1135,
+      "filename": "lut_O3_1125_1135.npz",
+      "bytes": 3127349,
+      "sha256": "da619744fd0dd47ef27bf3eb8550f1fb64600e9d517a96c57a723b7900d50246"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1135,
+      "upper_cm1": 1145,
+      "filename": "lut_O3_1135_1145.npz",
+      "bytes": 3124748,
+      "sha256": "50c1408f5e076431e487135f9edb6be2e0bf0c996ad604d9af52a2ebaae8986e"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1145,
+      "upper_cm1": 1155,
+      "filename": "lut_O3_1145_1155.npz",
+      "bytes": 3126001,
+      "sha256": "ff19d21e6e5b488eafb35ca36dd1c97525173be066cf669550129ca6ddc94958"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1155,
+      "upper_cm1": 1165,
+      "filename": "lut_O3_1155_1165.npz",
+      "bytes": 3127216,
+      "sha256": "4aa39d537fc464f15fe099e3e9240d4e29591eafd56b1622e8ef39ff9cb003f9"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1165,
+      "upper_cm1": 1175,
+      "filename": "lut_O3_1165_1175.npz",
+      "bytes": 3126865,
+      "sha256": "4a16159f43760f436aea0b9c8d07504e61348f8837d7c3314126aabc2bb41a87"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1175,
+      "upper_cm1": 1185,
+      "filename": "lut_O3_1175_1185.npz",
+      "bytes": 3128847,
+      "sha256": "f285c27bd9268afa25fdf647df1ac8c5832934e1fd91dc28d53c30809f05d040"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1185,
+      "upper_cm1": 1195,
+      "filename": "lut_O3_1185_1195.npz",
+      "bytes": 3128471,
+      "sha256": "c74eead2cfac2934b9846f358eb7958ff2608cb03d85cfc862d8607077d6611b"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1195,
+      "upper_cm1": 1205,
+      "filename": "lut_O3_1195_1205.npz",
+      "bytes": 3128861,
+      "sha256": "ee12e5479c27a0e0b4a2826d7fe15c74bdea66fdcad03fce9512b61c433e4630"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1205,
+      "upper_cm1": 1215,
+      "filename": "lut_O3_1205_1215.npz",
+      "bytes": 3128826,
+      "sha256": "6b561360efa6859eaf0851f344d829706f7e246e4e59c32292f65a503efaed05"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1215,
+      "upper_cm1": 1225,
+      "filename": "lut_O3_1215_1225.npz",
+      "bytes": 3130231,
+      "sha256": "8bab7dd1909d441bca1bc8bc3522b78894c839505607d3908e540fb4575b5a61"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1225,
+      "upper_cm1": 1235,
+      "filename": "lut_O3_1225_1235.npz",
+      "bytes": 3130627,
+      "sha256": "79b2a599b0b81d17cf11f8a2950a1aebcb3e78ed4ac5dfda079966d412790957"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1235,
+      "upper_cm1": 1245,
+      "filename": "lut_O3_1235_1245.npz",
+      "bytes": 3128414,
+      "sha256": "ca9021598f81a0ef20c801c840c6d56f318c7b1b82a570947931892afe4baec5"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1245,
+      "upper_cm1": 1255,
+      "filename": "lut_O3_1245_1255.npz",
+      "bytes": 3127199,
+      "sha256": "6ba4c4a8333f05c8d238f526db18fe2760234494685de7255d585a70e2579cc9"
+    },
+    {
+      "gas": "O3",
+      "lower_cm1": 1255,
+      "upper_cm1": 1265,
+      "filename": "lut_O3_1255_1265.npz",
+      "bytes": 3126737,
+      "sha256": "47fee6d09d49de98719749c8581296ac273efd51442f8d2903464c4e16ce3b24"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 635,
+      "upper_cm1": 645,
+      "filename": "lut_N2O_635_645.npz",
+      "bytes": 3126527,
+      "sha256": "2c3293227cb956f85f24b70c726e61c27b2f3496ba5e3491fa557817a4c869bb"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 645,
+      "upper_cm1": 655,
+      "filename": "lut_N2O_645_655.npz",
+      "bytes": 3127650,
+      "sha256": "4863e36adc3854290f68d45805bd908a61cf0263ec18813e90837dd98e4091e2"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 655,
+      "upper_cm1": 665,
+      "filename": "lut_N2O_655_665.npz",
+      "bytes": 3125885,
+      "sha256": "059102530ad7d5da170d9136f9b00e8024266da4d9d79935e2b23fe232be3097"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 665,
+      "upper_cm1": 675,
+      "filename": "lut_N2O_665_675.npz",
+      "bytes": 3125239,
+      "sha256": "f53c8efcc2cca3ca678ae683b61f8e354439b0685be962b459e2c9ad239de851"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 675,
+      "upper_cm1": 685,
+      "filename": "lut_N2O_675_685.npz",
+      "bytes": 3127383,
+      "sha256": "597df589abe0c51affbe5d292bb41bc3ab541b4cf40563b896e7044eb7af44cd"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 685,
+      "upper_cm1": 695,
+      "filename": "lut_N2O_685_695.npz",
+      "bytes": 3123619,
+      "sha256": "999bcdce26636aa91fe484de2bd8c92be676c4f4ee141a8c4821113d4ff10ae5"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 695,
+      "upper_cm1": 705,
+      "filename": "lut_N2O_695_705.npz",
+      "bytes": 3125050,
+      "sha256": "81b39400545fc3f7e79dd624b70940623d99761febd40e6d5e048018f4f90b7b"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 705,
+      "upper_cm1": 715,
+      "filename": "lut_N2O_705_715.npz",
+      "bytes": 3127743,
+      "sha256": "a41541ee29911dd2a249ba7645866b41955fa016d48ce1b8f1926084ec8d2395"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 715,
+      "upper_cm1": 725,
+      "filename": "lut_N2O_715_725.npz",
+      "bytes": 3125912,
+      "sha256": "ba54238a99f8f66f25456a06ec2f9878a15705d0861edf647c448a5c6f0dddf1"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 725,
+      "upper_cm1": 735,
+      "filename": "lut_N2O_725_735.npz",
+      "bytes": 3128308,
+      "sha256": "fdc2a9285ea4bc60a3921b433999365acb0f828cb48ebf4d041c0dd1c023d477"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 735,
+      "upper_cm1": 745,
+      "filename": "lut_N2O_735_745.npz",
+      "bytes": 3121099,
+      "sha256": "5dbb60a3ebe2b7ba2aa698b52c9f9982449a418db4c101040b25cc0185fce110"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 745,
+      "upper_cm1": 755,
+      "filename": "lut_N2O_745_755.npz",
+      "bytes": 3086267,
+      "sha256": "afde718533fd431a7b2516c8bc5f0b31cf05226a9246ec15ef98ec73d72f31f8"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 755,
+      "upper_cm1": 765,
+      "filename": "lut_N2O_755_765.npz",
+      "bytes": 3085497,
+      "sha256": "5a48fdd7b39db1902b0fb733b371032ce91857fc18fd16db4cb450e1003ae90b"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 765,
+      "upper_cm1": 775,
+      "filename": "lut_N2O_765_775.npz",
+      "bytes": 1613652,
+      "sha256": "4eeb8ef358cdf619ff8f9fece746d346161abfe5eece34d38bfbf654795c4666"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 775,
+      "upper_cm1": 785,
+      "filename": "lut_N2O_775_785.npz",
+      "bytes": 7299,
+      "sha256": "a0bea9412b168310b1eb3a8a8ec43e55d7f18f51a451381f1db4188e4c30ef3d"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 785,
+      "upper_cm1": 795,
+      "filename": "lut_N2O_785_795.npz",
+      "bytes": 7299,
+      "sha256": "5f2a227694fbf59c8e768eceb926a485b60af599f2f449b648dcb99336857671"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 795,
+      "upper_cm1": 805,
+      "filename": "lut_N2O_795_805.npz",
+      "bytes": 7299,
+      "sha256": "390534dab4432679e906ff71226bedd1ad0ed489987ca6cdfacad3318d3435d5"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 805,
+      "upper_cm1": 815,
+      "filename": "lut_N2O_805_815.npz",
+      "bytes": 7299,
+      "sha256": "3888187d8502dbd0c25b1423bcdded979c48e3f763357afb4a645d83cdc0e87c"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 815,
+      "upper_cm1": 825,
+      "filename": "lut_N2O_815_825.npz",
+      "bytes": 7299,
+      "sha256": "ca4abf0e946c3bc4bac2bceefd9a9414e4c8470297d25bb70a817f0ca221fe01"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 825,
+      "upper_cm1": 835,
+      "filename": "lut_N2O_825_835.npz",
+      "bytes": 7299,
+      "sha256": "afcab9b8418d495c52c4b2b9dab34ae53fabcf9fe3ac8278c85f90b96fdaa18d"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 835,
+      "upper_cm1": 845,
+      "filename": "lut_N2O_835_845.npz",
+      "bytes": 7299,
+      "sha256": "98add09d8964e9c119a556ea6dacf7206d7cdfb1cc43d19d5d5edcf9610562c1"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 845,
+      "upper_cm1": 855,
+      "filename": "lut_N2O_845_855.npz",
+      "bytes": 3123609,
+      "sha256": "f009e86e32e116261fcc4fd9ae82c23ebeacee2fd1b788394df0fef42c3df0ff"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 855,
+      "upper_cm1": 865,
+      "filename": "lut_N2O_855_865.npz",
+      "bytes": 3086786,
+      "sha256": "07bff45f7c83272bdb00bce5dec04e940a20ee4933d858fefbe1e6f2b7db21f3"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 865,
+      "upper_cm1": 875,
+      "filename": "lut_N2O_865_875.npz",
+      "bytes": 3066872,
+      "sha256": "666a164d2bcac23cbae49dcb21ed6bbb13ab77cdbb70abff0eaba2e91bf506c3"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 875,
+      "upper_cm1": 885,
+      "filename": "lut_N2O_875_885.npz",
+      "bytes": 3120103,
+      "sha256": "804a890ee4ef9154ffe3ccc4ad7161b18c837043b3a21b12cc37e7c8b7bd0d6c"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 885,
+      "upper_cm1": 895,
+      "filename": "lut_N2O_885_895.npz",
+      "bytes": 3130345,
+      "sha256": "89c4c1290a0a49a930b3469dde8015943b2ccccb95a5340981917ce27d762ebf"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 895,
+      "upper_cm1": 905,
+      "filename": "lut_N2O_895_905.npz",
+      "bytes": 3126402,
+      "sha256": "394960d085b70312798ee5322bf5732b055f1462f38f6259962f5e0db80e9c3d"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 905,
+      "upper_cm1": 915,
+      "filename": "lut_N2O_905_915.npz",
+      "bytes": 3123663,
+      "sha256": "67207096b73496dea19b1e300bfb15e31b7ddc98ab426ffa383c1b86a65f5d09"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 915,
+      "upper_cm1": 925,
+      "filename": "lut_N2O_915_925.npz",
+      "bytes": 3120601,
+      "sha256": "fb90c983734c1603138a0ee3a3950c34e939cd06a5d8c486d122c27c0a2aa24e"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 925,
+      "upper_cm1": 935,
+      "filename": "lut_N2O_925_935.npz",
+      "bytes": 3123471,
+      "sha256": "6d2f71e0516c13b425a7ad83c53773c845f6062bb9a92e19b0f71f4c639f0f63"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 935,
+      "upper_cm1": 945,
+      "filename": "lut_N2O_935_945.npz",
+      "bytes": 3125746,
+      "sha256": "cec761a3555ae1420623338626febac924ea3e67b25c528a9c7743cbb463da61"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 945,
+      "upper_cm1": 955,
+      "filename": "lut_N2O_945_955.npz",
+      "bytes": 3118061,
+      "sha256": "53cb0fdf70a370a812bb2ebcf663126a375bac3d40ade2882c0390b3e4888941"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 955,
+      "upper_cm1": 965,
+      "filename": "lut_N2O_955_965.npz",
+      "bytes": 3116651,
+      "sha256": "31016ac0702772e43193ab71df7253f56a684bbe2b9269796b243b48c186548e"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 965,
+      "upper_cm1": 975,
+      "filename": "lut_N2O_965_975.npz",
+      "bytes": 3117275,
+      "sha256": "7eabb1456dbed453a24ec2a5de64a4e2bce9616372121f8a98de5e6a692d400e"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 975,
+      "upper_cm1": 985,
+      "filename": "lut_N2O_975_985.npz",
+      "bytes": 3124945,
+      "sha256": "243713280062db24ca2c4d4e683632e531eb5525a707c1c1f074b9c244c07615"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 985,
+      "upper_cm1": 995,
+      "filename": "lut_N2O_985_995.npz",
+      "bytes": 3121298,
+      "sha256": "721859f058d6b481f931ae020db33542268d932868c6f8ea4ce1230965b6cc31"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 995,
+      "upper_cm1": 1005,
+      "filename": "lut_N2O_995_1005.npz",
+      "bytes": 3120682,
+      "sha256": "cd9f0837ce129f1f0b38cfa1c5315abf92a13e358802b1ca642addc27f6ad775"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1005,
+      "upper_cm1": 1015,
+      "filename": "lut_N2O_1005_1015.npz",
+      "bytes": 3122073,
+      "sha256": "2f404586b650b4423d92b2afe1e9ccdf5513a7f0c2720997d70763e9c233c43d"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1015,
+      "upper_cm1": 1025,
+      "filename": "lut_N2O_1015_1025.npz",
+      "bytes": 3127777,
+      "sha256": "d41a0177aa0844d11e804a5d99869a4de0baf7179ca1a92eb1aa0378866a5924"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1025,
+      "upper_cm1": 1035,
+      "filename": "lut_N2O_1025_1035.npz",
+      "bytes": 3127169,
+      "sha256": "b07fd25ad693e620581da14de5e8eb09a77f359dbb0b9b02b096f525264f41b7"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1035,
+      "upper_cm1": 1045,
+      "filename": "lut_N2O_1035_1045.npz",
+      "bytes": 3125418,
+      "sha256": "1d6fab4b0b3a16a8654ee614b5306ba576c935946d6fd572e4c5418aa5b694f7"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1045,
+      "upper_cm1": 1055,
+      "filename": "lut_N2O_1045_1055.npz",
+      "bytes": 3120425,
+      "sha256": "a70fb64802dc1921a4bf438c23ffa6cf60cf06e8c5e492167beabc9dea4143ad"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1055,
+      "upper_cm1": 1065,
+      "filename": "lut_N2O_1055_1065.npz",
+      "bytes": 3126737,
+      "sha256": "7c4ee4956db82d6488ab51c99f30618aa59d26e55c718a12f540564d0cc1ca84"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1065,
+      "upper_cm1": 1075,
+      "filename": "lut_N2O_1065_1075.npz",
+      "bytes": 3124986,
+      "sha256": "ca23d470aaf97c6d0c2480248c77a685c49ef225e812563b5f02cc38157a9709"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1075,
+      "upper_cm1": 1085,
+      "filename": "lut_N2O_1075_1085.npz",
+      "bytes": 3123647,
+      "sha256": "3668eb4c3f8e8fe1db34978e0e155971419a67346df7f6de8654f503bcec5b28"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1085,
+      "upper_cm1": 1095,
+      "filename": "lut_N2O_1085_1095.npz",
+      "bytes": 3123300,
+      "sha256": "265799e74a42436833805ab83009d1a697c0596727b947451650e6d45e73b6ca"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1095,
+      "upper_cm1": 1105,
+      "filename": "lut_N2O_1095_1105.npz",
+      "bytes": 3124455,
+      "sha256": "f7b945186a336a06977ab0bce97c8b1345328bd763ce7661a235afab019041ff"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1105,
+      "upper_cm1": 1115,
+      "filename": "lut_N2O_1105_1115.npz",
+      "bytes": 3127498,
+      "sha256": "ebb732f30c6061d2ac90494a84677f53f2d5063096c52dc121b595342404185e"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1115,
+      "upper_cm1": 1125,
+      "filename": "lut_N2O_1115_1125.npz",
+      "bytes": 3126594,
+      "sha256": "251cf5348335316350af9c100a4db0e887bed47a44d2749b280f6c10be83ceaf"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1125,
+      "upper_cm1": 1135,
+      "filename": "lut_N2O_1125_1135.npz",
+      "bytes": 3129202,
+      "sha256": "bb7926be13ec4ad7b9d632aec5dd41a12b85bf1ed480ad51f66967a1b9e0edcd"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1135,
+      "upper_cm1": 1145,
+      "filename": "lut_N2O_1135_1145.npz",
+      "bytes": 3129211,
+      "sha256": "b6d67ddd1dfad77bce1a587ef40f9e30fcfa53a2b1d2c2d43bf1830e7c5ffa16"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1145,
+      "upper_cm1": 1155,
+      "filename": "lut_N2O_1145_1155.npz",
+      "bytes": 3128889,
+      "sha256": "6450a006823a32ba640a2d46219b44af81b9fe176af1cbb92ed1295dcdfc9713"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1155,
+      "upper_cm1": 1165,
+      "filename": "lut_N2O_1155_1165.npz",
+      "bytes": 3127505,
+      "sha256": "2c5e1ba0134014a0567fb0fe1d6d18d4d379a1e1e0d97c3a3d45e12962bee2c0"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1165,
+      "upper_cm1": 1175,
+      "filename": "lut_N2O_1165_1175.npz",
+      "bytes": 3129317,
+      "sha256": "ef6f490e71c4faeb885d88ab086331a4490070dcddf58673ef4b8f3efdb3c971"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1175,
+      "upper_cm1": 1185,
+      "filename": "lut_N2O_1175_1185.npz",
+      "bytes": 3126659,
+      "sha256": "037e34d508e41e5f0ecbe61721c11c51e2be1714bbf3cf7bd9aff1a707cf78c0"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1185,
+      "upper_cm1": 1195,
+      "filename": "lut_N2O_1185_1195.npz",
+      "bytes": 3127846,
+      "sha256": "f55a9024fc06e09ef5fa142c95c9d1bffb0617f2028d3e17a1a52aed4fbcbdf4"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1195,
+      "upper_cm1": 1205,
+      "filename": "lut_N2O_1195_1205.npz",
+      "bytes": 3124848,
+      "sha256": "a558642c4a7f3df45e4c671b27e18f094840750c2d266bb02b4e8e8b2e28550c"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1205,
+      "upper_cm1": 1215,
+      "filename": "lut_N2O_1205_1215.npz",
+      "bytes": 3128173,
+      "sha256": "ea34ec148c583bc0b641e63becf5559494b804d283f89733dec19441271bea8d"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1215,
+      "upper_cm1": 1225,
+      "filename": "lut_N2O_1215_1225.npz",
+      "bytes": 3125745,
+      "sha256": "83ee58ee1219762c92e85067396ad3a4990b17abc33f27e10e5b7aecace72231"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1225,
+      "upper_cm1": 1235,
+      "filename": "lut_N2O_1225_1235.npz",
+      "bytes": 3126753,
+      "sha256": "6318f1402919001cace366d2e7a998c4fb5aec1967ed70b7a5886a5eea6e49d6"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1235,
+      "upper_cm1": 1245,
+      "filename": "lut_N2O_1235_1245.npz",
+      "bytes": 3128578,
+      "sha256": "929b964939bca9a112d33806226992f8134367ac731e11820b2627077943b4d4"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1245,
+      "upper_cm1": 1255,
+      "filename": "lut_N2O_1245_1255.npz",
+      "bytes": 3128920,
+      "sha256": "65d555487a2b835a9b9dcba2f85a1321ccd43d03f3bf5168effb9a4ef2750859"
+    },
+    {
+      "gas": "N2O",
+      "lower_cm1": 1255,
+      "upper_cm1": 1265,
+      "filename": "lut_N2O_1255_1265.npz",
+      "bytes": 3128048,
+      "sha256": "64e7e4864d27ccd2ded4929ce937d0f67b3ded2b1ea62125e0f38b2e0a75fb26"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 635,
+      "upper_cm1": 645,
+      "filename": "lut_CH4_635_645.npz",
+      "bytes": 3127673,
+      "sha256": "7858658af95cd84216ca2bb53bcb6712e5bc188f78aec0326ede66ca4edfa6a8"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 645,
+      "upper_cm1": 655,
+      "filename": "lut_CH4_645_655.npz",
+      "bytes": 3130462,
+      "sha256": "43cf65d6002b050b0711334a35520c8a190b9394479f441c11eeca73119171c5"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 655,
+      "upper_cm1": 665,
+      "filename": "lut_CH4_655_665.npz",
+      "bytes": 3128044,
+      "sha256": "708400d9196b42cad9a6e200f75c1b22c040835abe570a960d4532bc70d465b3"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 665,
+      "upper_cm1": 675,
+      "filename": "lut_CH4_665_675.npz",
+      "bytes": 3124913,
+      "sha256": "9a5e3f6effd72d1b4db7d79e63c28b8726ec3285de0271988f9f32e8d6fcdc80"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 675,
+      "upper_cm1": 685,
+      "filename": "lut_CH4_675_685.npz",
+      "bytes": 3126925,
+      "sha256": "d2b72bc89633e09dc740b862c1cff05fed066706c31e2775c78ac3f28b8f9135"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 685,
+      "upper_cm1": 695,
+      "filename": "lut_CH4_685_695.npz",
+      "bytes": 3127180,
+      "sha256": "7a91b99119b52cb6a6fe73ca1d0a254ece9aa96a92759d4e74802878892fac07"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 695,
+      "upper_cm1": 705,
+      "filename": "lut_CH4_695_705.npz",
+      "bytes": 3117450,
+      "sha256": "37b838485dfd559ecf2f677fbd88e988ee7b62315d2d9e727bafad6b71663fa7"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 705,
+      "upper_cm1": 715,
+      "filename": "lut_CH4_705_715.npz",
+      "bytes": 3125831,
+      "sha256": "827657ab5ecf85006ec15375a84bf40bb21260c2141cb95d2391b765e2d9aff8"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 715,
+      "upper_cm1": 725,
+      "filename": "lut_CH4_715_725.npz",
+      "bytes": 3122191,
+      "sha256": "106c3a8c6561bb3d0f75dbd0aaad3a285764fa2811c55e23ca50ab3d93774668"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 725,
+      "upper_cm1": 735,
+      "filename": "lut_CH4_725_735.npz",
+      "bytes": 3129397,
+      "sha256": "556f709fd1661990379bca4f617a86d980430982edae4b1cd48791d188c4e1e5"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 735,
+      "upper_cm1": 745,
+      "filename": "lut_CH4_735_745.npz",
+      "bytes": 3131931,
+      "sha256": "2ebffba86bf698e1bb1699d7bb1cbbb1924c8b6422780fe51e8cde9e26187112"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 745,
+      "upper_cm1": 755,
+      "filename": "lut_CH4_745_755.npz",
+      "bytes": 3134684,
+      "sha256": "793fbe0f6a3fc87d44e827675eb7f2cfaf7fc62658d7ca3371c9edcbf4cc7ac9"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 755,
+      "upper_cm1": 765,
+      "filename": "lut_CH4_755_765.npz",
+      "bytes": 3131976,
+      "sha256": "4bbceb6bca6c36841fd56cff64cbe8109cd5b502b072fa4de5eca8ee1dc5d8b2"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 765,
+      "upper_cm1": 775,
+      "filename": "lut_CH4_765_775.npz",
+      "bytes": 3132841,
+      "sha256": "29a3749ea3f78d369b963b63dc7b6c603e3db8e9460a9b9a7fd6352fe215d2d8"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 775,
+      "upper_cm1": 785,
+      "filename": "lut_CH4_775_785.npz",
+      "bytes": 3131891,
+      "sha256": "f99adee6bed7d1f51754487e543c3e256ebe52a4b3f0d0bcc3fa5d7f56e12963"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 785,
+      "upper_cm1": 795,
+      "filename": "lut_CH4_785_795.npz",
+      "bytes": 3130905,
+      "sha256": "4f6a31c1a6f9862fbfc90e7d5e5fa11b83abe23424dd0e274c310391422acae9"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 795,
+      "upper_cm1": 805,
+      "filename": "lut_CH4_795_805.npz",
+      "bytes": 3132165,
+      "sha256": "fde3f120eeac3fc08e1117d2edbced68c3224cb4ef9336d5ca26e3c1d11ca479"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 805,
+      "upper_cm1": 815,
+      "filename": "lut_CH4_805_815.npz",
+      "bytes": 3132494,
+      "sha256": "6a05c5c8c6c576aec4a854113306759349e6002f05b54e4a206372fac76e9ec3"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 815,
+      "upper_cm1": 825,
+      "filename": "lut_CH4_815_825.npz",
+      "bytes": 3131752,
+      "sha256": "a5b235770a8487078c853b43978ea5d339b2d6e7a572a3db11a673ca333739bd"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 825,
+      "upper_cm1": 835,
+      "filename": "lut_CH4_825_835.npz",
+      "bytes": 3131314,
+      "sha256": "bb8d5ad0d9ecf69137e66baf60a0c5b159c5357ff8b9c0b26648b86394c44609"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 835,
+      "upper_cm1": 845,
+      "filename": "lut_CH4_835_845.npz",
+      "bytes": 3132091,
+      "sha256": "b0ac93512d62fa5dbaf34c347ded2b812e5c53790ec3287680ed6e816744da7c"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 845,
+      "upper_cm1": 855,
+      "filename": "lut_CH4_845_855.npz",
+      "bytes": 3128944,
+      "sha256": "2f6671daa61b567faba130d5e5e088519494e1b8e7ebfb7797b7e5b2d0db188d"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 855,
+      "upper_cm1": 865,
+      "filename": "lut_CH4_855_865.npz",
+      "bytes": 3122167,
+      "sha256": "ee5ef73609f3d7e27e6e60bf8272d741e187e4b95a03834ee7330588e0601c3c"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 865,
+      "upper_cm1": 875,
+      "filename": "lut_CH4_865_875.npz",
+      "bytes": 3100970,
+      "sha256": "98fa2fb9ead2f824b11eafaf0d209041c0d8cbffc3a0ba013c8b2184dcbbb9f7"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 875,
+      "upper_cm1": 885,
+      "filename": "lut_CH4_875_885.npz",
+      "bytes": 3104696,
+      "sha256": "0ca112ad76ea57d392d9c39c8ed1fae5d5116fa0e58cfee875102fc6def913f9"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 885,
+      "upper_cm1": 895,
+      "filename": "lut_CH4_885_895.npz",
+      "bytes": 3105803,
+      "sha256": "f53f2d77cc3d886e6c61ba036ed19fd11c03055150c46bef3d7c993d537ae9dd"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 895,
+      "upper_cm1": 905,
+      "filename": "lut_CH4_895_905.npz",
+      "bytes": 3118178,
+      "sha256": "57c0883c1e72f84638702c66b5273eafad813d332c1ec488d049603a85e0f6b9"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 905,
+      "upper_cm1": 915,
+      "filename": "lut_CH4_905_915.npz",
+      "bytes": 3115304,
+      "sha256": "005e0baaf2c9f1cd5f840d60557eacedb9ae1488c79180fa4aa3870c6b407ddc"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 915,
+      "upper_cm1": 925,
+      "filename": "lut_CH4_915_925.npz",
+      "bytes": 3119159,
+      "sha256": "8f950ffdc930042b2b9f285d95719087a8b362cfd9f8cc5f768ae18c8b4f7118"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 925,
+      "upper_cm1": 935,
+      "filename": "lut_CH4_925_935.npz",
+      "bytes": 3127091,
+      "sha256": "a09e4db7a588c7d077ab92c953a7f5e5f5c453ea3639a8670d74ba356ffd96c2"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 935,
+      "upper_cm1": 945,
+      "filename": "lut_CH4_935_945.npz",
+      "bytes": 3123712,
+      "sha256": "ace9e2032eeec39b272a425edc714af1bf650c77efbbfae212f6ac2324413881"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 945,
+      "upper_cm1": 955,
+      "filename": "lut_CH4_945_955.npz",
+      "bytes": 3129459,
+      "sha256": "c2a555ed51e374bafde98ee21dafbc9b95effa264d8bfb523e153406ac222794"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 955,
+      "upper_cm1": 965,
+      "filename": "lut_CH4_955_965.npz",
+      "bytes": 3128750,
+      "sha256": "78a13e1eea26f50b55ee54600caad13ba03d77c7d0e95467edf702f8f86c579e"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 965,
+      "upper_cm1": 975,
+      "filename": "lut_CH4_965_975.npz",
+      "bytes": 3128057,
+      "sha256": "8c71d07237ccc8ca9c4e08186de10db518e4bfdf2af954265a0255cee8d53178"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 975,
+      "upper_cm1": 985,
+      "filename": "lut_CH4_975_985.npz",
+      "bytes": 3129617,
+      "sha256": "68b0f8bb813c67c9f722f17ebc0c7c303cd1fefa802d42cdeea002856e7f54bc"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 985,
+      "upper_cm1": 995,
+      "filename": "lut_CH4_985_995.npz",
+      "bytes": 3130426,
+      "sha256": "dd40253c32e250bb337c2d2ca0d331ba3857b614af1a665d75791805a21fb4ae"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 995,
+      "upper_cm1": 1005,
+      "filename": "lut_CH4_995_1005.npz",
+      "bytes": 3133317,
+      "sha256": "eb461f0a4e0cce911ff60e66bd92d57f34d01eea4ffbf3bd6daaa09bf9d21d96"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1005,
+      "upper_cm1": 1015,
+      "filename": "lut_CH4_1005_1015.npz",
+      "bytes": 3130925,
+      "sha256": "2debe3a5c39d5708c56d532f9e7b3fecd95aa8ba66cbc25897646fcec91da2a3"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1015,
+      "upper_cm1": 1025,
+      "filename": "lut_CH4_1015_1025.npz",
+      "bytes": 3131010,
+      "sha256": "ec82715b06ac7478ff2a47adc13f4f6d8afc9032724fecdd4f854b52eb471abb"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1025,
+      "upper_cm1": 1035,
+      "filename": "lut_CH4_1025_1035.npz",
+      "bytes": 3130291,
+      "sha256": "0700544756e85350007534ead905e8fd2610a2762eb854c53734bef816ddf173"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1035,
+      "upper_cm1": 1045,
+      "filename": "lut_CH4_1035_1045.npz",
+      "bytes": 3130477,
+      "sha256": "d1dfa6e1aaab1b2f6e65f188e76c8acecd87bc6bc1708d05bba9ccaa89b5ac17"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1045,
+      "upper_cm1": 1055,
+      "filename": "lut_CH4_1045_1055.npz",
+      "bytes": 3130067,
+      "sha256": "7faf33740ae57437d4868e8b2dc02c22dffcd467b59438507d9684753eb027dc"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1055,
+      "upper_cm1": 1065,
+      "filename": "lut_CH4_1055_1065.npz",
+      "bytes": 3128771,
+      "sha256": "4d694365e6724b7903903d69933e04394e3f8dfc247e3ead266eaee18d6295d2"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1065,
+      "upper_cm1": 1075,
+      "filename": "lut_CH4_1065_1075.npz",
+      "bytes": 3129672,
+      "sha256": "3c90e12be9d7038d5971c028f6e1c6992293e1deec2d935b27320cbc2f5e5a98"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1075,
+      "upper_cm1": 1085,
+      "filename": "lut_CH4_1075_1085.npz",
+      "bytes": 3129106,
+      "sha256": "e958cb1d8a135a897e449657875b47061490850a6764b3100a77d7f0c54eba5c"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1085,
+      "upper_cm1": 1095,
+      "filename": "lut_CH4_1085_1095.npz",
+      "bytes": 3128102,
+      "sha256": "f3375236ce4117ed951d233beef0cf2546535906c447e511de655faecb65fc3b"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1095,
+      "upper_cm1": 1105,
+      "filename": "lut_CH4_1095_1105.npz",
+      "bytes": 3127028,
+      "sha256": "ea5e612e621390720c792ebdbe4f67311c2b8bd21eacabccf88bd44fa397f940"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1105,
+      "upper_cm1": 1115,
+      "filename": "lut_CH4_1105_1115.npz",
+      "bytes": 3125478,
+      "sha256": "d37bc98ad823e48dda2a89226f53e8f7200607e51e869808cca54ec8561008c2"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1115,
+      "upper_cm1": 1125,
+      "filename": "lut_CH4_1115_1125.npz",
+      "bytes": 3125239,
+      "sha256": "27ad5a77f4df7b994be049cb7aa48165cbf4a44e8b3f1a6125e2574ae3a9013c"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1125,
+      "upper_cm1": 1135,
+      "filename": "lut_CH4_1125_1135.npz",
+      "bytes": 3123321,
+      "sha256": "757fd233707746521e4f576f1c53c4bc7a2c57b94c584560ff5d4e6453b2c835"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1135,
+      "upper_cm1": 1145,
+      "filename": "lut_CH4_1135_1145.npz",
+      "bytes": 3123851,
+      "sha256": "18d60182dcd05ab6b7fc9dec8f1b46177c7d405859a16344b1af1d5c41cf7f74"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1145,
+      "upper_cm1": 1155,
+      "filename": "lut_CH4_1145_1155.npz",
+      "bytes": 3123335,
+      "sha256": "2216e2173979fea51837304b311d6605a8a9e6ce37692ab33f87a42bbd50cced"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1155,
+      "upper_cm1": 1165,
+      "filename": "lut_CH4_1155_1165.npz",
+      "bytes": 3122903,
+      "sha256": "e5615283662008822e76b76122e15e2ae9832a83be6e9c656237ba2bc52efd7d"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1165,
+      "upper_cm1": 1175,
+      "filename": "lut_CH4_1165_1175.npz",
+      "bytes": 3122665,
+      "sha256": "20b44ebf364e5be02c88731fc438c77c27aec25afdf298aa6bad837c20f887af"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1175,
+      "upper_cm1": 1185,
+      "filename": "lut_CH4_1175_1185.npz",
+      "bytes": 3122007,
+      "sha256": "6e1b3c375079e6fa85c57fb63aa1efb7d9b4c1cc0abc8b5bc165b9a79b387b3f"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1185,
+      "upper_cm1": 1195,
+      "filename": "lut_CH4_1185_1195.npz",
+      "bytes": 3123083,
+      "sha256": "205b72f26078b2fd91f215d00de5cf8d5f848a09365bbbbcbb43fd650667b5c5"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1195,
+      "upper_cm1": 1205,
+      "filename": "lut_CH4_1195_1205.npz",
+      "bytes": 3123168,
+      "sha256": "5677b3fb4f9d9082882b57f9fb164b6b9b77957710ddb7048c27c1d513032221"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1205,
+      "upper_cm1": 1215,
+      "filename": "lut_CH4_1205_1215.npz",
+      "bytes": 3122434,
+      "sha256": "0072bbc1fab4bc395c4bc7e762f1a2de466f1a4da998e0fee30824dda1d65958"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1215,
+      "upper_cm1": 1225,
+      "filename": "lut_CH4_1215_1225.npz",
+      "bytes": 3124391,
+      "sha256": "6efc03db647d9bfab33e5000ea0a36486bcf59de5861688a463779dee2f8ec3a"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1225,
+      "upper_cm1": 1235,
+      "filename": "lut_CH4_1225_1235.npz",
+      "bytes": 3124627,
+      "sha256": "7d12efd7da00f8284abc654d7fdaa6641cf1f425754e09664fabaa085b9c3458"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1235,
+      "upper_cm1": 1245,
+      "filename": "lut_CH4_1235_1245.npz",
+      "bytes": 3126233,
+      "sha256": "b3796cd9951167ca85de620eb1cef40945ecbdb33e4c1560a2c75492a00e2e9a"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1245,
+      "upper_cm1": 1255,
+      "filename": "lut_CH4_1245_1255.npz",
+      "bytes": 3125762,
+      "sha256": "2d5eebf248c77e1fac58ec11c90cb63d2caae6277e3228fc5112b13da9f0c609"
+    },
+    {
+      "gas": "CH4",
+      "lower_cm1": 1255,
+      "upper_cm1": 1265,
+      "filename": "lut_CH4_1255_1265.npz",
+      "bytes": 3124615,
+      "sha256": "c0c23230325f23b21af5a3e0d113bb2333dbeb7d6321f494bd1627c37808eb47"
+    }
+  ]
+}

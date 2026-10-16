@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "captured_on": "2026-09-27",
+  "cams_l137": {
+    "url": "https://nwp-saf.eumetsat.int/site/download/profile_datasets/nwpsaf_cams137_2025.tar",
+    "archive_bytes": 993280000,
+    "archive_sha256": null,
+    "verification": "The six required TAR members were independently fetched by HTTP Range and matched raw_catalogs.json byte counts and SHA256 hashes. The full 993 MB TAR was not downloaded or hashed.",
+    "members": [
+      {"path": "cams_5000_temp_2025.nc", "header_offset": 927084544},
+      {"path": "cams_5000_hum_2025.nc", "header_offset": 488886272},
+      {"path": "cams_5000_co2_2025.nc", "header_offset": 293207040},
+      {"path": "cams_5000_oz_2025.nc", "header_offset": 683970560},
+      {"path": "cams_5000_n2o_2025.nc", "header_offset": 537659392},
+      {"path": "cams_5000_ch4_2025.nc", "header_offset": 146853376}
+    ]
+  },
+  "ecostress_selected": {
+    "url": "https://zenodo.org/api/records/15881226/files/ecostress_orig.zip/content",
+    "archive_bytes": 41526412,
+    "archive_sha256": "487561421483fd9abde2304cb6abf42d3f961a488e3ec254520f08b2deaf9e15",
+    "archive_md5": "8df79582088b5dccc2d56907261b8449",
+    "source_record": "https://zenodo.org/records/15881226",
+    "provenance": "Archived third-party mirror of JPL ECOSTRESS spectra; all 1419 selected members matched raw_catalogs.json byte counts and SHA256 hashes. The JPL download interface itself does not expose a stable direct URL for this selection."
+  },
+  "aer_v381": {
+    "url": "https://zenodo.org/api/records/4019178/files/aer_v_3.8.1.tar.gz/content",
+    "archive_bytes": 442551040,
+    "archive_sha256": "ea75443cb018286b7c894394a4d04e7dc152e3762644a8e39c706a278af4a697",
+    "archive_md5": "12e29cc828b36f78145f6ee874af552b",
+    "source_record": "https://zenodo.org/records/4019178",
+    "coupling_member": "lncpl_lines",
+    "line_members": [
+      "line_files_By_Molecule/01_H2O/01_H2O",
+      "line_files_By_Molecule/02_CO2/02_CO2",
+      "line_files_By_Molecule/03_O3/03_O3",
+      "line_files_By_Molecule/04_N2O/04_N2O",
+      "line_files_By_Molecule/05_CO/05_CO",
+      "line_files_By_Molecule/06_CH4/06_CH4",
+      "line_files_By_Molecule/07_O2/07_O2"
+    ],
+    "par_asset_id": "aer_lines",
+    "coupling_asset_id": "aer_coupling",
+    "par_line_count": 730759,
+    "verification": "The archived AER TAR matched the Zenodo record MD5 and size. Reapplying the historical 620-2785 cm-1 seven-molecule selection produced a .par file byte-identical to the frozen asset; the TAR root coupling member also matched."
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "captured_on": "2026-09-27",
+  "components": {
+    "photonix_cpu": {
+      "source_repository": "photonix worktree forward-clean-main",
+      "source_commit": "b4277191e86c81ff7ca783463ffdf919f8a2071c",
+      "source_directory": "forward clean/photonix/src/photonix",
+      "destination_directory": "packages/photonix/src/photonix",
+      "status": "all_63_source_and_resource_files_copied_byte_identically; absorption_py_and_constants_py_recopied_2026-09-28_from_uncommitted_working_tree_recipe_v2_radiation_term_per_frequency; corrected_cpu_recipe_full_band_validation_pending",
+      "evidence": ["docs/FORWARD_MIGRATION.md"]
+    },
+    "photonix_torch_historical": {
+      "source_repository": "model main",
+      "source_commit": "9f3e0a440189e54dd5c7ad6adfc56e74f2b04de7",
+      "source_files": [
+        "model/physinv/forward_lut_torch.py",
+        "model/physinv/continuum_torch.py"
+      ],
+      "destination_directory": "packages/photonix/src/photonix/torch_legacy",
+      "status": "style_normalized_extraction; numerical_fixture_parity_passed; frozen_checkpoint_sim300_and_mar64_metric_parity_passed",
+      "evidence": [
+        "docs/FORWARD_MIGRATION.md",
+        "docs/validation/sim300_comparison.json",
+        "docs/validation/mar64_comparison.json"
+      ]
+    },
+    "retrieval_z24_ncol": {
+      "source_repository": "model main",
+      "source_commit": "9f3e0a440189e54dd5c7ad6adfc56e74f2b04de7",
+      "source_directory": "model/physinv/closure_forward/experimentos/apae_loss_fisica",
+      "destination_directory": "packages/iasi_retrieval/src/iasi_retrieval",
+      "status": "extracted_from_committed_source; frozen_step1000_sim300_and_mar64_metric_parity_passed; fresh_end_to_end_training_validation_pending",
+      "evidence": [
+        "docs/validation/sim300_comparison.json",
+        "docs/validation/mar64_comparison.json",
+        "docs/validation/apae_comparison.json",
+        "docs/validation/prior_comparison.json"
+      ]
+    },
+    "historical_lut_generation": {
+      "source_repository": "photonix historical main",
+      "compatible_candidate_commit": "9f93c955779c11f7a8018e9200d63dddfa22ba23",
+      "destination_directory": "pipelines/generation",
+      "status": "candidate_source; five_895_905_gas_pilots_pass_numerical_spectral_gate; full_315_block_generation_unverified",
+      "evidence": [
+        "docs/validation/lut_pilot_co2_895_905.json",
+        "docs/validation/lut_pilot_h2o_895_905.json",
+        "docs/validation/lut_pilot_o3_895_905.json",
+        "docs/validation/lut_pilot_n2o_895_905.json",
+        "docs/validation/lut_pilot_ch4_895_905.json"
+      ]
+    },
+    "historical_gpu_pack_reconstruction": {
+      "destination_file": "pipelines/generation/gpu_pack.py",
+      "source_inputs": "manifests/gpu_pack_sources.json",
+      "status": "reconstructed_builder; all_three_archived_npz_outputs_byte_identical; original_tips_acquisition_and_three_continuum_source_generators_unverified",
+      "evidence": ["docs/validation/gpu_pack_rebuild.json"]
+    },
+    "final_training_recipe": {
+      "destination_files": [
+        "packages/iasi_retrieval/src/iasi_retrieval/training.py",
+        "packages/iasi_retrieval/src/iasi_retrieval/prior.py",
+        "packages/iasi_retrieval/src/iasi_retrieval/unrolled.py"
+      ],
+      "status": "apae_30_parameter_tensors_exact; prior_seed7_candidate_differs_from_historical; historical_prior_trainer_missing; fresh_sew_validation_pending",
+      "evidence": [
+        "docs/TRAINING_PROVENANCE.md",
+        "docs/validation/apae_comparison.json",
+        "docs/validation/prior_comparison.json"
+      ]
+    }
+  },
+  "notes": [
+    "Archived LUT blocks predate the compatible candidate commit and do not record a source hash.",
+    "The CPU clean recipe and historical dense Torch recipe have distinct physical contracts.",
+    "The old evaluation did not record the historical training checkpoint SHA256 or complete input inventory; passing frozen-model metrics is not historical byte identity.",
+    "Modal stage reports retain the SHA256 of the source snapshot present when each run began; later edits to this evidence manifest do not change those historical records."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "archive_sha256": "704a60cb2f37e047babbd52d2caf0b4de03cfbbbdf2fc61dac3083d415ac3813",
+  "build": {
+    "negative_fraction": 0.0,
+    "output": "/tmp/lut-pilot-ulcmg14m/candidate/lut_H2O_895_905.npz",
+    "rms_log": 0.00010352539522197961,
+    "sha256": "d6ead1eb0de21a38520d5d138b5bd4ecf62e189bd712cbfc9d9e84b9a9a4493e",
+    "status": "candidate_historical_source_unverified"
+  },
+  "candidate_sha256": "d6ead1eb0de21a38520d5d138b5bd4ecf62e189bd712cbfc9d9e84b9a9a4493e",
+  "comparison": {
+    "archived_sha256": "704a60cb2f37e047babbd52d2caf0b4de03cfbbbdf2fc61dac3083d415ac3813",
+    "candidate_sha256": "d6ead1eb0de21a38520d5d138b5bd4ecf62e189bd712cbfc9d9e84b9a9a4493e",
+    "max_abs_log10_sigma": 1.3560708111981512e-11,
+    "rms_log10_sigma": 2.1079780349052527e-13,
+    "status": "comparison_only_no_scientific_acceptance_threshold"
+  },
+  "gas": "H2O",
+  "gate": {
+    "comparison_grid": "20 deterministic state indices x 301 deterministic channel indices",
+    "max_abs_log10_sigma_limit": 0.00025,
+    "passed": true,
+    "rms_log10_sigma_limit": 2.5e-05,
+    "scope": "one H2O 895-905 cm^-1 candidate block only"
+  },
+  "generator_sha256": "9021ca785b1e7f20be707656c3b2dfbd10dd53236ec7a075ea2df6e73d4857e5",
+  "inputs_sha256": {
+    "cont.npz": "e8f18089c28d103e96c12ea2d7aa2ac7190e19cb095ab0a0de8cb7635c1e30f5",
+    "lineas.npz": "7dcc80ab21284b64d691b87c04e3375e425ecdba4d3a8014f4ff8d6b3e1867ac",
+    "lut_H2O_895_905.npz": "704a60cb2f37e047babbd52d2caf0b4de03cfbbbdf2fc61dac3083d415ac3813",
+    "qtab.npz": "99c09e782fadc315727d5adbcd3190451ef8ea3d399bdd6ce6f07f45aee92d9a"
+  },
+  "kernel_sha256": "282c8156b295561e7cb206ab1746e9f74c12e7b049555c430e3bac988f6a19f3",
+  "status": "candidate_pilot_comparison_only"
+}

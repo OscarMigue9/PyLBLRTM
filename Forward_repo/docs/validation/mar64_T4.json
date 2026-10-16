@@ -1,0 +1,519 @@
+{
+  "configuration_sha256": "0ff7cdee7f0b5bbae938f8a46a1418c3c7bf976a24554e5f958313ecc507015e",
+  "details": {
+    "count": 64,
+    "geo_record_sha256": "746558c16b17e957ccd072710e27956c906c0af5c0f759e906989e85f608e4bb",
+    "iterations": 4,
+    "metrics": {
+      "bias_CH4_dex": 0.0008629861537066045,
+      "bias_CO2_dex": 0.00033478044899014185,
+      "bias_H2O_dex": 0.005630455786905415,
+      "bias_N2O_dex": 0.0027136678278844384,
+      "bias_O3_dex": -0.010654774292444165,
+      "colCH4_dex": 0.004107547480983574,
+      "colCO2_dex": 0.0028679288934857867,
+      "colH2O_dex": 0.09313757234669762,
+      "colN2O_dex": 0.0018599617619218228,
+      "colO3_dex": 0.009930076780899237,
+      "forma_CH4_dex": 0.02258936509640135,
+      "forma_CO2_dex": 0.004038591782107917,
+      "forma_H2O_dex": 0.17133673818145062,
+      "forma_N2O_dex": 0.057010573000171046,
+      "forma_O3_dex": 0.11409606424352836,
+      "gases_dex": 0.07224882778057876,
+      "rmse_CH4_dex": 0.022707620352819688,
+      "rmse_CO2_dex": 0.004484671882449897,
+      "rmse_H2O_dex": 0.1626440019533286,
+      "rmse_N2O_dex": 0.05696869548899806,
+      "rmse_O3_dex": 0.11443914922529749,
+      "rmse_T_K": 2.2168835407769247,
+      "rmse_Tskin_K": 1.3401876392980372,
+      "skill_CH4": 0.9165361993137232,
+      "skill_CO2": 0.006800894161150262,
+      "skill_H2O": 0.8145690881174431,
+      "skill_N2O": 0.9056841416229703,
+      "skill_O3": 0.8092139316559364
+    },
+    "scientific_status": "historical_parity_unresolved"
+  },
+  "inputs": {
+    "apae": {
+      "path": "/cache/outputs/apae_fix_lat24b1e-4.pt",
+      "sha256": "c451f9400dfc66daf839d0062685aabe9846246b5643014dca42277e9d8d27c9"
+    },
+    "dates_30k": {
+      "path": "/cache/data/fechas_30k.npz",
+      "sha256": "aa1b8c246384fc76baad7e1df7b0b7f38600189f94c5ed397a313af9a0924604"
+    },
+    "lut_ch4": {
+      "path": "/cache/data/outputs/lut_band645_CH4.npy",
+      "sha256": "4585dca36e91fee0e124056917e7f657afc01c0f6db053bf6782254dc1b8e9fe"
+    },
+    "lut_co2": {
+      "path": "/cache/data/outputs/lut_band645_CO2.npy",
+      "sha256": "1210d85cc6c9bcd84d1be1f2f2fd4f69dbbbdf28b6b13ede2179220ac9ac97c4"
+    },
+    "lut_h2o": {
+      "path": "/cache/data/outputs/lut_band645_H2O.npy",
+      "sha256": "74c775eeb1e451485492f8df4dd6d38d75386bdc60d29f35c47a272965d9e280"
+    },
+    "lut_n2o": {
+      "path": "/cache/data/outputs/lut_band645_N2O.npy",
+      "sha256": "fa10dd9db7d549eb86cd75a35be3a68320905b87d2ffe2a608140e2eb6376b77"
+    },
+    "lut_o3": {
+      "path": "/cache/data/outputs/lut_band645_O3.npy",
+      "sha256": "3f17ad4c883ea7af4c49e1768a4b3ce756679032283508418e87e77ca69bb7e0"
+    },
+    "mar64_geo": {
+      "path": "/cache/data/val64_geo.npz",
+      "sha256": "dd7909e261230f7fff3e4899db8e45595a9dffc339189f38ba6b43f58546d008"
+    },
+    "model_error_sf": {
+      "path": "/cache/outputs/s_f_sim_iasiang.npz",
+      "sha256": "119bca7e97e980d4b41041dca621efd7811d795b0172bb9176454b4e4d801df2"
+    },
+    "noise_iasiang": {
+      "path": "/cache/data/outputs/noise_iasiang.npz",
+      "sha256": "efbe1b1295cddf8735bcd86b2ddbc159831fcd5d598274f66640f1c9430745eb"
+    },
+    "prior": {
+      "path": "/cache/outputs/prior_z_deep.pt",
+      "sha256": "64a6f727a9c77b1edef83313fa80150a45106beec3a1274ff1d3e4079a2604d8"
+    },
+    "r_self": {
+      "path": "/cache/data/outputs/r_self.npz",
+      "sha256": "9d8a9825454cab1d29083fa68a2fca06638adf97aa93e1f7e28d54a580b84679"
+    },
+    "radiances_iasiang": {
+      "path": "/cache/data/outputs/radiances_iasiang.npz",
+      "sha256": "dcb03b4002f5657433db1051df3fd0f9696f8273f68f98cdc1397ea08d70cc4d"
+    },
+    "scene_ammonium_1598": {
+      "path": "/cache/data/valstates_full/ammonium_1598.npz",
+      "sha256": "19f79504c9b9bf1c78951b21f8c4ba3798249ce6d0031f8fb5eebde4c7b9bf55"
+    },
+    "scene_ammonium_401": {
+      "path": "/cache/data/valstates_full/ammonium_401.npz",
+      "sha256": "a8912c352561097f5271b6094202067976100736e3f30d2358df48754a8865fb"
+    },
+    "scene_ammonium_4339": {
+      "path": "/cache/data/valstates_full/ammonium_4339.npz",
+      "sha256": "121338b3da18600cdd333ab0a4c07ea646e44efb59c99e4b575d2cf14b30091c"
+    },
+    "scene_bio_om_1704": {
+      "path": "/cache/data/valstates_full/bio_om_1704.npz",
+      "sha256": "03b39da54e4126996846b985cb4e5d978216e63967053324de39daf43011397d"
+    },
+    "scene_bio_om_343": {
+      "path": "/cache/data/valstates_full/bio_om_343.npz",
+      "sha256": "ab2ec9ca6a644cd20b20eaf232c3f74761a847bd1aced6846a59b8609bf0a525"
+    },
+    "scene_bio_om_4515": {
+      "path": "/cache/data/valstates_full/bio_om_4515.npz",
+      "sha256": "cc114949e98906276426e6b505c278f2ee170c01479fa2a21d10ee663be9e52b"
+    },
+    "scene_bio_om_4804": {
+      "path": "/cache/data/valstates_full/bio_om_4804.npz",
+      "sha256": "75db4f819be85c294c05e1bfd9a3fbb4d7aafcac0a05fcf04ff4445a5b3910ef"
+    },
+    "scene_ch2o_1587": {
+      "path": "/cache/data/valstates_full/ch2o_1587.npz",
+      "sha256": "1cc1dc6a4c1d2610de779aec1ed1d71a0a602125cb4e3e2c05cb59c740f5e50f"
+    },
+    "scene_ch2o_1846": {
+      "path": "/cache/data/valstates_full/ch2o_1846.npz",
+      "sha256": "abff3e6f1c35de7ab59c3d360b4c6f24287bea953401dca477f5902f10851fd7"
+    },
+    "scene_ch2o_358": {
+      "path": "/cache/data/valstates_full/ch2o_358.npz",
+      "sha256": "be901c007299f9bb9939ac9feb2a5c0a13639de78aa46a613c97a103dd41fbaa"
+    },
+    "scene_ch2o_804": {
+      "path": "/cache/data/valstates_full/ch2o_804.npz",
+      "sha256": "8fa358a5546fc39c3642d7ba62c0b9a406ad9dc1c8ff25322e5c08acdf9881f0"
+    },
+    "scene_clw_1374": {
+      "path": "/cache/data/valstates_full/clw_1374.npz",
+      "sha256": "d86947997bb3874c8b39b0a68941264a46dde5537da0455dd638dc706e6bb65c"
+    },
+    "scene_clw_2052": {
+      "path": "/cache/data/valstates_full/clw_2052.npz",
+      "sha256": "ad619b8650f90d18d6e7b8a46f0341784f39468b9d6212703f3862d64ae9feeb"
+    },
+    "scene_clw_2547": {
+      "path": "/cache/data/valstates_full/clw_2547.npz",
+      "sha256": "a01c47f4eda14d59b18fbf614a60d881d94d822a138f844053c999422f053a15"
+    },
+    "scene_clw_3130": {
+      "path": "/cache/data/valstates_full/clw_3130.npz",
+      "sha256": "7f6c28469ffa0e9e750beaf7792fb9891549f199a0e95eb5e0da9e86ea382d1e"
+    },
+    "scene_co_2347": {
+      "path": "/cache/data/valstates_full/co_2347.npz",
+      "sha256": "837632242cf946b32adae7e9a81adcb2aba1550eaac24d44de9460acb3927fe9"
+    },
+    "scene_co_387": {
+      "path": "/cache/data/valstates_full/co_387.npz",
+      "sha256": "42ad3edd23d15b39bfe601c5086e073a30a4fea6d4b1c3962a2992f95ec903f7"
+    },
+    "scene_dust1_1365": {
+      "path": "/cache/data/valstates_full/dust1_1365.npz",
+      "sha256": "42927fafdde6779519a85a699ffa77b18bd1507a518dd55e95699b1fef9c078c"
+    },
+    "scene_dust1_2161": {
+      "path": "/cache/data/valstates_full/dust1_2161.npz",
+      "sha256": "09e5de383517eddb0ed977c988e37c349937fe25b59aae60e8dddbb5cbd3c064"
+    },
+    "scene_dust1_2597": {
+      "path": "/cache/data/valstates_full/dust1_2597.npz",
+      "sha256": "e27da363d295d05d55b4b92364ecacc903894eddc55f092bee32284b84453a04"
+    },
+    "scene_dust1_2946": {
+      "path": "/cache/data/valstates_full/dust1_2946.npz",
+      "sha256": "20e32b0c7dfbd1918c1c079dc9b0ae010771c49c99c90797d7892184b464fa35"
+    },
+    "scene_dust1_3908": {
+      "path": "/cache/data/valstates_full/dust1_3908.npz",
+      "sha256": "95ce384b1ddb91febb4bcf7342270de152ec9c5b29678edd00183452be4783b8"
+    },
+    "scene_dust1_615": {
+      "path": "/cache/data/valstates_full/dust1_615.npz",
+      "sha256": "5e4aab49017bbaf674f34b0a6e8cfcfc89752c04544c34484624d7547c1e44e4"
+    },
+    "scene_dust1_682": {
+      "path": "/cache/data/valstates_full/dust1_682.npz",
+      "sha256": "70b7a6fec4d3fe43df8cd7a05beae70a736978ca2ee2fe308b746a3868c90c48"
+    },
+    "scene_dust1_930": {
+      "path": "/cache/data/valstates_full/dust1_930.npz",
+      "sha256": "3a264173a36b5df01977b8c68e2109d16d115841fc311ce89eb5382564ffffcf"
+    },
+    "scene_hphil_bc_1462": {
+      "path": "/cache/data/valstates_full/hphil_bc_1462.npz",
+      "sha256": "66940b797b80eb75b4cd89a2936ea76e24f71f0b42e60ebd51dd7c5d8def1f92"
+    },
+    "scene_hphil_bc_2085": {
+      "path": "/cache/data/valstates_full/hphil_bc_2085.npz",
+      "sha256": "fbbb0aa8b1b03542c597f2a4f7b24299dfe1d44254f8d8eacaea3c3bbb0bf653"
+    },
+    "scene_hphil_bc_3151": {
+      "path": "/cache/data/valstates_full/hphil_bc_3151.npz",
+      "sha256": "e106653a1c133606ee5f966116b5df9de2ec17c85b11bd7d6c7d0b6539367a2d"
+    },
+    "scene_hphil_bc_3264": {
+      "path": "/cache/data/valstates_full/hphil_bc_3264.npz",
+      "sha256": "36a8968e78d1b15be391ae2322555d7a0078af1ebf7669c18cbc42c32283d1c0"
+    },
+    "scene_hphil_bc_3445": {
+      "path": "/cache/data/valstates_full/hphil_bc_3445.npz",
+      "sha256": "8713ef72217af423ddfc2997d2cf22354ca44f29d92f78b800047a6558a4c353"
+    },
+    "scene_hphil_bc_3549": {
+      "path": "/cache/data/valstates_full/hphil_bc_3549.npz",
+      "sha256": "a1c7af697d42dba9a59062f052b4e221955ea72b7e47f8875cbd8a5b8a614501"
+    },
+    "scene_hphil_bc_4301": {
+      "path": "/cache/data/valstates_full/hphil_bc_4301.npz",
+      "sha256": "6f636ed352582ef16347066114f2db158dfc256fd6a19ca68f0609402c87f558"
+    },
+    "scene_hphil_om_1386": {
+      "path": "/cache/data/valstates_full/hphil_om_1386.npz",
+      "sha256": "6ac84f747e61acf641b913401a011c1dc74923061353c63130c797305bb88e13"
+    },
+    "scene_hphil_om_2537": {
+      "path": "/cache/data/valstates_full/hphil_om_2537.npz",
+      "sha256": "8a41642150b296e74ad9dece54f774514cddcabbae55c22719efeb92317ae259"
+    },
+    "scene_hphil_om_278": {
+      "path": "/cache/data/valstates_full/hphil_om_278.npz",
+      "sha256": "a6b5c3abb46e6888743348f9b898094a49ed384ba23e89c35905464c72f705ee"
+    },
+    "scene_hphil_om_4567": {
+      "path": "/cache/data/valstates_full/hphil_om_4567.npz",
+      "sha256": "6182ed63f66c44e6b5b4de4f88123c941a67df1a32bd0ea07829b3f9ee1b057a"
+    },
+    "scene_hphil_om_4599": {
+      "path": "/cache/data/valstates_full/hphil_om_4599.npz",
+      "sha256": "a11d979237bab87bbfc7a27d3fabc940e4e999928faf429629a0f5d5d06208b5"
+    },
+    "scene_hphil_om_57": {
+      "path": "/cache/data/valstates_full/hphil_om_57.npz",
+      "sha256": "c1ef36823f6be6c6d78fd48279def612c93afb2fe331633cd525d7f2c66f6e3f"
+    },
+    "scene_nitrate1_1652": {
+      "path": "/cache/data/valstates_full/nitrate1_1652.npz",
+      "sha256": "d9bb55aed4514a41940174e48fe8dacefa31a1df4bf2dbfcd050402b8b54f3dc"
+    },
+    "scene_nitrate1_2479": {
+      "path": "/cache/data/valstates_full/nitrate1_2479.npz",
+      "sha256": "47029930744b08b0a1fa1930e85124e9e34f8909e9185e4abd0b72155c390d7d"
+    },
+    "scene_nitrate1_2924": {
+      "path": "/cache/data/valstates_full/nitrate1_2924.npz",
+      "sha256": "fbdfeeb309fc536e279a21ae0c3f5d675349663db4a7f28aa97eb5821a0e0254"
+    },
+    "scene_nitrate1_3550": {
+      "path": "/cache/data/valstates_full/nitrate1_3550.npz",
+      "sha256": "298c48453a447d1a88c13bbb9af4c23c515afc1c324e7a92eae3d0f6466920a2"
+    },
+    "scene_nitrate1_3555": {
+      "path": "/cache/data/valstates_full/nitrate1_3555.npz",
+      "sha256": "3abccf7be63ec6fb925d0ce8c6d8cbd0a01d0ef23dcbed63b8e0f2a806f631fd"
+    },
+    "scene_nitrate1_3563": {
+      "path": "/cache/data/valstates_full/nitrate1_3563.npz",
+      "sha256": "9c999329b9960ae941c18b5621f3298535fdff63e3d9c67beed4a7fdfbe7f2a5"
+    },
+    "scene_nitrate1_3997": {
+      "path": "/cache/data/valstates_full/nitrate1_3997.npz",
+      "sha256": "42433216b6a74a911d14980c28b691031eb752628a5b1c47550e95070b71e32a"
+    },
+    "scene_no2_171": {
+      "path": "/cache/data/valstates_full/no2_171.npz",
+      "sha256": "1367bfb8b81da9e9a63bf6828e0ece8ee46e4a307b46bb3af4a326ad64e2ba2d"
+    },
+    "scene_rain_1131": {
+      "path": "/cache/data/valstates_full/rain_1131.npz",
+      "sha256": "6ecd94300d3504bd038cc66b077d026925fb709af64761f10f1b9635230dcd4c"
+    },
+    "scene_rain_1284": {
+      "path": "/cache/data/valstates_full/rain_1284.npz",
+      "sha256": "151e4f6464b96173567a49be425d04f310d3eeb694dde01fa73ae240f7274251"
+    },
+    "scene_rain_3100": {
+      "path": "/cache/data/valstates_full/rain_3100.npz",
+      "sha256": "6be1f7ccb65fef1d32a44391a6c840819ffb3391c743e908534f3e66a8f78c4b"
+    },
+    "scene_rain_3168": {
+      "path": "/cache/data/valstates_full/rain_3168.npz",
+      "sha256": "ecf157d162b35b941b9fbe8c76fbe7a1f8ac5f52ccfe47b59e1d575a0342e3ed"
+    },
+    "scene_rain_3666": {
+      "path": "/cache/data/valstates_full/rain_3666.npz",
+      "sha256": "f184bfad31f230a5f8015da8390ccb5e6ff7d50ce3ad322c60109af11d25e62b"
+    },
+    "scene_rain_4285": {
+      "path": "/cache/data/valstates_full/rain_4285.npz",
+      "sha256": "8627c42d0aa1fad687cb07e5bda4c323077e4ddf85d747a6269aa456adf17e24"
+    },
+    "scene_rain_4489": {
+      "path": "/cache/data/valstates_full/rain_4489.npz",
+      "sha256": "4305bcbbc066709622001208aeeb75b5ad1d106723f2c022fe99908cb373761f"
+    },
+    "scene_rain_71": {
+      "path": "/cache/data/valstates_full/rain_71.npz",
+      "sha256": "93c26bd3211b04965d88489b3636c715ce0cdab69c69feafccbee713eb52ab15"
+    },
+    "scene_salt1_1033": {
+      "path": "/cache/data/valstates_full/salt1_1033.npz",
+      "sha256": "86bae994fb0e1d3229c65063d7b4a3a95b53e9f8efc6032c4b11669d116fcff8"
+    },
+    "scene_salt1_1038": {
+      "path": "/cache/data/valstates_full/salt1_1038.npz",
+      "sha256": "13c79799b78f1823f5ebc9bd5ee9ff94febfea3a56cc89776fa25e1410f8056f"
+    },
+    "scene_salt1_204": {
+      "path": "/cache/data/valstates_full/salt1_204.npz",
+      "sha256": "3e65422df415cbe9ab2c14a4932f21f2b4f9695eaae8c5abc824910ee64606bb"
+    },
+    "scene_salt1_2543": {
+      "path": "/cache/data/valstates_full/salt1_2543.npz",
+      "sha256": "82afc8724af4699814dae819a082323a53218fc91a09299c566b259eb5ce8ec1"
+    },
+    "scene_so2_1350": {
+      "path": "/cache/data/valstates_full/so2_1350.npz",
+      "sha256": "e0850c7474948e29169ba6f6a89d4c45097b7f2ec896895e82b4f9b52affb6ce"
+    },
+    "scene_so2_2534": {
+      "path": "/cache/data/valstates_full/so2_2534.npz",
+      "sha256": "367c9f3af950ed3ba232ffd4181bb3c61d180e12034f4d932a28e0d8f7869663"
+    },
+    "scene_so2_3007": {
+      "path": "/cache/data/valstates_full/so2_3007.npz",
+      "sha256": "a06bd87b569af9a0de4f17d136ec58c02217bd83f9c62c2ab2ba4a8ab2640f29"
+    },
+    "scene_so2_4393": {
+      "path": "/cache/data/valstates_full/so2_4393.npz",
+      "sha256": "954b70f5663810c12bd5eb7c9fc1308fe627832ace3715084579a82782b5ea2f"
+    },
+    "scene_sulphate_2894": {
+      "path": "/cache/data/valstates_full/sulphate_2894.npz",
+      "sha256": "0b6500814dd28334b246460f24618f45b931d3d92dff476eb1a6a359840847f8"
+    },
+    "scene_sulphate_3694": {
+      "path": "/cache/data/valstates_full/sulphate_3694.npz",
+      "sha256": "f3e5fa1d9ff473aca1f5797eab32663a152c503d119b804438a436d57d81c524"
+    },
+    "sew": {
+      "path": "/cache/outputs/unroll714_sew_step1000.pt",
+      "sha256": "96833ee7da2f49ba5d02dad890ec5bf6f0ebed2260807f157ef483fb7ea2296f"
+    },
+    "split_30k_seed42": {
+      "path": "/cache/inputs/selections/split_30k_seed42.npz",
+      "sha256": "0b345dffaba7e713db2229c508f1a29519ae4c0d552875db3d475c05eee0d811"
+    },
+    "states_30k": {
+      "path": "/cache/data/nwpsaf_30k_states.npz",
+      "sha256": "9fd71327df0b3f65ed03ef35f466ff4ec85c2c3498c7b58a3689084a6658859e"
+    }
+  },
+  "outputs": {
+    "metrics": {
+      "path": "/runs/final/mar64_T4.json",
+      "sha256": "9d0cc6ef4eff250dbc0ad2ea17cdca85cc4476d554515878d1d2e1e5d6f87283"
+    },
+    "scene_dump": {
+      "path": "/runs/final/mar64_T4.npz",
+      "sha256": "d27bb439d5fbe746c01aa80a865e52b754b014a2ad2074d9cf77885a58545325"
+    }
+  },
+  "runtime": {
+    "cudnn": 90501,
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "packages": {
+      "cupy-cuda12x": "13.3.0",
+      "iasi-retrieval": "0.1.0",
+      "numba": "0.61.2",
+      "numpy": "2.1.3",
+      "photonix": "0.2.0",
+      "scipy": "1.14.1",
+      "torch": "2.7.1"
+    },
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.36",
+    "python": "3.11.12",
+    "torch_cuda": "12.6"
+  },
+  "schema_version": 1,
+  "source_snapshot": {
+    "file_count": 124,
+    "files": {
+      "configs/final.json": "0ff7cdee7f0b5bbae938f8a46a1418c3c7bf976a24554e5f958313ecc507015e",
+      "frozen/continuum/co2_bandhead_mtckd.npz": "d68c8b3c7b51cf0c7ba6b8ed587ed55c547da75e899db54cf64d19c84d34152d",
+      "frozen/continuum/co2_continuum_mtckd.npz": "14c2ba73ababd6d274832b76815d825157eab3fae91e1c14485732adc94b5057",
+      "frozen/continuum/continuum_tables_620_2785.npz": "dcb38f99a7deb7f1335b032e84ff1ed54074e20786c742960d50426a07b123a6",
+      "frozen/continuum/o2_n2_continuum_mtckd.npz": "fe938dba504fc114e6dd85ebbe4cb73df6302ab82002d1d51a0392ab270d1d81",
+      "frozen/cucc00_refr.dat": "550b7a78ab380ea5aebc6da6082fafe8522b475f2e47e2299a928e9dcd9978a6",
+      "frozen/gpu_pack/cont.npz": "e8f18089c28d103e96c12ea2d7aa2ac7190e19cb095ab0a0de8cb7635c1e30f5",
+      "frozen/gpu_pack/lineas.npz": "7dcc80ab21284b64d691b87c04e3375e425ecdba4d3a8014f4ff8d6b3e1867ac",
+      "frozen/gpu_pack/qtab.npz": "99c09e782fadc315727d5adbcd3190451ef8ea3d399bdd6ce6f07f45aee92d9a",
+      "frozen/nuestro_n300.json": "0eff201ac18758e137fe7db0805c24d5df4fed384f44dd7906a35993e76c947b",
+      "frozen/record_ids.npy": "34d9cf2daf17af81af6526bf8c4bb31b9226986ee36646a7855fd2564dfb1ed3",
+      "frozen/split_30k_seed42.npz": "0b345dffaba7e713db2229c508f1a29519ae4c0d552875db3d475c05eee0d811",
+      "frozen/val64_geo.npz": "dd7909e261230f7fff3e4899db8e45595a9dffc339189f38ba6b43f58546d008",
+      "manifests/assets.json": "d76ef4e8df04aa44f267c37c7b0fe85228fe89da19b98a8e71635000a3777a2a",
+      "manifests/baseline_sew.json": "7ca433907ed1474337d0e3566bf4c5105e4979baf62f8f8ef3d587bab2f7e185",
+      "manifests/code_provenance.json": "89c22d68aa1d31ef150feac2ecf9d5f7ed7e16a54e20f35282948cdf477aa017",
+      "manifests/gpu_pack_sources.json": "40c1b35f08907410af75d3ffdcb867635e3bb73bd5e9e85c4a4765fa6ba90d8c",
+      "manifests/lut_blocks.json": "137fe25aee0aded7206fbb0910d7d0f9c91209e17f19e59dfcc2434ac73f6b7f",
+      "manifests/mar64_inputs.json": "d8490471a8bc118110f5973541dbb75e934d0bcc96b21939313d172d5f0d714a",
+      "manifests/raw_catalogs.json": "9b2e856e03b20e9184de136435d913376f778c0283d4a4865f47e6d1c2584185",
+      "manifests/raw_sources.json": "bc429b148be943c4b71798331ad854f0673c991e410d8aec75db4c1eeaa11947",
+      "packages/iasi_retrieval/pyproject.toml": "0decaa603846cf9d19f9af72d85c77ab2492642c5e0d5a362a334e4604859f46",
+      "packages/iasi_retrieval/src/iasi_retrieval/__init__.py": "2078babf5941c13967c54c087ff81c347ebff6c6ae01cf5dd42bb233d4ad432f",
+      "packages/iasi_retrieval/src/iasi_retrieval/assembly.py": "b4d859c3fe2907a2df874c666b97e489ab1d546f2481cc56786ff9a12675f764",
+      "packages/iasi_retrieval/src/iasi_retrieval/data.py": "6e3721cc04af8fcb67b3ae60a282a597d900489e02bcbb4bed4cd91d16392617",
+      "packages/iasi_retrieval/src/iasi_retrieval/forward_adapter.py": "618b135d7eed468abf28e5bcea5a4dd89d08da170dfd6d8249245d16638177e8",
+      "packages/iasi_retrieval/src/iasi_retrieval/mar64.py": "0c9ffe626bd6d17c73bf7d9685da21b5377b935ac230174c3860dab92e6d53f1",
+      "packages/iasi_retrieval/src/iasi_retrieval/models.py": "eb30687adaacc35b773da2e62dd4cbec9c44cf0e114598383cad88b0c33d67fc",
+      "packages/iasi_retrieval/src/iasi_retrieval/prior.py": "9875339b3bec4da892af638bb472583363739410c8c67a68fb552dda25ebc57d",
+      "packages/iasi_retrieval/src/iasi_retrieval/provenance.py": "b425ecb48f4a918ddb678278287906094928449ee1188a86b088c5a8377597d8",
+      "packages/iasi_retrieval/src/iasi_retrieval/state.py": "0c0a5b28867464b6d83eb66c92eac4ecc7a48e1bb9c573511bb31069b9191999",
+      "packages/iasi_retrieval/src/iasi_retrieval/training.py": "96956b6b8ef1b23102fe33e95e32e88176464990dcd34610e2a91396c51151fb",
+      "packages/iasi_retrieval/src/iasi_retrieval/unrolled.py": "75396ce6a446081340a795e20f2b77714483fbd19305448918d7350e5fee9b7b",
+      "packages/photonix/pyproject.toml": "f6377c2f2d22d62947b5f0ee36b7ce64e130e71202fd663d7fdb96955ecbae6d",
+      "packages/photonix/src/photonix/__init__.py": "60ea14ea19e81b4a1d6d0522fae500f25cce71001bf23c4c4fac97c1f06356bf",
+      "packages/photonix/src/photonix/_validation.py": "ece8c2869a281d84d4a68988cee7fbe7cc6036232a8c948cb59289b6ca40944f",
+      "packages/photonix/src/photonix/atmosphere.py": "30966d080b889aa2d1f0c2e85c21f8e3a333fd199bd5d01aec4907b3d619dcfb",
+      "packages/photonix/src/photonix/constants.py": "f690c83d624b598b9c26867d4875558c867f42d568834f810cf6efa4e28b32f2",
+      "packages/photonix/src/photonix/forward.py": "642b7369b09be1327678f40068545d659830d20f7f6ba8bca23047528b28945c",
+      "packages/photonix/src/photonix/lut/__init__.py": "8561ebe4cd383478991610709237bdcf58c7baa189f2f59134d34ef6cd1ec211",
+      "packages/photonix/src/photonix/lut/cross_section.py": "1ad414bce165216b8b12eb73faa49658f7b6e6ffcae62e5a144141c674fca13b",
+      "packages/photonix/src/photonix/resources/aer/continuum.npz": "6ea56d7b59f1533414b9964a05e7bbd2821d856ca476f501f84d5ec2cc956bcd",
+      "packages/photonix/src/photonix/resources/aer/manifest.json": "d5d4878d6971cf6af982498a8a2193ce61dde0e2dab335b58d8cb07bd0ca61e3",
+      "packages/photonix/src/photonix/resources/tips/CH4/q32.txt": "02a8fd11d6f0905a6d93caa033039118006f9a3dacb4d8e743ef8d440b748227",
+      "packages/photonix/src/photonix/resources/tips/CH4/q33.txt": "3aa3f1cf300c445ceccbe861147b546c520b5049ac414106e4644890d8b92079",
+      "packages/photonix/src/photonix/resources/tips/CH4/q34.txt": "eb91103ed8f16e034f03abfd20d0a731679855117e3fb67235fa539ac1572798",
+      "packages/photonix/src/photonix/resources/tips/CH4/q35.txt": "f0eb0a820df38a11e52cbab0f2ced17366130229e159eec7fe113ebbb3fb75a5",
+      "packages/photonix/src/photonix/resources/tips/CO/q26.txt": "55f659277c96e59616f89324e1606d41f068076115d7e41c7c8769fd744c80f5",
+      "packages/photonix/src/photonix/resources/tips/CO/q27.txt": "090b44d6e284416c77615a797857f88075d36d892f68d1ab1991398c05f91787",
+      "packages/photonix/src/photonix/resources/tips/CO/q28.txt": "5328a15a2041b3f9e1a36feac16589df07a5ffc91b78472a2a26af00f3847e1a",
+      "packages/photonix/src/photonix/resources/tips/CO/q29.txt": "2c764e8906e2ad3d70c7647a6ab026d3f6a33ff794ecc7d8e2d1561d269ab4c0",
+      "packages/photonix/src/photonix/resources/tips/CO/q30.txt": "5ba5d435a545202592a56b2b17bf41bbe5324112b6a175f48cdf16b397d80b57",
+      "packages/photonix/src/photonix/resources/tips/CO/q31.txt": "ede8553a7075ea1b1443894a47f4298b890ddcb9e9d603d99c2b084f360149c2",
+      "packages/photonix/src/photonix/resources/tips/CO2/q10.txt": "33ee96f692c31331ece1130950d0a1e0523c97d061b9e817f1a108dfe74d5707",
+      "packages/photonix/src/photonix/resources/tips/CO2/q11.txt": "220db6807629cf07f7f9198b3b26c0e788a62513384d02ded74f691a9c995a43",
+      "packages/photonix/src/photonix/resources/tips/CO2/q12.txt": "727ace70becb2956a904ab6340db641479d243699811fdce9c58d2ff498fe818",
+      "packages/photonix/src/photonix/resources/tips/CO2/q120.txt": "a6c40c252e8d3d2c5317e9a1ae27a14408868b8e19287d657a3151b971a73ad6",
+      "packages/photonix/src/photonix/resources/tips/CO2/q121.txt": "9485090821a5a236c432e089e117a878ac5aeba664a51a951918612b6bee0ef4",
+      "packages/photonix/src/photonix/resources/tips/CO2/q122.txt": "f4f4e34e485d7d5640cacd6fdfdd3cd29b13858a488a753d3ab0276e47a7854d",
+      "packages/photonix/src/photonix/resources/tips/CO2/q13.txt": "a9f26f4d0e0624f7ecfca4745c0bf561010e8b83668b24ffc63621521b21f56c",
+      "packages/photonix/src/photonix/resources/tips/CO2/q14.txt": "e221ff1360a129c2bfa8c7b04c2555eba4c4f5558e9f577341a87d2b898afe8b",
+      "packages/photonix/src/photonix/resources/tips/CO2/q15.txt": "969814a46ae15e780d5fb0360f8dba7560a69142503c8e8b09aae8bde91144c0",
+      "packages/photonix/src/photonix/resources/tips/CO2/q7.txt": "0b285b2776480938cf3ac0f7100e64e8fa8ffa0418bfb7ea5ba1f1fc614d2103",
+      "packages/photonix/src/photonix/resources/tips/CO2/q8.txt": "280061f58470049c705cf9f36ec1086307c72ca6baa979763da00fe19abd0991",
+      "packages/photonix/src/photonix/resources/tips/CO2/q9.txt": "0875f0a389b5354d8fcec8617c79c8505d4d3da8a0de3730b5c7bb432c2333bb",
+      "packages/photonix/src/photonix/resources/tips/H2O/q1.txt": "ef0d0dd744dfd265b65187b62d21a370f065cd21f913a742f34c4a642c2e59de",
+      "packages/photonix/src/photonix/resources/tips/H2O/q129.txt": "c2b5775b746c9ec0ed9ab0b1b2bd68db1cdcd4b432e25fb95cbdd6798238d42f",
+      "packages/photonix/src/photonix/resources/tips/H2O/q2.txt": "554ec5d8e92d049e6bebf3479281ef122231868fd98ec7c08324696acd479c77",
+      "packages/photonix/src/photonix/resources/tips/H2O/q3.txt": "2efa00aba3a31756783b5900d3d840edf09ad951666556dfba92825b1681d400",
+      "packages/photonix/src/photonix/resources/tips/H2O/q4.txt": "19b2a44de45a504fd916795b29d1a999736699492294d6bbb2a32ccfce779cca",
+      "packages/photonix/src/photonix/resources/tips/H2O/q5.txt": "1bb00d96369480662c43e16f97d93b50e32c74d9a743fe6ed66b8329a9b3aec4",
+      "packages/photonix/src/photonix/resources/tips/H2O/q6.txt": "214c45ae68c13e75748d375eb218d8411f91cb946f7795c408d45de0e08a6414",
+      "packages/photonix/src/photonix/resources/tips/N2O/q21.txt": "3ae7fedb5a3013cac78dd609468a0649d80898d9b9893e4278618fc74796a4d5",
+      "packages/photonix/src/photonix/resources/tips/N2O/q22.txt": "da33831d09ddc5a52fb4b61b0f69ce81093a00378a8d05804efb9274f8c79573",
+      "packages/photonix/src/photonix/resources/tips/N2O/q23.txt": "f044b47968d3c904efcef3fdc85310de367e45ec2f686f8703a773e492749837",
+      "packages/photonix/src/photonix/resources/tips/N2O/q24.txt": "051aa4bf3fd6a643b5ec19333f595dc948eedb417f2eee346d0efefaeb370598",
+      "packages/photonix/src/photonix/resources/tips/N2O/q25.txt": "b4c21fc83d47acf7f85d50e2c4fe215e269c251a94ef6c9e88cf3fd13b62fc2e",
+      "packages/photonix/src/photonix/resources/tips/O2/q36.txt": "06d665ea305c552727d2d13a6bd3599bc275240443e1a848f3a7e73f2f628b67",
+      "packages/photonix/src/photonix/resources/tips/O2/q37.txt": "83a82a596eb98f81bbdd26672add11ca4e3e9de737326e39498d8757c084805f",
+      "packages/photonix/src/photonix/resources/tips/O2/q38.txt": "70f03a8a857eb18c4431f6030e15513ae50c37c21590cdcc0ac4833e98c5016c",
+      "packages/photonix/src/photonix/resources/tips/O3/q16.txt": "e97fcee44b316dcb48308f8ab5eeb6debbe491ae22b2a3585d41c11aed7d970b",
+      "packages/photonix/src/photonix/resources/tips/O3/q17.txt": "3ce05fed1e7332e95643fdace1f74afac211566786222446dbd647edf6b7a9f1",
+      "packages/photonix/src/photonix/resources/tips/O3/q18.txt": "7f5ef3d6ca62f4f6298bacc2b1877d167d8d31935d635a1c243bdab1efed5c62",
+      "packages/photonix/src/photonix/resources/tips/O3/q19.txt": "68a27716e8b945191321f1f3e4d2325b13065531219dd9bb5dd48034cdb5a31a",
+      "packages/photonix/src/photonix/resources/tips/O3/q20.txt": "074d168202f7c0fd499c8e204f77e03187272e2ebf916e5754a2056faa5866dc",
+      "packages/photonix/src/photonix/resources/tips/manifest.json": "bcba451462cc69b3814f013d789b730aad3a200cddc8cf35ffd108e57def80a5",
+      "packages/photonix/src/photonix/spectroscopy/__init__.py": "abe14dc6277a8ba97eeef8d0a19d73a440beef01c040fd33458443516594bd9d",
+      "packages/photonix/src/photonix/spectroscopy/absorption.py": "797b3573b591167d4605a45ea4f3e2b23ecd65a533cb54520a4cd49010f83709",
+      "packages/photonix/src/photonix/spectroscopy/aer.py": "1ea0d77a2751e6c45e205a4aef9bd414f62e0ffd3768233ee20c7d4419732b87",
+      "packages/photonix/src/photonix/spectroscopy/continuum.py": "f84039e83cdad736f610419d5e1445b2ccdb93770ce3f66e02f7e2258c788402",
+      "packages/photonix/src/photonix/spectroscopy/hitran.py": "b1d1b52c174fff3f1ecbf0417b38f0e32347900342784297d4cd39c43fee2564",
+      "packages/photonix/src/photonix/spectroscopy/species.py": "45c3d6954e5bb4f06ee2cbc801c391e2ae98099feb82ed63171a02d8e8b1462b",
+      "packages/photonix/src/photonix/spectroscopy/voigt.py": "a84e6244191cffd0620fe7cdcd4c94a1d8c00a61bf5303d39bcccfc0daa6d4ee",
+      "packages/photonix/src/photonix/torch_legacy/__init__.py": "3eb4ca18019586d823d31c25b91e9ecfe36ab1e134991c7abb45205177c67f6e",
+      "packages/photonix/src/photonix/torch_legacy/continuum.py": "e75da06b42bbfd4951e6d6d43dae7ef7fc3c3008cab04e76f64409c19c377da1",
+      "packages/photonix/src/photonix/torch_legacy/continuum_tables.npz": "192e5e2771947e371d729df5d0f08af8bed8804f52f3f7c818a12851bdfcef29",
+      "packages/photonix/src/photonix/torch_legacy/forward.py": "132c4f40a921a6f8d53c330eda93517b33e326df79c5120d623a78c52a4d8d9c",
+      "packages/photonix/src/photonix/transfer/__init__.py": "d70d8371b1a2fa82066109ab0dd5202b85b40cc4fbb8b09d3ee2891c079f237f",
+      "packages/photonix/src/photonix/transfer/ils.py": "0ab4d41cc8c2f4d3007ecded7c0839b70d0c906ea5dcb77b5087ab0df0f8d11e",
+      "packages/photonix/src/photonix/transfer/integrator.py": "dda43e36c37b5eff56997c2a5167852fab3f078cd9ae154f1b200b597993c172",
+      "packages/photonix/src/photonix/transfer/planck.py": "305aff7409e3942e628aa77d297b4291456ab8ba48bf9aae3bbcfa6f6740220b",
+      "pipelines/RAW_FETCH.md": "f0648098c1c0e1a089eaeba1b251a558da2190e1b1b67867e46e2a6bbe288d8e",
+      "pipelines/__init__.py": "5af19af090044737d2da2f707ea6001cb1405a6e3868a9f5e08b259f5a2d00d9",
+      "pipelines/assets.py": "31a1b15fddd751274eb8be9fd669a9feaf0a7b73a838012e7c3047a1f496f385",
+      "pipelines/baseline_gate.py": "dcd9f7b4379116de3ce76df266377d275f355751b51aaa4f6ecd564c92f831dc",
+      "pipelines/final.py": "2de858ae8b4da879daf516ad0ec2632a4cf34fee87bec8ee65b1ca7f707243b8",
+      "pipelines/generation/README.md": "ba7e5a5feb0dfc294e48d28367310a1867a01a5af0a67953c9b6e1e7cc1c8bf6",
+      "pipelines/generation/__init__.py": "2946056cc272895e61738a6ae9a31cb55f9d9eb59758ac0ff9e40564d2588446",
+      "pipelines/generation/__main__.py": "b08d0f70c81193d81d364a143cf21fd8aaab142bb8a4e2175584f8af0e23347b",
+      "pipelines/generation/candidate_gpu.py": "9021ca785b1e7f20be707656c3b2dfbd10dd53236ec7a075ea2df6e73d4857e5",
+      "pipelines/generation/gpu_pack.py": "68b23f35361c0cfdda839b32b38544e88c93e26d69154f8a70b5edf9f92e7f34",
+      "pipelines/generation/historical_kernel.cu": "282c8156b295561e7cb206ab1746e9f74c12e7b049555c430e3bac988f6a19f3",
+      "pipelines/generation/l137.py": "02f40e2767826e0ad2ba9ce9cad34574a3b2574a92b84c733d7770476186a9a2",
+      "pipelines/generation/lut.py": "1244ff578d8d81fff093e880f62db5ad716c994d355d2880e71fe15c9e0123af",
+      "pipelines/generation/raw.py": "d9206d5299f70d567ddf5b4a3dfaca2c2a5698dcebe8a743b9aef86439151a96",
+      "pipelines/generation/synthesis.py": "fc8979847461656909a9fa744b83e78b9de01e4a158bc0c22a7bf3a843b17dfd",
+      "pipelines/lut_manifest.py": "7865a0aecb9d0de1d5a2dd63cb490615cdbdd2123a4314fa7638f6d44acff116",
+      "pipelines/mar64_fetch.py": "037d65a55e1180f25ade8cf4dc59a4717dd13fe3cc05c1cc17c39252d3137df9",
+      "pipelines/modal_final.py": "6cfde1dee20a8fac5e15e4cd6f08aeaa590b3d43e2dc56fa637f67e044bad345",
+      "pipelines/modal_lut_canary.py": "668223caf464367109b246747181043dd44a59e4a9bf10f777854944f9ab6553",
+      "pipelines/provenance.py": "8ac0a1ab73a2c6c9f53de194ca7ec954869ec2706256e17233e44cf23aa3ad24",
+      "pipelines/raw_fetch.py": "2729f5df34583c81be08f1d63e631f27b95a15100eff69759dd1d5ad235af1ce",
+      "pipelines/report_adapter.py": "fc7f9dab8cb9d1f2c5bd0b5f8c208da73104688960a5bf9d6243550c7989cbca",
+      "pipelines/source_inventory.py": "0b56e57d74334bdc7fac05fbc4c0e9569404496c1c3ef9b4a934088ad90a406c"
+    },
+    "sha256": "7a970548d6f2b80662e430477c0c5a0a531db0e2f649ce9d0ee410fba04a4b1f"
+  },
+  "stage": "evaluate_mar64"
+}

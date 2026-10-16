@@ -1,0 +1,77 @@
+{
+  "gate_passed": false,
+  "historical_identity": {
+    "candidate_checkpoint_sha256": "96833ee7da2f49ba5d02dad890ec5bf6f0ebed2260807f157ef483fb7ea2296f",
+    "candidate_checkpoint_step": 1000,
+    "candidate_configured_steps": 1000,
+    "expected_checkpoint_step": 1000,
+    "historical_checkpoint_sha256": null,
+    "passed": false,
+    "reasons": [
+      "Historical checkpoint SHA256 is missing or invalid",
+      "Historical input hashes are missing",
+      "Historical input inventory has no checkpoint entry"
+    ]
+  },
+  "numeric_comparison": {
+    "passed": true,
+    "sets": {
+      "sea_64": {
+        "metrics": {
+          "gases_dex": {
+            "absolute_delta": 1.588482471948094e-08,
+            "historical": 0.07224884366540348,
+            "observed": 0.07224882778057876,
+            "passed": true,
+            "tolerance": 0.001
+          },
+          "rmse_T_K": {
+            "absolute_delta": 7.215612316535669e-07,
+            "historical": 2.216882819215693,
+            "observed": 2.2168835407769247,
+            "passed": true,
+            "tolerance": 0.05
+          },
+          "rmse_Tskin_K": {
+            "absolute_delta": 1.0715220661872138e-06,
+            "historical": 1.3401887108201034,
+            "observed": 1.3401876392980372,
+            "passed": true,
+            "tolerance": 0.05
+          }
+        },
+        "passed": true,
+        "rows_sha256": "a49d88051b2d2e5d1255d4f806a7569cda9b33a650a908566197031349ad8db4",
+        "stage": "result"
+      },
+      "simulated_300": {
+        "metrics": {
+          "gases_dex": {
+            "absolute_delta": 4.1246649151727155e-10,
+            "historical": 0.06622375581197712,
+            "observed": 0.06622375622444361,
+            "passed": true,
+            "tolerance": 0.001
+          },
+          "rmse_T_K": {
+            "absolute_delta": 1.063632795172964e-07,
+            "historical": 2.410006033340147,
+            "observed": 2.4100061397034267,
+            "passed": true,
+            "tolerance": 0.05
+          },
+          "rmse_Tskin_K": {
+            "absolute_delta": 8.691772976909817e-07,
+            "historical": 0.8293446514066635,
+            "observed": 0.8293437822293658,
+            "passed": true,
+            "tolerance": 0.05
+          }
+        },
+        "passed": true,
+        "rows_sha256": "a113ebe856ada5ad49df726f04b2f80bb02091740b6edcd7ba075aaea1cbf172",
+        "stage": "result"
+      }
+    }
+  }
+}

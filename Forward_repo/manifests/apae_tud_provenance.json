@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "captured_on": "2026-09-27",
+  "source": {
+    "modal_profile": "oscarmigue9325",
+    "volume": "wikithesis-datos",
+    "directory": "outputs/tud30k_channels",
+    "metadata_modified": "2026-08-10 09:37 (Modal listing, America/Bogota)",
+    "tud_cache_modified": "2026-08-12 01:11 (Modal listing, America/Bogota)",
+    "tud_cache_size_reported": "736.4 MiB"
+  },
+  "artifacts": [
+    {
+      "path": "frozen/apae_tud_provenance/meta.npz",
+      "source_path": "outputs/tud30k_channels/meta.npz",
+      "bytes": 783978,
+      "sha256": "fb2a70ef6f13e2edd8f6300a50a93eff3321a136ead9119c8e052b6dc1241bdb"
+    },
+    {
+      "path": "frozen/apae_tud_provenance/nu_iasi.npy",
+      "source_path": "outputs/tud30k_channels/nu_iasi.npy",
+      "bytes": 17288,
+      "sha256": "90f59ea5adc8e5fbf07c032ca6b785496acd60f524be61138fc9369430ed2468"
+    }
+  ],
+  "observed_metadata": {
+    "n_profiles": 30000,
+    "chunk_rows": 1000,
+    "channel_count": 2145,
+    "channel_start_cm_1": 714.0,
+    "channel_end_cm_1": 1250.0,
+    "channel_step_cm_1": 0.25,
+    "fwhm_iasi_cm_1": 0.5,
+    "nadir": "mu=1 vertical",
+    "lut_label": "outputs/lut_band_* 2026-08-02, TODOS los isotopologos de los 5 gases (lblrtm_tud E11/E17/E18)"
+  },
+  "state_alignment": {
+    "asset_id": "states_30k",
+    "arrays_equal_to_verified_asset": [
+      "T_skin_K -> T_skin",
+      "lat -> lat",
+      "lon -> lon",
+      "lsm -> lsm",
+      "subset_id -> subset_id",
+      "profile_index -> profile_index"
+    ]
+  },
+  "frozen_tud_candidate": {
+    "asset_id": "tud_iasi_apae",
+    "bytes": 772200128,
+    "sha256": "8ea2dd0cc6454797099b07087430c016f2ec0db5fe2986a0a03a347ee76e5833",
+    "shape": [30000, 6435],
+    "dtype": "float32",
+    "field_order": ["T", "U", "D"]
+  },
+  "original_chunk_probe": {
+    "checked_on": "2026-09-27",
+    "profile": "oscarmigue9325",
+    "volume": "wikithesis-datos",
+    "path": "outputs/tud30k_channels/chunks/T_iasi_000000.npy",
+    "volume_ls_result": "No such file or directory for outputs/tud30k_channels/chunks",
+    "volume_get_result": "No such file or directory for the first T chunk",
+    "large_file_downloaded": false
+  },
+  "attribution_limit": "The archived metadata and spectral axis are co-located with a TUD cache of matching size and timestamp, but neither file embeds the cache hash. The preserved gen_tud30k_channels.py loads outputs/lut_xsec_jax_*.npy while its metadata string names outputs/lut_band_*. The exact executed script and LUT bytes remain unproven. An original T/U/D chunk row compared bytewise with the frozen cache would establish the missing data linkage."
+}

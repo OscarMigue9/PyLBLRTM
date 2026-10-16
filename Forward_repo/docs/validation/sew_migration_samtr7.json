@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-09-27 21:53:38 UTC",
+  "source_workspace": {
+    "profile": "meltraslav08",
+    "workspace_id": "ac-wcltPGHZuWysY1tH2xbeL8",
+    "status": "disabled; CPU probe reported exceeded spend limit"
+  },
+  "destination_workspace": {
+    "profile": "samtr7",
+    "volume": "wikithesis-salida",
+    "directory": "final",
+    "cpu_probe": "passed",
+    "gpu_probe": {
+      "status": "passed",
+      "requested": "A100-80GB",
+      "observed": "NVIDIA A100-SXM4-80GB"
+    }
+  },
+  "transfer": {
+    "method": "Upload four local backups to the destination volume, download them again, and independently compare local SHA256 and byte counts",
+    "hashes_equal_after_round_trip": true,
+    "files": [
+      {
+        "source_local": "runs/sew_step200_backup.pt",
+        "destination_volume_path": "final/sew.pt",
+        "downloaded_local": "runs/migrated_sew.pt",
+        "bytes": 28445000,
+        "sha256": "bfbf358626426a7ee86b24cbe935f127bedd1c881063490f15065369dfe929d5"
+      },
+      {
+        "source_local": "runs/apae_after_disable.pt",
+        "destination_volume_path": "final/apae.pt",
+        "downloaded_local": "runs/migrated_apae.pt",
+        "bytes": 23997597,
+        "sha256": "5fc68d561d09ef848411f665e13a22b0378d9bcec97559978db5d56717d9bafc"
+      },
+      {
+        "source_local": "runs/prior_after_disable.pt",
+        "destination_volume_path": "final/prior.pt",
+        "downloaded_local": "runs/migrated_prior.pt",
+        "bytes": 833573,
+        "sha256": "a11fcc3a69f649b364feaf33b749ddcfb7087f735dc355c5d5c63e93908c2dfe"
+      },
+      {
+        "source_local": "runs/prior_latents_after_disable.npz",
+        "destination_volume_path": "final/prior_latents.npz",
+        "downloaded_local": "runs/migrated_prior_latents.npz",
+        "bytes": 2675893,
+        "sha256": "530fcde375e7987001613325b7b9c16201e4d03f62dfd1aba6d3b56b38912b39"
+      }
+    ]
+  },
+  "resume": {
+    "app_id": "ap-31MuiofGKfRyiIpnmq3UHP",
+    "status_at_record_time": "image_building",
+    "completed_training_claimed": false,
+    "checkpoint_step_before_resume": 200,
+    "checkpoint_has_embedded_input_hashes": false,
+    "legacy_resume_requires_explicit_checkpoint_sha256": true
+  },
+  "continuation": {
+    "recorded_at_utc": "2026-09-27 22:29:51 UTC",
+    "first_resume_app_id": "ap-31MuiofGKfRyiIpnmq3UHP",
+    "first_resume_asset_fetches_sha256_passed": 12,
+    "first_resume_status": "deliberately stopped after verified step-300 checkpoint",
+    "step_300_checkpoint": {
+      "destination_volume_path": "final/sew.pt",
+      "downloaded_local_backup": "runs/sew_step300_backup.pt",
+      "bytes": 28449780,
+      "sha256": "7082cf94c3395e4e65dd83e8e8f6df6712c1b739776dcd9bcb43bc036a41fca6",
+      "paso": 300,
+      "embedded_input_sha256_count": 16,
+      "scheduler_last_epoch": 300
+    },
+    "detached_resume_app_id": "ap-HRMLdXgqKY22UkradkUpLP",
+    "detached_resume_uses_legacy_exception": false,
+    "detached_resume_status": "initialized; completion not verified",
+    "step_beyond_300_verified": false,
+    "fresh_training_completed": false,
+    "new_model_evaluation_completed": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "arrays": {
+    "noise": {
+      "cells": 64350000,
+      "different_bit_pattern_cells": 2,
+      "examples": [
+        {
+          "candidate": 2.891289152540111e-10,
+          "difference": -2.7755575615628914e-17,
+          "frozen": 2.891289430095867e-10,
+          "index": [
+            9733,
+            596
+          ]
+        },
+        {
+          "candidate": -0.01011050958186388,
+          "difference": 9.313225746154785e-10,
+          "frozen": -0.010110510513186455,
+          "index": [
+            14108,
+            1477
+          ]
+        }
+      ],
+      "examples_truncated": false,
+      "max_abs_error": 9.313225746154785e-10,
+      "rms_error": 1.160982983818225e-13,
+      "unequal_cells": 2
+    },
+    "nu": {
+      "cells": 2145,
+      "different_bit_pattern_cells": 0,
+      "examples": [],
+      "examples_truncated": false,
+      "max_abs_error": 0.0,
+      "rms_error": 0.0,
+      "unequal_cells": 0
+    },
+    "sigma_ch": {
+      "cells": 2145,
+      "different_bit_pattern_cells": 0,
+      "examples": [],
+      "examples_truncated": false,
+      "max_abs_error": 0.0,
+      "rms_error": 0.0,
+      "unequal_cells": 0
+    }
+  },
+  "arrays_exact": false,
+  "candidate": {
+    "build_report_validated": true,
+    "bytes": 238626813,
+    "sha256": "a026a7f16292bc6cefcdba943bbcf0e31d03a30af5b2b96ad3ef4f7d277a1899"
+  },
+  "comparison": "All numerical arrays; descriptive receta text ignored.",
+  "frozen": {
+    "asset_id": "noise_iasiang",
+    "bytes": 238626926,
+    "manifest_validated": true,
+    "sha256": "efbe1b1295cddf8735bcd86b2ddbc159831fcd5d598274f66640f1c9430745eb"
+  },
+  "shape": [
+    30000,
+    2145
+  ],
+  "status": "numerically_different"
+}

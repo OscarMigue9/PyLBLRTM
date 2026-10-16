@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "source": {
+    "remote_uri": "gdrive:WikiThesis/exp_iasi_full/out/radiancias/L_30k.npy",
+    "bytes": 5076600128,
+    "sha256": "7e33eca95e2d1116041d5361d8969e31acdef3dc49e76008b48e0e4707453dd8",
+    "hash_evidence": "SHA256 independently calculated from the complete 5,076,600,128-byte local download; agrees with Google Drive metadata"
+  },
+  "source_metadata": {
+    "remote_uri": "gdrive:WikiThesis/exp_iasi_full/out/radiancias/meta_30k.npz",
+    "bytes": 971180,
+    "sha256": "a635741a5312985c683255caa2c4af4d5145139bad6bd22f67cf68429f3f0c18",
+    "hash_evidence": "SHA256 calculated from all downloaded metadata bytes"
+  },
+  "layout": {
+    "dtype": "<f4",
+    "shape": [30000, 5, 8461],
+    "npy_header_bytes": 128,
+    "channel_start": 276,
+    "channel_count": 2145,
+    "angles": [0.55, 0.67, 0.8, 0.92, 1.0],
+    "selection_seed": 991
+  },
+  "frozen_radiance": {
+    "asset_id": "radiances_iasiang",
+    "bytes": 366309747,
+    "sha256": "dcb03b4002f5657433db1051df3fd0f9696f8273f68f98cdc1397ea08d70cc4d",
+    "array": "L"
+  },
+  "canaries": [
+    {
+      "profile_index": 0,
+      "angle_index": 2,
+      "row_sha256": "1447824f109c288fab4102d4ff20ebc75dcda5874362036b3553642204ecdcab"
+    },
+    {
+      "profile_index": 1,
+      "angle_index": 3,
+      "row_sha256": "e14a8ea66f647557f88f4d08ec0aa57e1d04178025d02428d40ddbf16ae54670"
+    },
+    {
+      "profile_index": 15000,
+      "angle_index": 0,
+      "row_sha256": "846b37c0500c0a4d50e8c6dbe77f8086a8a173f2baead51c0e34f5286fc1f235"
+    },
+    {
+      "profile_index": 29999,
+      "angle_index": 0,
+      "row_sha256": "7a4d051fc2448a8ef2da244295af003fde475d8fd7827db922e4e0212cfa9821"
+    }
+  ],
+  "full_comparison": {
+    "report": "docs/validation/radiance_parent_full.json",
+    "source_hash_evidence": "local_file",
+    "angle_assignment_all_rows_equal": true,
+    "profile_count": 30000,
+    "channel_count": 2145,
+    "value_count": 64350000,
+    "unequal_count": 0,
+    "rms_difference": 0.0,
+    "max_absolute_difference": 0.0,
+    "scope": "archived five-angle parent selection/crop to frozen radiance; upstream physical generation not verified"
+  },
+  "recipe": [
+    "photonix/production/modal_radiancias.py",
+    "model/physinv/closure_forward/experimentos/apae_loss_fisica/prep_banda645.py",
+    "model/physinv/closure_forward/experimentos/apae_loss_fisica/prep_angulo.py",
+    "model/physinv/closure_forward/experimentos/apae_loss_fisica/prep_recorte714.py"
+  ]
+}

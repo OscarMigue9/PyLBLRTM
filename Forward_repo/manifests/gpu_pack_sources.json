@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "hash_algorithm": "sha256",
+  "line_file_asset": "aer_lines",
+  "coupling_asset": "aer_coupling",
+  "tips_manifest": "packages/photonix/src/photonix/resources/tips/manifest.json",
+  "tips_directory": "packages/photonix/src/photonix/resources/tips",
+  "legacy_co2_mapping": {
+    "9": "CO2/q15.txt",
+    "10": "CO2/q120.txt",
+    "A": "CO2/q121.txt"
+  },
+  "legacy_co2_note": "The archived pack uses the historical Photonix isotope labels and q-file assignments. This reproduces its bytes but differs from the corrected CPU catalogue: local 9/0/A use q121/q15/q120 respectively. Historical local 10 has no lines in the packed PAR.",
+  "continuum": [
+    {
+      "prefix": "h2o",
+      "bundle_path": "frozen/continuum/continuum_tables_620_2785.npz",
+      "origin_path": "experiments/2026-08_forward_iasi_completo/exp_iasi_full/out/continuum_tables_620_2785.npz",
+      "bytes": 6708,
+      "sha256": "dcb38f99a7deb7f1335b032e84ff1ed54074e20786c742960d50426a07b123a6"
+    },
+    {
+      "prefix": "co2",
+      "bundle_path": "frozen/continuum/co2_continuum_mtckd.npz",
+      "origin_path": "data/spectroscopy/mt_ckd_versions/co2_continuum_mtckd.npz",
+      "bytes": 43618,
+      "sha256": "14c2ba73ababd6d274832b76815d825157eab3fae91e1c14485732adc94b5057"
+    },
+    {
+      "prefix": "o2n2",
+      "bundle_path": "frozen/continuum/o2_n2_continuum_mtckd.npz",
+      "origin_path": "data/spectroscopy/mt_ckd_versions/o2_n2_continuum_mtckd.npz",
+      "bytes": 11219,
+      "sha256": "fe938dba504fc114e6dd85ebbe4cb73df6302ab82002d1d51a0392ab270d1d81"
+    },
+    {
+      "prefix": "bh",
+      "bundle_path": "frozen/continuum/co2_bandhead_mtckd.npz",
+      "origin_path": "experiments/2026-08_forward_iasi_completo/exp_iasi_full/out/co2_bandhead_mtckd.npz",
+      "bytes": 4946,
+      "sha256": "d68c8b3c7b51cf0c7ba6b8ed587ed55c547da75e899db54cf64d19c84d34152d"
+    }
+  ],
+  "output_assets": {
+    "lineas.npz": "gpu_pack_lines",
+    "qtab.npz": "gpu_pack_qtab",
+    "cont.npz": "gpu_pack_continuum"
+  }
+}

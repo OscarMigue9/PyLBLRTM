@@ -1,0 +1,395 @@
+{
+  "schema_version": 1,
+  "snapshot_version": "local-snapshot-2026-09-24",
+  "tips_edition": null,
+  "edition_note": "Original local files have no TIPS edition metadata; no edition or current-online equivalence is claimed.",
+  "source_directory": "C:\\Users\\Samue\\Documents\\GitHub\\GPT\\tips",
+  "catalogue_verified_against": "https://hitran.org/docs/iso-meta/",
+  "metadata_checked_date": "2026-09-24",
+  "license_note": "HITRAN scientific data: cite the original HITRAN/TIPS sources; local acquisition history is not recorded.",
+  "corrections_from_legacy": [
+    "CO2 local 9 uses global 121/q121.txt",
+    "CO2 local 0 (decimal 10) uses global 15/q15.txt",
+    "CO2 local A (decimal 11) uses global 120/q120.txt"
+  ],
+  "files": [
+    {
+      "path": "H2O/q1.txt",
+      "molecule_id": 1,
+      "isotope_id": "1",
+      "global_id": 1,
+      "molar_mass_g_mol": 18.010565,
+      "bytes": 130000,
+      "sha256": "ef0d0dd744dfd265b65187b62d21a370f065cd21f913a742f34c4a642c2e59de"
+    },
+    {
+      "path": "H2O/q2.txt",
+      "molecule_id": 1,
+      "isotope_id": "2",
+      "global_id": 2,
+      "molar_mass_g_mol": 20.014811,
+      "bytes": 129998,
+      "sha256": "554ec5d8e92d049e6bebf3479281ef122231868fd98ec7c08324696acd479c77"
+    },
+    {
+      "path": "H2O/q3.txt",
+      "molecule_id": 1,
+      "isotope_id": "3",
+      "global_id": 3,
+      "molar_mass_g_mol": 19.01478,
+      "bytes": 129998,
+      "sha256": "2efa00aba3a31756783b5900d3d840edf09ad951666556dfba92825b1681d400"
+    },
+    {
+      "path": "H2O/q4.txt",
+      "molecule_id": 1,
+      "isotope_id": "4",
+      "global_id": 4,
+      "molar_mass_g_mol": 19.01674,
+      "bytes": 129998,
+      "sha256": "19b2a44de45a504fd916795b29d1a999736699492294d6bbb2a32ccfce779cca"
+    },
+    {
+      "path": "H2O/q5.txt",
+      "molecule_id": 1,
+      "isotope_id": "5",
+      "global_id": 5,
+      "molar_mass_g_mol": 21.020985,
+      "bytes": 129998,
+      "sha256": "1bb00d96369480662c43e16f97d93b50e32c74d9a743fe6ed66b8329a9b3aec4"
+    },
+    {
+      "path": "H2O/q6.txt",
+      "molecule_id": 1,
+      "isotope_id": "6",
+      "global_id": 6,
+      "molar_mass_g_mol": 20.020956,
+      "bytes": 129998,
+      "sha256": "214c45ae68c13e75748d375eb218d8411f91cb946f7795c408d45de0e08a6414"
+    },
+    {
+      "path": "H2O/q129.txt",
+      "molecule_id": 1,
+      "isotope_id": "7",
+      "global_id": 129,
+      "molar_mass_g_mol": 20.022915,
+      "bytes": 155998,
+      "sha256": "c2b5775b746c9ec0ed9ab0b1b2bd68db1cdcd4b432e25fb95cbdd6798238d42f"
+    },
+    {
+      "path": "CO2/q7.txt",
+      "molecule_id": 2,
+      "isotope_id": "1",
+      "global_id": 7,
+      "molar_mass_g_mol": 43.98983,
+      "bytes": 130000,
+      "sha256": "0b285b2776480938cf3ac0f7100e64e8fa8ffa0418bfb7ea5ba1f1fc614d2103"
+    },
+    {
+      "path": "CO2/q8.txt",
+      "molecule_id": 2,
+      "isotope_id": "2",
+      "global_id": 8,
+      "molar_mass_g_mol": 44.993185,
+      "bytes": 129998,
+      "sha256": "280061f58470049c705cf9f36ec1086307c72ca6baa979763da00fe19abd0991"
+    },
+    {
+      "path": "CO2/q9.txt",
+      "molecule_id": 2,
+      "isotope_id": "3",
+      "global_id": 9,
+      "molar_mass_g_mol": 45.994076,
+      "bytes": 90998,
+      "sha256": "0875f0a389b5354d8fcec8617c79c8505d4d3da8a0de3730b5c7bb432c2333bb"
+    },
+    {
+      "path": "CO2/q10.txt",
+      "molecule_id": 2,
+      "isotope_id": "4",
+      "global_id": 10,
+      "molar_mass_g_mol": 44.994045,
+      "bytes": 90998,
+      "sha256": "33ee96f692c31331ece1130950d0a1e0523c97d061b9e817f1a108dfe74d5707"
+    },
+    {
+      "path": "CO2/q11.txt",
+      "molecule_id": 2,
+      "isotope_id": "5",
+      "global_id": 11,
+      "molar_mass_g_mol": 46.997431,
+      "bytes": 90998,
+      "sha256": "220db6807629cf07f7f9198b3b26c0e788a62513384d02ded74f691a9c995a43"
+    },
+    {
+      "path": "CO2/q12.txt",
+      "molecule_id": 2,
+      "isotope_id": "6",
+      "global_id": 12,
+      "molar_mass_g_mol": 45.9974,
+      "bytes": 90998,
+      "sha256": "727ace70becb2956a904ab6340db641479d243699811fdce9c58d2ff498fe818"
+    },
+    {
+      "path": "CO2/q13.txt",
+      "molecule_id": 2,
+      "isotope_id": "7",
+      "global_id": 13,
+      "molar_mass_g_mol": 47.99832,
+      "bytes": 129998,
+      "sha256": "a9f26f4d0e0624f7ecfca4745c0bf561010e8b83668b24ffc63621521b21f56c"
+    },
+    {
+      "path": "CO2/q14.txt",
+      "molecule_id": 2,
+      "isotope_id": "8",
+      "global_id": 14,
+      "molar_mass_g_mol": 46.998291,
+      "bytes": 90998,
+      "sha256": "e221ff1360a129c2bfa8c7b04c2555eba4c4f5558e9f577341a87d2b898afe8b"
+    },
+    {
+      "path": "CO2/q121.txt",
+      "molecule_id": 2,
+      "isotope_id": "9",
+      "global_id": 121,
+      "molar_mass_g_mol": 45.998262,
+      "bytes": 129998,
+      "sha256": "9485090821a5a236c432e089e117a878ac5aeba664a51a951918612b6bee0ef4"
+    },
+    {
+      "path": "CO2/q15.txt",
+      "molecule_id": 2,
+      "isotope_id": "0",
+      "global_id": 15,
+      "molar_mass_g_mol": 49.001675,
+      "bytes": 129998,
+      "sha256": "969814a46ae15e780d5fb0360f8dba7560a69142503c8e8b09aae8bde91144c0"
+    },
+    {
+      "path": "CO2/q120.txt",
+      "molecule_id": 2,
+      "isotope_id": "A",
+      "global_id": 120,
+      "molar_mass_g_mol": 48.001646,
+      "bytes": 90998,
+      "sha256": "a6c40c252e8d3d2c5317e9a1ae27a14408868b8e19287d657a3151b971a73ad6"
+    },
+    {
+      "path": "CO2/q122.txt",
+      "molecule_id": 2,
+      "isotope_id": "B",
+      "global_id": 122,
+      "molar_mass_g_mol": 47.001618,
+      "bytes": 129998,
+      "sha256": "f4f4e34e485d7d5640cacd6fdfdd3cd29b13858a488a753d3ab0276e47a7854d"
+    },
+    {
+      "path": "O3/q16.txt",
+      "molecule_id": 3,
+      "isotope_id": "1",
+      "global_id": 16,
+      "molar_mass_g_mol": 47.984745,
+      "bytes": 26000,
+      "sha256": "e97fcee44b316dcb48308f8ab5eeb6debbe491ae22b2a3585d41c11aed7d970b"
+    },
+    {
+      "path": "O3/q17.txt",
+      "molecule_id": 3,
+      "isotope_id": "2",
+      "global_id": 17,
+      "molar_mass_g_mol": 49.988991,
+      "bytes": 25998,
+      "sha256": "3ce05fed1e7332e95643fdace1f74afac211566786222446dbd647edf6b7a9f1"
+    },
+    {
+      "path": "O3/q18.txt",
+      "molecule_id": 3,
+      "isotope_id": "3",
+      "global_id": 18,
+      "molar_mass_g_mol": 49.988991,
+      "bytes": 25998,
+      "sha256": "7f5ef3d6ca62f4f6298bacc2b1877d167d8d31935d635a1c243bdab1efed5c62"
+    },
+    {
+      "path": "O3/q19.txt",
+      "molecule_id": 3,
+      "isotope_id": "4",
+      "global_id": 19,
+      "molar_mass_g_mol": 48.98896,
+      "bytes": 25998,
+      "sha256": "68a27716e8b945191321f1f3e4d2325b13065531219dd9bb5dd48034cdb5a31a"
+    },
+    {
+      "path": "O3/q20.txt",
+      "molecule_id": 3,
+      "isotope_id": "5",
+      "global_id": 20,
+      "molar_mass_g_mol": 48.98896,
+      "bytes": 25998,
+      "sha256": "074d168202f7c0fd499c8e204f77e03187272e2ebf916e5754a2056faa5866dc"
+    },
+    {
+      "path": "N2O/q21.txt",
+      "molecule_id": 4,
+      "isotope_id": "1",
+      "global_id": 21,
+      "molar_mass_g_mol": 44.001062,
+      "bytes": 130000,
+      "sha256": "3ae7fedb5a3013cac78dd609468a0649d80898d9b9893e4278618fc74796a4d5"
+    },
+    {
+      "path": "N2O/q22.txt",
+      "molecule_id": 4,
+      "isotope_id": "2",
+      "global_id": 22,
+      "molar_mass_g_mol": 44.998096,
+      "bytes": 129998,
+      "sha256": "da33831d09ddc5a52fb4b61b0f69ce81093a00378a8d05804efb9274f8c79573"
+    },
+    {
+      "path": "N2O/q23.txt",
+      "molecule_id": 4,
+      "isotope_id": "3",
+      "global_id": 23,
+      "molar_mass_g_mol": 44.998096,
+      "bytes": 129998,
+      "sha256": "f044b47968d3c904efcef3fdc85310de367e45ec2f686f8703a773e492749837"
+    },
+    {
+      "path": "N2O/q24.txt",
+      "molecule_id": 4,
+      "isotope_id": "4",
+      "global_id": 24,
+      "molar_mass_g_mol": 46.005308,
+      "bytes": 129998,
+      "sha256": "051aa4bf3fd6a643b5ec19333f595dc948eedb417f2eee346d0efefaeb370598"
+    },
+    {
+      "path": "N2O/q25.txt",
+      "molecule_id": 4,
+      "isotope_id": "5",
+      "global_id": 25,
+      "molar_mass_g_mol": 45.005278,
+      "bytes": 129998,
+      "sha256": "b4c21fc83d47acf7f85d50e2c4fe215e269c251a94ef6c9e88cf3fd13b62fc2e"
+    },
+    {
+      "path": "CO/q26.txt",
+      "molecule_id": 5,
+      "isotope_id": "1",
+      "global_id": 26,
+      "molar_mass_g_mol": 27.994915,
+      "bytes": 234000,
+      "sha256": "55f659277c96e59616f89324e1606d41f068076115d7e41c7c8769fd744c80f5"
+    },
+    {
+      "path": "CO/q27.txt",
+      "molecule_id": 5,
+      "isotope_id": "2",
+      "global_id": 27,
+      "molar_mass_g_mol": 28.99827,
+      "bytes": 233998,
+      "sha256": "090b44d6e284416c77615a797857f88075d36d892f68d1ab1991398c05f91787"
+    },
+    {
+      "path": "CO/q28.txt",
+      "molecule_id": 5,
+      "isotope_id": "3",
+      "global_id": 28,
+      "molar_mass_g_mol": 29.999161,
+      "bytes": 233998,
+      "sha256": "5328a15a2041b3f9e1a36feac16589df07a5ffc91b78472a2a26af00f3847e1a"
+    },
+    {
+      "path": "CO/q29.txt",
+      "molecule_id": 5,
+      "isotope_id": "4",
+      "global_id": 29,
+      "molar_mass_g_mol": 28.99913,
+      "bytes": 233998,
+      "sha256": "2c764e8906e2ad3d70c7647a6ab026d3f6a33ff794ecc7d8e2d1561d269ab4c0"
+    },
+    {
+      "path": "CO/q30.txt",
+      "molecule_id": 5,
+      "isotope_id": "5",
+      "global_id": 30,
+      "molar_mass_g_mol": 31.002516,
+      "bytes": 233998,
+      "sha256": "5ba5d435a545202592a56b2b17bf41bbe5324112b6a175f48cdf16b397d80b57"
+    },
+    {
+      "path": "CO/q31.txt",
+      "molecule_id": 5,
+      "isotope_id": "6",
+      "global_id": 31,
+      "molar_mass_g_mol": 30.002485,
+      "bytes": 233998,
+      "sha256": "ede8553a7075ea1b1443894a47f4298b890ddcb9e9d603d99c2b084f360149c2"
+    },
+    {
+      "path": "CH4/q32.txt",
+      "molecule_id": 6,
+      "isotope_id": "1",
+      "global_id": 32,
+      "molar_mass_g_mol": 16.0313,
+      "bytes": 98000,
+      "sha256": "02a8fd11d6f0905a6d93caa033039118006f9a3dacb4d8e743ef8d440b748227"
+    },
+    {
+      "path": "CH4/q33.txt",
+      "molecule_id": 6,
+      "isotope_id": "2",
+      "global_id": 33,
+      "molar_mass_g_mol": 17.034655,
+      "bytes": 64998,
+      "sha256": "3aa3f1cf300c445ceccbe861147b546c520b5049ac414106e4644890d8b92079"
+    },
+    {
+      "path": "CH4/q34.txt",
+      "molecule_id": 6,
+      "isotope_id": "3",
+      "global_id": 34,
+      "molar_mass_g_mol": 17.037475,
+      "bytes": 64998,
+      "sha256": "eb91103ed8f16e034f03abfd20d0a731679855117e3fb67235fa539ac1572798"
+    },
+    {
+      "path": "CH4/q35.txt",
+      "molecule_id": 6,
+      "isotope_id": "4",
+      "global_id": 35,
+      "molar_mass_g_mol": 18.04083,
+      "bytes": 64998,
+      "sha256": "f0eb0a820df38a11e52cbab0f2ced17366130229e159eec7fe113ebbb3fb75a5"
+    },
+    {
+      "path": "O2/q36.txt",
+      "molecule_id": 7,
+      "isotope_id": "1",
+      "global_id": 36,
+      "molar_mass_g_mol": 31.98983,
+      "bytes": 195000,
+      "sha256": "06d665ea305c552727d2d13a6bd3599bc275240443e1a848f3a7e73f2f628b67"
+    },
+    {
+      "path": "O2/q37.txt",
+      "molecule_id": 7,
+      "isotope_id": "2",
+      "global_id": 37,
+      "molar_mass_g_mol": 33.994076,
+      "bytes": 194998,
+      "sha256": "83a82a596eb98f81bbdd26672add11ca4e3e9de737326e39498d8757c084805f"
+    },
+    {
+      "path": "O2/q38.txt",
+      "molecule_id": 7,
+      "isotope_id": "3",
+      "global_id": 38,
+      "molar_mass_g_mol": 32.994045,
+      "bytes": 194998,
+      "sha256": "70f03a8a857eb18c4431f6030e15513ae50c37c21590cdcc0ac4833e98c5016c"
+    }
+  ]
+}

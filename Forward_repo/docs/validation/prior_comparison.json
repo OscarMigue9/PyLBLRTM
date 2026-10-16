@@ -1,0 +1,16 @@
+{
+  "historical_checkpoint_sha256": "64a6f727a9c77b1edef83313fa80150a45106beec3a1274ff1d3e4079a2604d8",
+  "historical_latents_sha256": "26e5553793f0ab4e717acc89aa4612e26a71c8bee4fd0ac07c135a7313b66cce",
+  "historical_seed_recorded": false,
+  "latent_maximum_absolute_difference": 5.361569881439209,
+  "latent_rmse": 0.33492069625454124,
+  "latent_shape": [
+    30000,
+    24
+  ],
+  "maximum_weight_difference": 2.865842580795288,
+  "new_checkpoint_sha256": "a11fcc3a69f649b364feaf33b749ddcfb7087f735dc355c5d5c63e93908c2dfe",
+  "new_latents_sha256": "530fcde375e7987001613325b7b9c16201e4d03f62dfd1aba6d3b56b38912b39",
+  "schema_version": 1,
+  "weight_tensor_count": 10
+}

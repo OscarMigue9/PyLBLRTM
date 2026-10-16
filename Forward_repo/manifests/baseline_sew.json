@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "model": "unroll714_sew",
+  "state": "Ncol",
+  "latent_dim": 24,
+  "evaluation_steps": 4,
+  "expected_checkpoint_step": 1000,
+  "spectral_range_cm_1": [714, 1250],
+  "status": "historical_parity_unresolved",
+  "hash_algorithm": "sha256",
+  "path_base": "original_repository_root",
+  "local_artifacts": {
+    "split_30k_seed42": {
+      "path": "model/physinv/closure_forward/experimentos/apae_loss_fisica/split_30k_seed42.npz",
+      "sha256": "0b345dffaba7e713db2229c508f1a29519ae4c0d552875db3d475c05eee0d811",
+      "bytes": 168083
+    },
+    "frozen_simulated_rows": {
+      "path": "experiments/2026-08_barrido_T/barrN_sew/nuestro_n300.json",
+      "sha256": "0eff201ac18758e137fe7db0805c24d5df4fed384f44dd7906a35993e76c947b",
+      "bytes": 5222,
+      "row_count": 300
+    },
+    "training_summary": {
+      "path": "experiments/2026-08_barrido_T/barrN_sew/unroll714_sew.json",
+      "sha256": "bf5637e00f6bafc480c44990de606698db6ba9eb4d336bb70e4f5aceddd50210",
+      "bytes": 11040
+    },
+    "local_apae_copy_matching_new_run": {
+      "path": "experiments/2026-07_apae_r2a/_modal_rescate/out_iasi/apae_fix_lat24b1e-4.pt",
+      "sha256": "c451f9400dfc66daf839d0062685aabe9846246b5643014dca42277e9d8d27c9",
+      "bytes": 23930297
+    },
+    "local_sf_copy_matching_new_run": {
+      "path": "experiments/2026-08_barrido_T/s_f_sim_iasiang.npz",
+      "sha256": "119bca7e97e980d4b41041dca621efd7811d795b0172bb9176454b4e4d801df2",
+      "bytes": 42329
+    },
+    "historical_simulated_metrics": {
+      "path": "experiments/2026-08_barrido_T/barrN_sew/barrN_sew_T4.json",
+      "sha256": "45ea4aa5978bada1a96814e8e62a47e9c594934964e026cdcb0a03cee23ecde8",
+      "bytes": 5248
+    },
+    "historical_simulated_metrics_repeat": {
+      "path": "experiments/2026-08_barrido_T/panel8/sew_n4.json",
+      "sha256": "fd9d334da4577e213f71919f98dc5468dc30eaee46453754fc44a5a2ad185ec3",
+      "bytes": 5248
+    },
+    "historical_simulated_scenes": {
+      "path": "experiments/2026-08_barrido_T/panel8/sew_n4.npz",
+      "sha256": "fe9f5a4d5796156ead83e3d7b1a6aace1b5a49e967d11a740ffdbbdc85a6c76d",
+      "bytes": 6997078,
+      "row_count": 300,
+      "x_hat_shape": [300, 818]
+    },
+    "historical_sea_metrics": {
+      "path": "experiments/2026-08_barrido_T/barrN_sew/barrN_sewmar_T4.json",
+      "sha256": "70e40ac56ece1acb297c79a975d7be81eb0a8afc07482e6e6530affcc0c9da97",
+      "bytes": 3015
+    },
+    "historical_sea_scenes": {
+      "path": "experiments/2026-08_barrido_T/marplot/mar_sew_n4.npz",
+      "sha256": "9bae8bbc7e392253f40253aa29f02a0586c3e72580c26996188a49acd8c66084",
+      "bytes": 1332466,
+      "row_count": 64,
+      "x_hat_shape": [64, 818]
+    },
+    "new_run_manifest": {
+      "path": "ops/modal/hybrid_oe_20260917/results/manifest.json",
+      "sha256": "234c1624b32baae00501e6c941e38716a2088f507871f3ea904514a81032727a",
+      "bytes": 33518
+    },
+    "new_simulated_metrics": {
+      "path": "ops/modal/hybrid_oe_20260917/results/sim300_T4_oe4.json",
+      "sha256": "e27dc682b718506642c0e80c7a9fa25ae792d7f3c2f679668505bb5da5d13f7c",
+      "bytes": 15572
+    },
+    "new_sea_metrics": {
+      "path": "ops/modal/hybrid_oe_20260917/results/mar64_T4_oe4.json",
+      "sha256": "f336b3b6a2049e1ed26037a7a5c2adb5e083a24f6ca3ae61622dbcb3af3aa930",
+      "bytes": 13255
+    },
+    "step1000_trajectory": {
+      "path": "experiments/2026-08_barrido_T/trajsew/trajsew10_traj.npz",
+      "sha256": "c58d9cf0adc70b617d9debc60dbb60460d6bb28077241093cdd612245128606b",
+      "bytes": 38605481,
+      "row_count": 300
+    },
+    "step1000_trajectory_metrics": {
+      "path": "experiments/2026-08_barrido_T/trajsew/trajsew10.json",
+      "sha256": "2187de01176a07767d763f10dac0bd6b0133b250944bb20770fd3cf2a55b5e3c",
+      "bytes": 8489
+    },
+    "step1000_resume_log": {
+      "path": "experiments/2026-08_ablacion_prior/trajz0.log",
+      "sha256": "4f0514eb52170e39762e36eb49eb871e9a4bc6a015698af81f05cd02775bc9a0",
+      "bytes": 2383
+    }
+  },
+  "new_run_input_hashes_reported_by_manifest": {
+    "/salida/out_iasi/apae_fix_lat24b1e-4.pt": "c451f9400dfc66daf839d0062685aabe9846246b5643014dca42277e9d8d27c9",
+    "/salida/out_iasi/prior_z_deep.pt": "64a6f727a9c77b1edef83313fa80150a45106beec3a1274ff1d3e4079a2604d8",
+    "/salida/out_iasiang/s_f_sim_iasiang.npz": "119bca7e97e980d4b41041dca621efd7811d795b0172bb9176454b4e4d801df2",
+    "/salida/out_iasiang/config/unroll714_sew_ckpt.pt": "4b446240e1282e939d36561a40598b7b26727e20fd6436d265c19b7dfe8bbe7a",
+    "/salida/out_iasiang/exp24_714b/nuestro_n300.json": "0eff201ac18758e137fe7db0805c24d5df4fed384f44dd7906a35993e76c947b"
+  },
+  "new_run_source_hashes_reverified_locally": {
+    "_common.py": "bc21f0ab7c00fbcfc47bf189d777ce5f802de78b9d03c286fabe9bf2d62bcb2e",
+    "exp24_baselines.py": "b9ba1dff9c0a41305b0df00c63eec9ea715307740226c35c539e30949ab8708f",
+    "exp18_unrolled.py": "3074aa83d8d41c5cc3f900d831ad776dbe3498cde3df398adb19907d335a710d",
+    "exp1_barrido.py": "b60bb98d5ac434d9c33d2eee35ddf7ea56b589e81ed6fa6feba57a8fdb4210a4",
+    "exp20_tierra.py": "fa0dcda0c38900d34b6229398c46be5a5c09d0309d7e89ee1c56312ea5ea5c34",
+    "nets.py": "cc9c266b9886cea39bfa467aea657b7014c3d9bb9d04ce00fa04b327c992e535"
+  },
+  "comparison": {
+    "simulated_300": {
+      "rows_identical_in_order": true,
+      "historical_rows_sha256": "a113ebe856ada5ad49df726f04b2f80bb02091740b6edcd7ba075aaea1cbf172",
+      "historical_gases_dex": 0.06622375581197712,
+      "new_pre_oe_gases_dex": 0.07008674021985307,
+      "relative_change_percent": 5.8332306292680824,
+      "historical_rmse_T_K": 2.410006033340147,
+      "new_pre_oe_rmse_T_K": 2.59825681865178,
+      "historical_rmse_Tskin_K": 0.8293446514066635,
+      "new_pre_oe_rmse_Tskin_K": 1.0213816916704526
+    },
+    "sea_64": {
+      "rows_identical_in_order": true,
+      "historical_rows_sha256": "a49d88051b2d2e5d1255d4f806a7569cda9b33a650a908566197031349ad8db4",
+      "historical_gases_dex": 0.07224884366540348,
+      "new_pre_oe_gases_dex": 0.07281369207057058,
+      "relative_change_percent": 0.7818096131517516,
+      "historical_rmse_T_K": 2.216882819215693,
+      "new_pre_oe_rmse_T_K": 2.368458236884966,
+      "historical_rmse_Tskin_K": 1.3401887108201034,
+      "new_pre_oe_rmse_Tskin_K": 1.3026019427605728
+    }
+  },
+  "local_checks": {
+    "simulated_rows_unique": true,
+    "simulated_rows_subset_of_materialized_test_split": true,
+    "historical_simulated_dump_rows_match_metrics": true,
+    "historical_sea_dump_rows_match_metrics": true,
+    "local_apae_hash_matches_new_manifest": true,
+    "local_sf_hash_matches_new_manifest": true,
+    "new_run_six_source_hashes_match_local_files": true
+  },
+  "checkpoint_observations": {
+    "new_hybrid_input": {
+      "sha256": "4b446240e1282e939d36561a40598b7b26727e20fd6436d265c19b7dfe8bbe7a",
+      "remote_uri": "d400:WikiThesis_respaldo/salida/out_iasiang/config/unroll714_sew_ckpt.pt",
+      "verified_local_copy": "thesis final/data_cache/outputs/unroll714_sew_ckpt.pt",
+      "bytes": 28417469,
+      "paso": 400,
+      "args_steps": 1000,
+      "has_final_metricas": false,
+      "mlp_tensor_bytes_sha256": "852313aa5ce21ac2a8745ef8cfc5fca04f0f551fb49834ab93a1992aa7383d7d"
+    },
+    "recovered_step1000_evaluation_copy": {
+      "sha256": "96833ee7da2f49ba5d02dad890ec5bf6f0ebed2260807f157ef483fb7ea2296f",
+      "remote_uri": "d400:WikiThesis_respaldo/salida/out_iasiang/trajsew/trajsew10_ckpt.pt",
+      "bytes": 28418841,
+      "drive_metadata_sha256_matches_downloaded_bytes": true,
+      "paso": 1000,
+      "args_steps": 1000,
+      "args_solo_eval": true,
+      "args_resume": "/salida/out_iasiang/config/unroll714_sew_ckpt.pt",
+      "has_final_metricas": true,
+      "latent_dim": 24,
+      "input_dim": 4292,
+      "mlp_tensor_bytes_sha256": "a2eceb6c4dfc6f6cdf8a0801c20e3cd315a14d91053e5b3a9578dfde0deb6a83",
+      "r_sd_tensor_bytes_sha256": "1dcad94e523a1f90ffbd628a4117a025895198e2b3be95536fa4c4f8cad25fcf"
+    },
+    "independent_step1000_evaluation_copy": {
+      "sha256": "1461c642378fd2a3506a752b4181b05ed4d1f4476479f4d22717fecb8309c35a",
+      "remote_uri": "d400:WikiThesis_respaldo/salida/out_iasiang/trajz0/trajz0_24_ckpt.pt",
+      "bytes": 28418969,
+      "drive_metadata_sha256_matches_downloaded_bytes": true,
+      "paso": 1000,
+      "args_steps": 1000,
+      "args_solo_eval": true,
+      "args_resume": "/salida/out_iasiang/config/unroll714_sew_ckpt.pt",
+      "mlp_tensors_equal_to_trajsew10": true,
+      "r_sd_tensors_equal_to_trajsew10": false
+    },
+    "tensor_digest_definition": "SHA256 of contiguous CPU tensor bytes concatenated in PyTorch state_dict insertion order; this is a model-state fingerprint, not a checkpoint-file hash."
+  },
+  "step1000_simulated_trajectory_check": {
+    "rows_identical_to_historical_dump_in_order": true,
+    "x_true_equal_after_float32_conversion": true,
+    "t4_x_hat_element_rmse": 5.683693970499555e-6,
+    "t4_x_hat_element_mean_absolute_error": 1.415837170539489e-6,
+    "t4_x_hat_max_absolute_error": 0.0001220703125,
+    "t4_x_hat_float32_exact_fraction": 0.8593398533007335,
+    "t4_trajectory_metrics": {
+      "rmse_T_K": 2.4100060553935676,
+      "rmse_Tskin_K": 0.8293435678331977,
+      "rmse_H2O_dex": 0.13313090669901603,
+      "rmse_CO2_dex": 0.004089053354214709,
+      "rmse_O3_dex": 0.10734283617142913,
+      "rmse_N2O_dex": 0.06174354851777268,
+      "rmse_CH4_dex": 0.02481242529576245
+    },
+    "interpretation": "The step-1000 trajectory alone links the MLP to the published simulated T4 result. Subsequent extracted-package Modal evaluations also reproduce the simulated-300 and sea-64 T4 metrics within declared tolerances. Neither result proves exact identity of the original training checkpoint."
+  },
+  "prior_live_vs_materialized_audit": {
+    "source": "parallel local audit on the 30000-state prior_z_deep.pt and prior_z_deep.npz assets",
+    "max_absolute_latent_difference": 7.03e-6,
+    "mean_absolute_latent_difference": 5.96e-7,
+    "latent_rmse": 7.80e-7,
+    "interpretation": "The materialized and live prior routes are numerically close; this alone does not establish the cause of the T4 discrepancy."
+  },
+  "historical_checkpoint_sha256": null,
+  "historical_input_hashes": null,
+  "historical_runtime_versions": null,
+  "new_run_simulated_scene_dump_local": false,
+  "interpretation": "The September hybrid pre-OE state did not reproduce the historical T4 baseline because it used an intermediate step-400 checkpoint. Two independent evaluation copies contain identical step-1000 MLP weights. Extracted-package Modal T4 evaluations with the recovered step-1000 checkpoint reproduce both the simulated-300 and sea-64 historical metrics within declared tolerances; sea-64 inputs match exactly and retrieved states differ by 5.7670e-6 RMSE per component. Exact original training checkpoint identity and complete historical input hashes remain unverified."
+}

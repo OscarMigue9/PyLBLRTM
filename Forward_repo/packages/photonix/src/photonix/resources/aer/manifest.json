@@ -1,0 +1,70 @@
+{
+  "recipe": "aer-3.8.1-convf4-thermal-714-1250-v1",
+  "source": "experiments/2026-08_forward_iasi_completo/exp_iasi_full/out/gpu_pack/cont.npz",
+  "source_sha256": "e8f18089c28d103e96c12ea2d7aa2ac7190e19cb095ab0a0de8cb7635c1e30f5",
+  "bundle_sha256": "6ea56d7b59f1533414b9964a05e7bbd2821d856ca476f501f84d5ec2cc956bcd",
+  "source_metadata": {
+    "h2o_fuente": "LBLRTM data/absco-ref_wv-mt-ckd.nc (MT_CKD), recorte 620-2785",
+    "h2o_C2": 1.4388,
+    "co2_fuente": "AER-RC/LBLRTM src/contnm.f90 BLOCK DATA BFCO2 (MT_CKD)",
+    "co2_unidades": "cm^3/mol * 1e-20"
+  },
+  "runtime_radiation_constant_cm_k": 1.4387752,
+  "co2_reference_pressure_hpa": 1013.0,
+  "co2_reference_temperature_k": 296.0,
+  "derivation": "Exact numerical subset; H2O and CO2 arrays preserved unchanged. O2/N2 CIA, chi and bandhead excluded from thermal 714-1250 recipe.",
+  "arrays": {
+    "h2o_NU_TABLE": {
+      "shape": [
+        217
+      ],
+      "dtype": "float64",
+      "sha256_float64_c_order": "c805d78da7f3b2eac2a1cb4d64f08f9c8e08d6168b1447f876e2a91b4af44c08"
+    },
+    "h2o_CS_REF": {
+      "shape": [
+        217
+      ],
+      "dtype": "float64",
+      "sha256_float64_c_order": "41e2b32c3e69eec3fc1592e987ea3dd77f1e154d63412ece86763281ecc220cf"
+    },
+    "h2o_CF_REF": {
+      "shape": [
+        217
+      ],
+      "dtype": "float64",
+      "sha256_float64_c_order": "068ba32a13aac08b6149c98b827df50f5f752a873d50a3e9645df5dd200638bc"
+    },
+    "h2o_TEXP_REF": {
+      "shape": [
+        217
+      ],
+      "dtype": "float64",
+      "sha256_float64_c_order": "bb4125d4a4561af300807be684833407891d574f64b335993fa018f8bbaeac7f"
+    },
+    "h2o_T_REF": {
+      "shape": [],
+      "dtype": "float64",
+      "sha256_float64_c_order": "7ab21028535fd7c42367ac5a51ee8ae367a50822bdb2ed062c79ad829d22cb36"
+    },
+    "h2o_P_REF_HP": {
+      "shape": [],
+      "dtype": "float64",
+      "sha256_float64_c_order": "34f939e51c77a3e1ca65c0dd44d7ea90e64a097525ed877a78fc5a0c82ef3162"
+    },
+    "co2_nu": {
+      "shape": [
+        5003
+      ],
+      "dtype": "float64",
+      "sha256_float64_c_order": "ce145233f9e5c92dd97090890c8296554a70103bb6349870fb914271e521158f"
+    },
+    "co2_S": {
+      "shape": [
+        5003
+      ],
+      "dtype": "float64",
+      "sha256_float64_c_order": "ce0fa24caf75722794c7799ab18ca2f720fcc9e6f58942a2dfa61f07e30734f3"
+    }
+  }
+}

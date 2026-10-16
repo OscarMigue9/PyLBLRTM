@@ -1,0 +1,12 @@
+{
+  "absolute_validation_loss_difference": 6.357828777336927e-10,
+  "historical_best_validation_loss": 0.036749335159858065,
+  "historical_sha256": "c451f9400dfc66daf839d0062685aabe9846246b5643014dca42277e9d8d27c9",
+  "identical_parameter_tensors": 30,
+  "maximum_parameter_difference": 0.0,
+  "new_best_validation_loss": 0.03674933579564094,
+  "new_epoch_count": 300,
+  "new_sha256": "5fc68d561d09ef848411f665e13a22b0378d9bcec97559978db5d56717d9bafc",
+  "parameter_tensors": 30,
+  "schema_version": 1
+}

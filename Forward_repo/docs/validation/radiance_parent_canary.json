@@ -1,0 +1,35 @@
+{
+  "status": "pass",
+  "source_uri": "gdrive:WikiThesis/exp_iasi_full/out/radiancias/L_30k.npy",
+  "source_sha256": "7e33eca95e2d1116041d5361d8969e31acdef3dc49e76008b48e0e4707453dd8",
+  "source_hash_evidence": "remote_metadata",
+  "source_metadata_sha256": "a635741a5312985c683255caa2c4af4d5145139bad6bd22f67cf68429f3f0c18",
+  "frozen_radiance_sha256": "dcb03b4002f5657433db1051df3fd0f9696f8273f68f98cdc1397ea08d70cc4d",
+  "angle_assignment_all_rows_equal": true,
+  "canaries": [
+    {
+      "profile_index": 0,
+      "angle_index": 2,
+      "row_sha256": "1447824f109c288fab4102d4ff20ebc75dcda5874362036b3553642204ecdcab",
+      "byte_equal_to_frozen": true
+    },
+    {
+      "profile_index": 1,
+      "angle_index": 3,
+      "row_sha256": "e14a8ea66f647557f88f4d08ec0aa57e1d04178025d02428d40ddbf16ae54670",
+      "byte_equal_to_frozen": true
+    },
+    {
+      "profile_index": 15000,
+      "angle_index": 0,
+      "row_sha256": "846b37c0500c0a4d50e8c6dbe77f8086a8a173f2baead51c0e34f5286fc1f235",
+      "byte_equal_to_frozen": true
+    },
+    {
+      "profile_index": 29999,
+      "angle_index": 0,
+      "row_sha256": "7a4d051fc2448a8ef2da244295af003fde475d8fd7827db922e4e0212cfa9821",
+      "byte_equal_to_frozen": true
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "name": "unroll714_sew_z24_ncol",
+  "scientific_status": "historical_parity_unresolved",
+  "physics_recipe": "historical-aer-2026-08-thermal-714-1250",
+  "spectral": {
+    "grid": "iasiang",
+    "nu_min_cm1": 714.0,
+    "nu_max_cm1": 1250.0,
+    "channel_step_cm1": 0.25,
+    "channels": 2145,
+    "valid_channels": 2121,
+    "ils_fwhm_cm1": 0.5,
+    "view_angle_per_profile": true
+  },
+  "lut": {
+    "prefix": "lut_band645",
+    "nu_min_cm1": 635.0,
+    "nu_max_cm1": 1265.0,
+    "fine_step_cm1": 0.001,
+    "temperature_points": 20,
+    "pressure_points": 145,
+    "pressure_min_atm": 0.000014,
+    "pressure_max_atm": 1.189,
+    "gases": ["H2O", "CO2", "O3", "N2O", "CH4"]
+  },
+  "state": {
+    "representation": "Ncol",
+    "dimension": 818,
+    "levels": 137,
+    "layers": 136,
+    "gases": ["H2O", "CO2", "O3", "N2O", "CH4"],
+    "vertical_order": "top_of_atmosphere_first"
+  },
+  "seeds": {
+    "split": 42,
+    "emissivity_assignment": 42,
+    "view_angle_assignment": 991,
+    "instrument_noise": 1337,
+    "apae_training": 7,
+    "prior_training": 7,
+    "prior_training_provenance": "default_value_only_original_invocation_unknown",
+    "unrolled_training": 0,
+    "simulated_300_selection": 0
+  },
+  "split": {
+    "train": 24000,
+    "validation": 3000,
+    "test": 3000,
+    "artifact_id": "split_30k_seed42"
+  },
+  "apae": {
+    "state_dimension": 818,
+    "tud_dimension": 6435,
+    "latent_dimension": 24,
+    "auxiliary_dimensions": 0,
+    "beta": 0.0001,
+    "epochs": 300,
+    "checkpoint_id": "apae_checkpoint"
+  },
+  "prior": {
+    "features": ["latitude", "longitude", "day_of_year", "surface_pressure_hpa"],
+    "hidden_layers": [256, 256, 256, 256],
+    "activation": "GELU",
+    "epochs": 400,
+    "batch_size": 512,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "patience": 40,
+    "checkpoint_id": "prior_checkpoint"
+  },
+  "unrolled": {
+    "training_steps": 3,
+    "optimization_steps": 1000,
+    "batch_size": 16,
+    "supervised_samples": 24000,
+    "physics_loss_weight": 0.0,
+    "labels": "perfect",
+    "residual_whitening": "isrf",
+    "model_error_id": "model_error_sf",
+    "checkpoint_id": "sew_checkpoint"
+  },
+  "evaluation": {
+    "train_time_steps": 3,
+    "selected_inference_steps": 4,
+    "simulated_full_test": 3000,
+    "simulated_frozen_selection": 300,
+    "simulated_selection_artifact_id": "frozen_simulated_rows",
+    "real_ocean_scenes": 64,
+    "metric_tolerance_status": "fixed_before_extracted_runtime_validation",
+    "metric_tolerances": {
+      "gases_dex": 0.001,
+      "rmse_T_K": 0.05,
+      "rmse_Tskin_K": 0.05
+    }
+  }
+}

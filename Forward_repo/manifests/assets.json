@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "project": "iasi-retrieval-sew-z24-ncol",
+  "captured_on": "2026-09-27",
+  "hash_algorithm": "sha256",
+  "remote_hash_evidence": "Most d400:WikiThesis_714 files were inventoried with rclone lsjson --hash --stat; the step-1000 SEW checkpoint was also downloaded and byte-hashed, and bundled files were byte-hashed locally. Every fetch verifies downloaded bytes.",
+  "artifacts": [
+    {
+      "id": "aer_lines",
+      "role": "source",
+      "workspace_path": "data/spectroscopy/aer_line_file/aer_IASI_620-2785.par",
+      "destination": "inputs/spectroscopy/aer_IASI_620-2785.par",
+      "bytes": 73806659,
+      "sha256": "898c856b07b298d85a8e0bc788ab388ce7391417fb9a0276b44d62c874c457b2",
+      "remote_uri": null
+    },
+    {
+      "id": "aer_coupling",
+      "role": "source",
+      "workspace_path": "data/spectroscopy/aer_line_file/lncpl_lines",
+      "destination": "inputs/spectroscopy/lncpl_lines",
+      "bytes": 74234394,
+      "sha256": "5b26c87b4623cedbd58557c0265033cdf1bac6e1616eb979519421c391386bcf",
+      "remote_uri": null
+    },
+    {
+      "id": "gpu_pack_lines",
+      "role": "derived_source",
+      "workspace_path": "experiments/2026-08_forward_iasi_completo/exp_iasi_full/out/gpu_pack/lineas.npz",
+      "destination": "inputs/gpu_pack/lineas.npz",
+      "bytes": 19363092,
+      "sha256": "7dcc80ab21284b64d691b87c04e3375e425ecdba4d3a8014f4ff8d6b3e1867ac",
+      "remote_uri": null,
+      "bundle_path": "frozen/gpu_pack/lineas.npz"
+    },
+    {
+      "id": "gpu_pack_qtab",
+      "role": "derived_source",
+      "workspace_path": "experiments/2026-08_forward_iasi_completo/exp_iasi_full/out/gpu_pack/qtab.npz",
+      "destination": "inputs/gpu_pack/qtab.npz",
+      "bytes": 202701,
+      "sha256": "99c09e782fadc315727d5adbcd3190451ef8ea3d399bdd6ce6f07f45aee92d9a",
+      "remote_uri": null,
+      "bundle_path": "frozen/gpu_pack/qtab.npz"
+    },
+    {
+      "id": "gpu_pack_continuum",
+      "role": "derived_source",
+      "workspace_path": "experiments/2026-08_forward_iasi_completo/exp_iasi_full/out/gpu_pack/cont.npz",
+      "destination": "inputs/gpu_pack/cont.npz",
+      "bytes": 66757,
+      "sha256": "e8f18089c28d103e96c12ea2d7aa2ac7190e19cb095ab0a0de8cb7635c1e30f5",
+      "remote_uri": null,
+      "bundle_path": "frozen/gpu_pack/cont.npz"
+    },
+    {
+      "id": "emissivity_record_ids",
+      "role": "source",
+      "workspace_path": "data/derived/emisividades/data/record_ids.npy",
+      "destination": "inputs/emissivity/record_ids.npy",
+      "bytes": 471236,
+      "sha256": "34d9cf2daf17af81af6526bf8c4bb31b9226986ee36646a7855fd2564dfb1ed3",
+      "remote_uri": null,
+      "bundle_path": "frozen/record_ids.npy"
+    },
+    {
+      "id": "emissivity_iasi",
+      "role": "derived_source",
+      "workspace_path": "data/derived/emisividades/data/emis_iasi.npy",
+      "destination": "inputs/emissivity/emis_iasi.npy",
+      "bytes": 48024764,
+      "sha256": "a33e89a55138ecf46d763a1d1aa6dc4074b29d73c0ca0f9c4d791bdb7d2129e1",
+      "remote_uri": null
+    },
+    {
+      "id": "water_refractive_index",
+      "role": "source",
+      "workspace_path": "data/libradtran/aerosol/OPAC/refractive_indices/cucc00_refr.dat",
+      "destination": "inputs/surface/cucc00_refr.dat",
+      "bytes": 1891,
+      "sha256": "550b7a78ab380ea5aebc6da6082fafe8522b475f2e47e2299a928e9dcd9978a6",
+      "remote_uri": null,
+      "bundle_path": "frozen/cucc00_refr.dat"
+    },
+    {
+      "id": "split_30k_seed42",
+      "role": "frozen_selection",
+      "workspace_path": "model/physinv/closure_forward/experimentos/apae_loss_fisica/split_30k_seed42.npz",
+      "destination": "inputs/selections/split_30k_seed42.npz",
+      "bytes": 168083,
+      "sha256": "0b345dffaba7e713db2229c508f1a29519ae4c0d552875db3d475c05eee0d811",
+      "remote_uri": null,
+      "bundle_path": "frozen/split_30k_seed42.npz"
+    },
+    {
+      "id": "states_30k",
+      "role": "derived",
+      "workspace_path": "experiments/2026-05_diseno_lut/nwpsaf_30k_states.npz",
+      "destination": "data/nwpsaf_30k_states.npz",
+      "bytes": 147783260,
+      "sha256": "9fd71327df0b3f65ed03ef35f466ff4ec85c2c3498c7b58a3689084a6658859e",
+      "remote_uri": "d400:WikiThesis_714/datos/nwpsaf_30k_states.npz"
+    },
+    {
+      "id": "dates_30k",
+      "role": "derived",
+      "workspace_path": "experiments/2026-08_apae_banda_completa/fechas_30k.npz",
+      "destination": "data/fechas_30k.npz",
+      "bytes": 541230,
+      "sha256": "aa1b8c246384fc76baad7e1df7b0b7f38600189f94c5ed397a313af9a0924604",
+      "remote_uri": "d400:WikiThesis_714/datos/fechas_30k.npz"
+    },
+    {
+      "id": "lut_h2o",
+      "role": "gpu_lut_cache",
+      "destination": "data/outputs/lut_band645_H2O.npy",
+      "bytes": 7308011728,
+      "sha256": "74c775eeb1e451485492f8df4dd6d38d75386bdc60d29f35c47a272965d9e280",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_H2O.npy"
+    },
+    {
+      "id": "lut_co2",
+      "role": "gpu_lut_cache",
+      "destination": "data/outputs/lut_band645_CO2.npy",
+      "bytes": 7308011728,
+      "sha256": "1210d85cc6c9bcd84d1be1f2f2fd4f69dbbbdf28b6b13ede2179220ac9ac97c4",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_CO2.npy"
+    },
+    {
+      "id": "lut_o3",
+      "role": "gpu_lut_cache",
+      "destination": "data/outputs/lut_band645_O3.npy",
+      "bytes": 7308011728,
+      "sha256": "3f17ad4c883ea7af4c49e1768a4b3ce756679032283508418e87e77ca69bb7e0",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_O3.npy"
+    },
+    {
+      "id": "lut_n2o",
+      "role": "gpu_lut_cache",
+      "destination": "data/outputs/lut_band645_N2O.npy",
+      "bytes": 7308011728,
+      "sha256": "fa10dd9db7d549eb86cd75a35be3a68320905b87d2ffe2a608140e2eb6376b77",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_N2O.npy"
+    },
+    {
+      "id": "lut_ch4",
+      "role": "gpu_lut_cache",
+      "destination": "data/outputs/lut_band645_CH4.npy",
+      "bytes": 7308011728,
+      "sha256": "4585dca36e91fee0e124056917e7f657afc01c0f6db053bf6782254dc1b8e9fe",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_CH4.npy"
+    },
+    {
+      "id": "tud_iasi_apae",
+      "role": "training_input",
+      "destination": "data/outputs/tud30k_channels/tud_iasi_all.npy",
+      "bytes": 772200128,
+      "sha256": "8ea2dd0cc6454797099b07087430c016f2ec0db5fe2986a0a03a347ee76e5833",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/tud30k_channels/tud_iasi_all.npy"
+    },
+    {
+      "id": "radiances_iasiang",
+      "role": "training_input",
+      "workspace_path": "data/derived/radiancias_iasiang/radiances_iasiang.npz",
+      "destination": "data/outputs/radiances_iasiang.npz",
+      "bytes": 366309747,
+      "sha256": "dcb03b4002f5657433db1051df3fd0f9696f8273f68f98cdc1397ea08d70cc4d",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/radiances_iasiang.npz"
+    },
+    {
+      "id": "noise_iasiang",
+      "role": "training_input",
+      "destination": "data/outputs/noise_iasiang.npz",
+      "bytes": 238626926,
+      "sha256": "efbe1b1295cddf8735bcd86b2ddbc159831fcd5d598274f66640f1c9430745eb",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/noise_iasiang.npz"
+    },
+    {
+      "id": "r_self",
+      "role": "lut_metadata",
+      "destination": "data/outputs/r_self.npz",
+      "bytes": 6649,
+      "sha256": "9d8a9825454cab1d29083fa68a2fca06638adf97aa93e1f7e28d54a580b84679",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/r_self.npz"
+    },
+    {
+      "id": "model_error_sf",
+      "role": "training_input",
+      "workspace_path": "experiments/2026-08_barrido_T/s_f_sim_iasiang.npz",
+      "destination": "outputs/s_f_sim_iasiang.npz",
+      "bytes": 42329,
+      "sha256": "119bca7e97e980d4b41041dca621efd7811d795b0172bb9176454b4e4d801df2",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasiang/s_f_sim_iasiang.npz"
+    },
+    {
+      "id": "apae_checkpoint",
+      "role": "checkpoint",
+      "workspace_path": "experiments/2026-07_apae_r2a/_modal_rescate/out_iasi/apae_fix_lat24b1e-4.pt",
+      "destination": "outputs/apae_fix_lat24b1e-4.pt",
+      "bytes": 23930297,
+      "sha256": "c451f9400dfc66daf839d0062685aabe9846246b5643014dca42277e9d8d27c9",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasi/apae_fix_lat24b1e-4.pt"
+    },
+    {
+      "id": "prior_checkpoint",
+      "role": "checkpoint",
+      "destination": "outputs/prior_z_deep.pt",
+      "bytes": 823957,
+      "sha256": "64a6f727a9c77b1edef83313fa80150a45106beec3a1274ff1d3e4079a2604d8",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasi/prior_z_deep.pt"
+    },
+    {
+      "id": "prior_latents",
+      "role": "checkpoint_companion",
+      "destination": "outputs/prior_z_deep.npz",
+      "bytes": 103922272,
+      "sha256": "26e5553793f0ab4e717acc89aa4612e26a71c8bee4fd0ac07c135a7313b66cce",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasi/prior_z_deep.npz"
+    },
+    {
+      "id": "sew_checkpoint",
+      "role": "checkpoint",
+      "destination": "outputs/unroll714_sew_step1000.pt",
+      "bytes": 28418841,
+      "sha256": "96833ee7da2f49ba5d02dad890ec5bf6f0ebed2260807f157ef483fb7ea2296f",
+      "remote_uri": "d400:WikiThesis_respaldo/salida/out_iasiang/trajsew/trajsew10_ckpt.pt"
+    },
+    {
+      "id": "frozen_simulated_rows",
+      "role": "frozen_selection",
+      "workspace_path": "experiments/2026-08_barrido_T/barrN_sew/nuestro_n300.json",
+      "destination": "inputs/selections/nuestro_n300.json",
+      "bytes": 5222,
+      "sha256": "0eff201ac18758e137fe7db0805c24d5df4fed384f44dd7906a35993e76c947b",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasiang/exp24_714b/nuestro_n300.json",
+      "bundle_path": "frozen/nuestro_n300.json"
+    },
+    {
+      "id": "mar64_geo",
+      "role": "frozen_selection",
+      "bundle_path": "frozen/val64_geo.npz",
+      "destination": "data/val64_geo.npz",
+      "bytes": 7348,
+      "sha256": "dd7909e261230f7fff3e4899db8e45595a9dffc339189f38ba6b43f58546d008",
+      "remote_uri": "d400:WikiThesis_714/datos/val64_geo.npz"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "selection": "frozen300",
+  "iterations": 4,
+  "tolerances": {
+    "gases_dex": 0.001,
+    "rmse_T_K": 0.05,
+    "rmse_Tskin_K": 0.05
+  },
+  "metrics": {
+    "gases_dex": {
+      "historical": 0.06622375581197712,
+      "extracted": 0.06622375622444361,
+      "absolute_delta": 4.1246649151727155e-10
+    },
+    "rmse_T_K": {
+      "historical": 2.410006033340147,
+      "extracted": 2.4100061397034267,
+      "absolute_delta": 1.063632795172964e-07
+    },
+    "rmse_Tskin_K": {
+      "historical": 0.8293446514066635,
+      "extracted": 0.8293437822293658,
+      "absolute_delta": 8.691772976909817e-07
+    }
+  },
+  "passed": true
+}

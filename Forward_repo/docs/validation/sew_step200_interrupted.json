@@ -1,0 +1,40 @@
+{
+  "asset_manifest_sha256": "d76ef4e8df04aa44f267c37c7b0fe85228fe89da19b98a8e71635000a3777a2a",
+  "checkpoint": {
+    "bytes": 28445000,
+    "completed_updates": 200,
+    "legacy_input_hashes_absent": true,
+    "recipe_args": {
+      "angulo": true,
+      "iters": 3,
+      "labels": "perfect",
+      "lam_chi2": 0.0,
+      "se_corr": "isrf",
+      "seed": 0,
+      "za": "clim"
+    },
+    "scheduler_last_epoch": 200,
+    "sha256": "bfbf358626426a7ee86b24cbe935f127bedd1c881063490f15065369dfe929d5",
+    "volume_copy_equal": true
+  },
+  "configuration_sha256": "0ff7cdee7f0b5bbae938f8a46a1418c3c7bf976a24554e5f958313ecc507015e",
+  "resume_requirement": "Enabled Modal workspace, matching verified upstream/asset files and explicit --legacy-checkpoint-sha256 for this pre-hash checkpoint.",
+  "schema_version": 1,
+  "source_snapshot_note": "Active Modal image was uploaded before the checkpoint input-hash and atomic-save source edits; no completed train_unrolled report was written.",
+  "stage": "train_unrolled_interrupted",
+  "status": "workspace_disabled_before_completion",
+  "upstream": {
+    "apae": {
+      "expected_sha256": "5fc68d561d09ef848411f665e13a22b0378d9bcec97559978db5d56717d9bafc",
+      "sha256": "5fc68d561d09ef848411f665e13a22b0378d9bcec97559978db5d56717d9bafc"
+    },
+    "prior": {
+      "expected_sha256": "a11fcc3a69f649b364feaf33b749ddcfb7087f735dc355c5d5c63e93908c2dfe",
+      "sha256": "a11fcc3a69f649b364feaf33b749ddcfb7087f735dc355c5d5c63e93908c2dfe"
+    },
+    "prior_latents": {
+      "expected_sha256": "530fcde375e7987001613325b7b9c16201e4d03f62dfd1aba6d3b56b38912b39",
+      "sha256": "530fcde375e7987001613325b7b9c16201e4d03f62dfd1aba6d3b56b38912b39"
+    }
+  }
+}

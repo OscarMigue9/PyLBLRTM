@@ -1,0 +1,35 @@
+{
+  "archive_sha256": "394960d085b70312798ee5322bf5732b055f1462f38f6259962f5e0db80e9c3d",
+  "build": {
+    "negative_fraction": 0.0,
+    "output": "/tmp/lut-pilot-5ea5g48p/candidate/lut_N2O_895_905.npz",
+    "rms_log": 6.69558226888626e-07,
+    "sha256": "8e51b1e74bad5e79279ae1f02125945a0f527c7006d81321be8fb1b66dd5c99d",
+    "status": "candidate_historical_source_unverified"
+  },
+  "candidate_sha256": "8e51b1e74bad5e79279ae1f02125945a0f527c7006d81321be8fb1b66dd5c99d",
+  "comparison": {
+    "archived_sha256": "394960d085b70312798ee5322bf5732b055f1462f38f6259962f5e0db80e9c3d",
+    "candidate_sha256": "8e51b1e74bad5e79279ae1f02125945a0f527c7006d81321be8fb1b66dd5c99d",
+    "max_abs_log10_sigma": 4.192202140984591e-13,
+    "rms_log10_sigma": 1.575929654795895e-14,
+    "status": "comparison_only_no_scientific_acceptance_threshold"
+  },
+  "gas": "N2O",
+  "gate": {
+    "comparison_grid": "20 deterministic state indices x 301 deterministic channel indices",
+    "max_abs_log10_sigma_limit": 0.00025,
+    "passed": true,
+    "rms_log10_sigma_limit": 2.5e-05,
+    "scope": "one N2O 895-905 cm^-1 candidate block only"
+  },
+  "generator_sha256": "9021ca785b1e7f20be707656c3b2dfbd10dd53236ec7a075ea2df6e73d4857e5",
+  "inputs_sha256": {
+    "cont.npz": "e8f18089c28d103e96c12ea2d7aa2ac7190e19cb095ab0a0de8cb7635c1e30f5",
+    "lineas.npz": "7dcc80ab21284b64d691b87c04e3375e425ecdba4d3a8014f4ff8d6b3e1867ac",
+    "lut_N2O_895_905.npz": "394960d085b70312798ee5322bf5732b055f1462f38f6259962f5e0db80e9c3d",
+    "qtab.npz": "99c09e782fadc315727d5adbcd3190451ef8ea3d399bdd6ce6f07f45aee92d9a"
+  },
+  "kernel_sha256": "282c8156b295561e7cb206ab1746e9f74c12e7b049555c430e3bac988f6a19f3",
+  "status": "candidate_pilot_comparison_only"
+}

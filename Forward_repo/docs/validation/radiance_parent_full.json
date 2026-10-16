@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "mode": "full_parent",
+  "source_path": "runs\\radiance_parent_full.npy",
+  "source_sha256": "7e33eca95e2d1116041d5361d8969e31acdef3dc49e76008b48e0e4707453dd8",
+  "source_hash_evidence": "local_file",
+  "frozen_radiance_sha256": "dcb03b4002f5657433db1051df3fd0f9696f8273f68f98cdc1397ea08d70cc4d",
+  "angle_assignment_all_rows_equal": true,
+  "profile_count": 30000,
+  "channel_count": 2145,
+  "value_count": 64350000,
+  "unequal_count": 0,
+  "rms_difference": 0.0,
+  "max_absolute_difference": 0.0,
+  "batch_size": 256,
+  "batches": 118
+}

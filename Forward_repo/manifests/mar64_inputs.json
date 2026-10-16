@@ -1,0 +1,792 @@
+{
+  "schema_version": 1,
+  "dataset": "iasi_ocean_64",
+  "loader": "exp22_recon.py::carga_mar",
+  "loader_mode": {
+    "own_shapes": false,
+    "state": "full",
+    "max_cloud": 99.0
+  },
+  "scene_source_directory": "experiments/2026-07_apae_r2a/valstates_full",
+  "modal_scene_directory": "/datos/valstates_full",
+  "remote_scene_identity_verified": true,
+  "remote_scene_hash_evidence": "2026-09-27 rclone lsjson --hash --max-depth 1: exactly 64 Drive files, each Size and SHA256 matching scene_files; remote bytes not downloaded in this check",
+  "selection": {
+    "glob": "*.npz",
+    "sort": "lexicographic_filename",
+    "scene_count": 64,
+    "all_local_files_retained": true
+  },
+  "scene_files": [
+    {
+      "name": "ammonium_1598.npz",
+      "bytes": 217644,
+      "sha256": "19f79504c9b9bf1c78951b21f8c4ba3798249ce6d0031f8fb5eebde4c7b9bf55"
+    },
+    {
+      "name": "ammonium_401.npz",
+      "bytes": 217644,
+      "sha256": "a8912c352561097f5271b6094202067976100736e3f30d2358df48754a8865fb"
+    },
+    {
+      "name": "ammonium_4339.npz",
+      "bytes": 217644,
+      "sha256": "121338b3da18600cdd333ab0a4c07ea646e44efb59c99e4b575d2cf14b30091c"
+    },
+    {
+      "name": "bio_om_1704.npz",
+      "bytes": 217636,
+      "sha256": "03b39da54e4126996846b985cb4e5d978216e63967053324de39daf43011397d"
+    },
+    {
+      "name": "bio_om_343.npz",
+      "bytes": 217636,
+      "sha256": "ab2ec9ca6a644cd20b20eaf232c3f74761a847bd1aced6846a59b8609bf0a525"
+    },
+    {
+      "name": "bio_om_4515.npz",
+      "bytes": 217636,
+      "sha256": "cc114949e98906276426e6b505c278f2ee170c01479fa2a21d10ee663be9e52b"
+    },
+    {
+      "name": "bio_om_4804.npz",
+      "bytes": 217636,
+      "sha256": "75db4f819be85c294c05e1bfd9a3fbb4d7aafcac0a05fcf04ff4445a5b3910ef"
+    },
+    {
+      "name": "ch2o_1587.npz",
+      "bytes": 217628,
+      "sha256": "1cc1dc6a4c1d2610de779aec1ed1d71a0a602125cb4e3e2c05cb59c740f5e50f"
+    },
+    {
+      "name": "ch2o_1846.npz",
+      "bytes": 217628,
+      "sha256": "abff3e6f1c35de7ab59c3d360b4c6f24287bea953401dca477f5902f10851fd7"
+    },
+    {
+      "name": "ch2o_358.npz",
+      "bytes": 217628,
+      "sha256": "be901c007299f9bb9939ac9feb2a5c0a13639de78aa46a613c97a103dd41fbaa"
+    },
+    {
+      "name": "ch2o_804.npz",
+      "bytes": 217628,
+      "sha256": "8fa358a5546fc39c3642d7ba62c0b9a406ad9dc1c8ff25322e5c08acdf9881f0"
+    },
+    {
+      "name": "clw_1374.npz",
+      "bytes": 217624,
+      "sha256": "d86947997bb3874c8b39b0a68941264a46dde5537da0455dd638dc706e6bb65c"
+    },
+    {
+      "name": "clw_2052.npz",
+      "bytes": 217624,
+      "sha256": "ad619b8650f90d18d6e7b8a46f0341784f39468b9d6212703f3862d64ae9feeb"
+    },
+    {
+      "name": "clw_2547.npz",
+      "bytes": 217624,
+      "sha256": "a01c47f4eda14d59b18fbf614a60d881d94d822a138f844053c999422f053a15"
+    },
+    {
+      "name": "clw_3130.npz",
+      "bytes": 217624,
+      "sha256": "7f6c28469ffa0e9e750beaf7792fb9891549f199a0e95eb5e0da9e86ea382d1e"
+    },
+    {
+      "name": "co_2347.npz",
+      "bytes": 217620,
+      "sha256": "837632242cf946b32adae7e9a81adcb2aba1550eaac24d44de9460acb3927fe9"
+    },
+    {
+      "name": "co_387.npz",
+      "bytes": 217620,
+      "sha256": "42ad3edd23d15b39bfe601c5086e073a30a4fea6d4b1c3962a2992f95ec903f7"
+    },
+    {
+      "name": "dust1_1365.npz",
+      "bytes": 217632,
+      "sha256": "42927fafdde6779519a85a699ffa77b18bd1507a518dd55e95699b1fef9c078c"
+    },
+    {
+      "name": "dust1_2161.npz",
+      "bytes": 217632,
+      "sha256": "09e5de383517eddb0ed977c988e37c349937fe25b59aae60e8dddbb5cbd3c064"
+    },
+    {
+      "name": "dust1_2597.npz",
+      "bytes": 217632,
+      "sha256": "e27da363d295d05d55b4b92364ecacc903894eddc55f092bee32284b84453a04"
+    },
+    {
+      "name": "dust1_2946.npz",
+      "bytes": 217632,
+      "sha256": "20e32b0c7dfbd1918c1c079dc9b0ae010771c49c99c90797d7892184b464fa35"
+    },
+    {
+      "name": "dust1_3908.npz",
+      "bytes": 217632,
+      "sha256": "95ce384b1ddb91febb4bcf7342270de152ec9c5b29678edd00183452be4783b8"
+    },
+    {
+      "name": "dust1_615.npz",
+      "bytes": 217632,
+      "sha256": "5e4aab49017bbaf674f34b0a6e8cfcfc89752c04544c34484624d7547c1e44e4"
+    },
+    {
+      "name": "dust1_682.npz",
+      "bytes": 217632,
+      "sha256": "70b7a6fec4d3fe43df8cd7a05beae70a736978ca2ee2fe308b746a3868c90c48"
+    },
+    {
+      "name": "dust1_930.npz",
+      "bytes": 217632,
+      "sha256": "3a264173a36b5df01977b8c68e2109d16d115841fc311ce89eb5382564ffffcf"
+    },
+    {
+      "name": "hphil_bc_1462.npz",
+      "bytes": 217644,
+      "sha256": "66940b797b80eb75b4cd89a2936ea76e24f71f0b42e60ebd51dd7c5d8def1f92"
+    },
+    {
+      "name": "hphil_bc_2085.npz",
+      "bytes": 217644,
+      "sha256": "fbbb0aa8b1b03542c597f2a4f7b24299dfe1d44254f8d8eacaea3c3bbb0bf653"
+    },
+    {
+      "name": "hphil_bc_3151.npz",
+      "bytes": 217644,
+      "sha256": "e106653a1c133606ee5f966116b5df9de2ec17c85b11bd7d6c7d0b6539367a2d"
+    },
+    {
+      "name": "hphil_bc_3264.npz",
+      "bytes": 217644,
+      "sha256": "36a8968e78d1b15be391ae2322555d7a0078af1ebf7669c18cbc42c32283d1c0"
+    },
+    {
+      "name": "hphil_bc_3445.npz",
+      "bytes": 217644,
+      "sha256": "8713ef72217af423ddfc2997d2cf22354ca44f29d92f78b800047a6558a4c353"
+    },
+    {
+      "name": "hphil_bc_3549.npz",
+      "bytes": 217644,
+      "sha256": "a1c7af697d42dba9a59062f052b4e221955ea72b7e47f8875cbd8a5b8a614501"
+    },
+    {
+      "name": "hphil_bc_4301.npz",
+      "bytes": 217644,
+      "sha256": "6f636ed352582ef16347066114f2db158dfc256fd6a19ca68f0609402c87f558"
+    },
+    {
+      "name": "hphil_om_1386.npz",
+      "bytes": 217644,
+      "sha256": "6ac84f747e61acf641b913401a011c1dc74923061353c63130c797305bb88e13"
+    },
+    {
+      "name": "hphil_om_2537.npz",
+      "bytes": 217644,
+      "sha256": "8a41642150b296e74ad9dece54f774514cddcabbae55c22719efeb92317ae259"
+    },
+    {
+      "name": "hphil_om_278.npz",
+      "bytes": 217644,
+      "sha256": "a6b5c3abb46e6888743348f9b898094a49ed384ba23e89c35905464c72f705ee"
+    },
+    {
+      "name": "hphil_om_4567.npz",
+      "bytes": 217644,
+      "sha256": "6182ed63f66c44e6b5b4de4f88123c941a67df1a32bd0ea07829b3f9ee1b057a"
+    },
+    {
+      "name": "hphil_om_4599.npz",
+      "bytes": 217644,
+      "sha256": "a11d979237bab87bbfc7a27d3fabc940e4e999928faf429629a0f5d5d06208b5"
+    },
+    {
+      "name": "hphil_om_57.npz",
+      "bytes": 217644,
+      "sha256": "c1ef36823f6be6c6d78fd48279def612c93afb2fe331633cd525d7f2c66f6e3f"
+    },
+    {
+      "name": "nitrate1_1652.npz",
+      "bytes": 217644,
+      "sha256": "d9bb55aed4514a41940174e48fe8dacefa31a1df4bf2dbfcd050402b8b54f3dc"
+    },
+    {
+      "name": "nitrate1_2479.npz",
+      "bytes": 217644,
+      "sha256": "47029930744b08b0a1fa1930e85124e9e34f8909e9185e4abd0b72155c390d7d"
+    },
+    {
+      "name": "nitrate1_2924.npz",
+      "bytes": 217644,
+      "sha256": "fbdfeeb309fc536e279a21ae0c3f5d675349663db4a7f28aa97eb5821a0e0254"
+    },
+    {
+      "name": "nitrate1_3550.npz",
+      "bytes": 217644,
+      "sha256": "298c48453a447d1a88c13bbb9af4c23c515afc1c324e7a92eae3d0f6466920a2"
+    },
+    {
+      "name": "nitrate1_3555.npz",
+      "bytes": 217644,
+      "sha256": "3abccf7be63ec6fb925d0ce8c6d8cbd0a01d0ef23dcbed63b8e0f2a806f631fd"
+    },
+    {
+      "name": "nitrate1_3563.npz",
+      "bytes": 217644,
+      "sha256": "9c999329b9960ae941c18b5621f3298535fdff63e3d9c67beed4a7fdfbe7f2a5"
+    },
+    {
+      "name": "nitrate1_3997.npz",
+      "bytes": 217644,
+      "sha256": "42433216b6a74a911d14980c28b691031eb752628a5b1c47550e95070b71e32a"
+    },
+    {
+      "name": "no2_171.npz",
+      "bytes": 217624,
+      "sha256": "1367bfb8b81da9e9a63bf6828e0ece8ee46e4a307b46bb3af4a326ad64e2ba2d"
+    },
+    {
+      "name": "rain_1131.npz",
+      "bytes": 217628,
+      "sha256": "6ecd94300d3504bd038cc66b077d026925fb709af64761f10f1b9635230dcd4c"
+    },
+    {
+      "name": "rain_1284.npz",
+      "bytes": 217628,
+      "sha256": "151e4f6464b96173567a49be425d04f310d3eeb694dde01fa73ae240f7274251"
+    },
+    {
+      "name": "rain_3100.npz",
+      "bytes": 217628,
+      "sha256": "6be1f7ccb65fef1d32a44391a6c840819ffb3391c743e908534f3e66a8f78c4b"
+    },
+    {
+      "name": "rain_3168.npz",
+      "bytes": 217628,
+      "sha256": "ecf157d162b35b941b9fbe8c76fbe7a1f8ac5f52ccfe47b59e1d575a0342e3ed"
+    },
+    {
+      "name": "rain_3666.npz",
+      "bytes": 217628,
+      "sha256": "f184bfad31f230a5f8015da8390ccb5e6ff7d50ce3ad322c60109af11d25e62b"
+    },
+    {
+      "name": "rain_4285.npz",
+      "bytes": 217628,
+      "sha256": "8627c42d0aa1fad687cb07e5bda4c323077e4ddf85d747a6269aa456adf17e24"
+    },
+    {
+      "name": "rain_4489.npz",
+      "bytes": 217628,
+      "sha256": "4305bcbbc066709622001208aeeb75b5ad1d106723f2c022fe99908cb373761f"
+    },
+    {
+      "name": "rain_71.npz",
+      "bytes": 217628,
+      "sha256": "93c26bd3211b04965d88489b3636c715ce0cdab69c69feafccbee713eb52ab15"
+    },
+    {
+      "name": "salt1_1033.npz",
+      "bytes": 217632,
+      "sha256": "86bae994fb0e1d3229c65063d7b4a3a95b53e9f8efc6032c4b11669d116fcff8"
+    },
+    {
+      "name": "salt1_1038.npz",
+      "bytes": 217632,
+      "sha256": "13c79799b78f1823f5ebc9bd5ee9ff94febfea3a56cc89776fa25e1410f8056f"
+    },
+    {
+      "name": "salt1_204.npz",
+      "bytes": 217632,
+      "sha256": "3e65422df415cbe9ab2c14a4932f21f2b4f9695eaae8c5abc824910ee64606bb"
+    },
+    {
+      "name": "salt1_2543.npz",
+      "bytes": 217632,
+      "sha256": "82afc8724af4699814dae819a082323a53218fc91a09299c566b259eb5ce8ec1"
+    },
+    {
+      "name": "so2_1350.npz",
+      "bytes": 217624,
+      "sha256": "e0850c7474948e29169ba6f6a89d4c45097b7f2ec896895e82b4f9b52affb6ce"
+    },
+    {
+      "name": "so2_2534.npz",
+      "bytes": 217624,
+      "sha256": "367c9f3af950ed3ba232ffd4181bb3c61d180e12034f4d932a28e0d8f7869663"
+    },
+    {
+      "name": "so2_3007.npz",
+      "bytes": 217624,
+      "sha256": "a06bd87b569af9a0de4f17d136ec58c02217bd83f9c62c2ab2ba4a8ab2640f29"
+    },
+    {
+      "name": "so2_4393.npz",
+      "bytes": 217624,
+      "sha256": "954b70f5663810c12bd5eb7c9fc1308fe627832ace3715084579a82782b5ea2f"
+    },
+    {
+      "name": "sulphate_2894.npz",
+      "bytes": 217644,
+      "sha256": "0b6500814dd28334b246460f24618f45b931d3d92dff476eb1a6a359840847f8"
+    },
+    {
+      "name": "sulphate_3694.npz",
+      "bytes": 217644,
+      "sha256": "f3e5fa1d9ff473aca1f5797eab32663a152c503d119b804438a436d57d81c524"
+    }
+  ],
+  "scene_file_set_sha256": "c34ea87a36efd6ce056ec87d06567b95a232fa985242e9959e05724b0d94f64f",
+  "scene_file_set_canonicalization": "SHA256 of UTF-8 JSON scene_files, sorted keys and compact separators, in loader order",
+  "scene_key_schema": {
+    "L_obs": [
+      {
+        "shape": [
+          8461
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "L_obs_avg": [
+      {
+        "shape": [
+          8461
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "Ncol": [
+      {
+        "shape": [
+          5,
+          136
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "P_lay": [
+      {
+        "shape": [
+          136
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "T_lay": [
+      {
+        "shape": [
+          136
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "T_levels": [
+      {
+        "shape": [
+          137
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "T_skin": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "VMR_H2O": [
+      {
+        "shape": [
+          136
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "cloud_frac": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "dist_km": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "dt_min": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "land_frac": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "lat_fov": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "lon_fov": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "mu": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "n_avg": [
+      {
+        "shape": [],
+        "dtype": "int64"
+      }
+    ],
+    "nu": [
+      {
+        "shape": [
+          8461
+        ],
+        "dtype": "float64"
+      }
+    ],
+    "psurf_hPa": [
+      {
+        "shape": [],
+        "dtype": "float64"
+      }
+    ],
+    "subset": [
+      {
+        "shape": [],
+        "dtype": "unicode"
+      }
+    ]
+  },
+  "geo": {
+    "modal_path": "/datos/val64_geo.npz",
+    "remote_candidate_uri": "d400:WikiThesis_714/datos/val64_geo.npz",
+    "remote_candidate_verified": false,
+    "remote_lookup_status": "Modal volume bytes fetched and SHA256 verified on 2026-09-27; Drive copy not byte-verified",
+    "local_copy_found": true,
+    "file_sha256": "dd7909e261230f7fff3e4899db8e45595a9dffc339189f38ba6b43f58546d008",
+    "required_keys": [
+      "lat",
+      "lon",
+      "doy",
+      "cloud",
+      "mu",
+      "nombres"
+    ],
+    "expected_length": 64,
+    "record_sha256": "746558c16b17e957ccd072710e27956c906c0af5c0f759e906989e85f608e4bb",
+    "record_canonicalization": "SHA256 of UTF-8 JSON records {name,lat,lon,doy,cloud,mu}, sorted keys and compact separators, in loader order; doy is integer day of year",
+    "derivation": "lat/lon/cloud/mu/name from scene NPZ; doy from year/month/day at filename index in matching NWP-SAF catalog",
+    "catalog_required_keys": [
+      "year",
+      "month",
+      "day"
+    ],
+    "catalogs": [
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_ammonium_2025.nc",
+        "bytes": 49026462,
+        "sha256": "0f6b87d6eea7b8a54ed951b5dc1c7e2e32b66ebac6e13139a00d4f3962cc2aac"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_bio_om_2025.nc",
+        "bytes": 48878412,
+        "sha256": "1b4b08a8dc83c63df2b2343d4b1e8fa2c36f634ea23c6748571bce21c44a6b5e"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_ch2o_2025.nc",
+        "bytes": 48946465,
+        "sha256": "8ebfbafe781079e56d2ff2a3e8da83136f28d93f8251207e5aece04fd98ce6a6"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_clw_2025.nc",
+        "bytes": 48730416,
+        "sha256": "dd575e3b7e6ea8787c23e5b4808db8b04d8050723b54d5ac39dc4dbff933c2c2"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_co_2025.nc",
+        "bytes": 48796607,
+        "sha256": "edc8e2165ea32865c487369b57b371aca7c946355ac904ce2e6aabda42d435c7"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_dust1_2025.nc",
+        "bytes": 48970861,
+        "sha256": "d65ac9b2f8ea70fe57ead48d8fdf395f1778e254baedf4966aeb4c397c476d5c"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_hphil_bc_2025.nc",
+        "bytes": 48914318,
+        "sha256": "cee43d7f13d7ed30c3215318f741973d96f58bdcba16870f0d53545074126296"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_hphil_om_2025.nc",
+        "bytes": 48873809,
+        "sha256": "c122b1341bf02ec5b0c83cca794742884bbfd86c3773e80f051ed9e59eb60634"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_nitrate1_2025.nc",
+        "bytes": 49058816,
+        "sha256": "ecbe1536f8162806d858fed605e38a979167f488b2bf70256c50a395e53e93c7"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_no2_2025.nc",
+        "bytes": 48968358,
+        "sha256": "a64ccd262afa2ae4a3dc2615e80918f7183398ca931064f36633a102619e4ce4"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_rain_2025.nc",
+        "bytes": 48597258,
+        "sha256": "5b5a91150e61c28c8dcbf959d7caabc6c4afdb751dc0fd22aa5642fc4fc26e96"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_salt1_2025.nc",
+        "bytes": 48537086,
+        "sha256": "4018783fe92fe23e5e5c3f765031a6b809ffc5fbedf718b8ad2fc4c821762d30"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_so2_2025.nc",
+        "bytes": 48622415,
+        "sha256": "0d34141576859217cd255d0c3300242bfbd640be4f07b111d26673315ec4ca9f"
+      },
+      {
+        "repository_path": "data/atmospheres/nwpsaf_cams137_2025/cams_5000_sulphate_2025.nc",
+        "bytes": 48831437,
+        "sha256": "9ca47d5b91c064c151597bd0ee92f35f637c413efadd7edbf096b12df1c6f655"
+      }
+    ],
+    "bytes": 7348,
+    "bundle_path": "frozen/val64_geo.npz",
+    "modal_volume_bytes_verified": true
+  },
+  "historical_t4_scene_match": {
+    "reference_path": "experiments/2026-08_barrido_T/marplot/mar_sew_n4.npz",
+    "reference_sha256": "9bae8bbc7e392253f40253aa29f02a0586c3e72580c26996188a49acd8c66084",
+    "x_true_equal_after_float32": true,
+    "y_obs_selected_channels_equal_after_float32": true,
+    "P_lay_equal": true,
+    "reference_rows": "0..63_in_lexicographic_loader_order"
+  },
+  "additional_local_candidates": {
+    "states_30k": {
+      "repository_path": "experiments/2026-05_diseno_lut/nwpsaf_30k_states.npz",
+      "bytes": 147783260,
+      "sha256": "9fd71327df0b3f65ed03ef35f466ff4ec85c2c3498c7b58a3689084a6658859e",
+      "modal_path": "/datos/nwpsaf_30k_states.npz",
+      "remote_identity_verified": true,
+      "remote_uri": "d400:WikiThesis_714/datos/nwpsaf_30k_states.npz",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "assets_manifest_id": "states_30k",
+      "required_keys": [
+        "T_levels",
+        "T_skin",
+        "Ncol",
+        "P_lay",
+        "P_surf_hPa",
+        "lat",
+        "lon",
+        "subset_id"
+      ]
+    },
+    "radiances_30k": {
+      "repository_path": "data/derived/radiancias_iasiang/radiances_iasiang.npz",
+      "bytes": 366309747,
+      "sha256": "dcb03b4002f5657433db1051df3fd0f9696f8273f68f98cdc1397ea08d70cc4d",
+      "modal_path": "/datos/outputs/radiances_iasiang.npz",
+      "remote_identity_verified": true,
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/radiances_iasiang.npz",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "assets_manifest_id": "radiances_iasiang",
+      "required_keys": [
+        "L",
+        "eps",
+        "mu",
+        "nu"
+      ]
+    },
+    "dates_30k": {
+      "repository_path": "experiments/2026-08_apae_banda_completa/fechas_30k.npz",
+      "bytes": 541230,
+      "sha256": "aa1b8c246384fc76baad7e1df7b0b7f38600189f94c5ed397a313af9a0924604",
+      "modal_path": "/datos/fechas_30k.npz",
+      "remote_identity_verified": true,
+      "remote_uri": "d400:WikiThesis_714/datos/fechas_30k.npz",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "assets_manifest_id": "dates_30k",
+      "required_keys": [
+        "doy",
+        "subset_id"
+      ]
+    },
+    "effective_pressure": {
+      "repository_path": "experiments/2026-08_forward_iasi_completo/exp_iasi_full/out/lut/r_self.npz",
+      "bytes": 6649,
+      "sha256": "9d8a9825454cab1d29083fa68a2fca06638adf97aa93e1f7e28d54a580b84679",
+      "modal_path": "/datos/outputs/r_self.npz",
+      "remote_identity_verified": true,
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/r_self.npz",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "assets_manifest_id": "r_self",
+      "required_keys": [
+        "bordes",
+        "H2O",
+        "CO2",
+        "O3",
+        "N2O",
+        "CH4"
+      ]
+    },
+    "continuum_tables": {
+      "repository_path": "model/physinv/continuum_tables.npz",
+      "bytes": 3868,
+      "sha256": "192e5e2771947e371d729df5d0f08af8bed8804f52f3f7c818a12851bdfcef29",
+      "modal_path": "adjacent_to_continuum_torch.py",
+      "remote_identity_verified": false,
+      "required_keys": [
+        "NU_TABLE",
+        "CS_REF",
+        "CF_REF",
+        "TEXP_REF",
+        "T_REF",
+        "P_REF_HP",
+        "C2"
+      ]
+    }
+  },
+  "data_handling": "Third-party IASI/NWP-SAF inputs remain in their authorized storage; this manifest contains only names, schemas, sizes and hashes.",
+  "additional_modal_inputs": {
+    "noise_30k": {
+      "modal_path": "/datos/outputs/noise_iasiang.npz",
+      "bytes": 238626926,
+      "sha256": "efbe1b1295cddf8735bcd86b2ddbc159831fcd5d598274f66640f1c9430745eb",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/noise_iasiang.npz",
+      "assets_manifest_id": "noise_iasiang",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "required_keys": [
+        "noise",
+        "sigma_ch"
+      ]
+    },
+    "apae_checkpoint": {
+      "modal_path": "/salida/out_iasi/apae_fix_lat24b1e-4.pt",
+      "bytes": 23930297,
+      "sha256": "c451f9400dfc66daf839d0062685aabe9846246b5643014dca42277e9d8d27c9",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasi/apae_fix_lat24b1e-4.pt",
+      "assets_manifest_id": "apae_checkpoint",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "required_keys": [
+        "y_a_dim",
+        "y_t_dim",
+        "latent_dim",
+        "n_aux",
+        "model_state",
+        "sx",
+        "state"
+      ]
+    },
+    "prior_checkpoint": {
+      "modal_path": "/salida/out_iasi/prior_z_deep.pt",
+      "bytes": 823957,
+      "sha256": "64a6f727a9c77b1edef83313fa80150a45106beec3a1274ff1d3e4079a2604d8",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasi/prior_z_deep.pt",
+      "assets_manifest_id": "prior_checkpoint",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "required_keys": [
+        "capas",
+        "state_dict",
+        "mu_p",
+        "sd_p"
+      ]
+    },
+    "unrolled_checkpoint": {
+      "modal_path": "/salida/out_iasiang/config/unroll714_sew_ckpt.pt",
+      "bytes": 28418841,
+      "sha256": "96833ee7da2f49ba5d02dad890ec5bf6f0ebed2260807f157ef483fb7ea2296f",
+      "remote_uri": "d400:WikiThesis_respaldo/salida/out_iasiang/trajsew/trajsew10_ckpt.pt",
+      "assets_manifest_id": "sew_checkpoint",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash matched SHA256 of downloaded bytes",
+      "required_keys": [
+        "args",
+        "in_dim",
+        "mlp",
+        "R_SD",
+        "paso",
+        "metricas"
+      ],
+      "provenance_note": "Step-1000 evaluation copy; its MLP yields the historical simulated T4 state within numerical tolerance. The original training checkpoint SHA256 is unknown."
+    },
+    "model_error_sf": {
+      "modal_path": "/salida/out_iasiang/s_f_sim_iasiang.npz",
+      "bytes": 42329,
+      "sha256": "119bca7e97e980d4b41041dca621efd7811d795b0172bb9176454b4e4d801df2",
+      "remote_uri": "d400:WikiThesis_714/salida/out_iasiang/s_f_sim_iasiang.npz",
+      "assets_manifest_id": "model_error_sf",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded",
+      "required_keys": [
+        "s_f"
+      ]
+    },
+    "lut_h2o": {
+      "modal_path": "/datos/outputs/lut_band645_H2O.npy",
+      "bytes": 7308011728,
+      "sha256": "74c775eeb1e451485492f8df4dd6d38d75386bdc60d29f35c47a272965d9e280",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_H2O.npy",
+      "assets_manifest_id": "lut_h2o",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded"
+    },
+    "lut_co2": {
+      "modal_path": "/datos/outputs/lut_band645_CO2.npy",
+      "bytes": 7308011728,
+      "sha256": "1210d85cc6c9bcd84d1be1f2f2fd4f69dbbbdf28b6b13ede2179220ac9ac97c4",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_CO2.npy",
+      "assets_manifest_id": "lut_co2",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded"
+    },
+    "lut_o3": {
+      "modal_path": "/datos/outputs/lut_band645_O3.npy",
+      "bytes": 7308011728,
+      "sha256": "3f17ad4c883ea7af4c49e1768a4b3ce756679032283508418e87e77ca69bb7e0",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_O3.npy",
+      "assets_manifest_id": "lut_o3",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded"
+    },
+    "lut_n2o": {
+      "modal_path": "/datos/outputs/lut_band645_N2O.npy",
+      "bytes": 7308011728,
+      "sha256": "fa10dd9db7d549eb86cd75a35be3a68320905b87d2ffe2a608140e2eb6376b77",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_N2O.npy",
+      "assets_manifest_id": "lut_n2o",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded"
+    },
+    "lut_ch4": {
+      "modal_path": "/datos/outputs/lut_band645_CH4.npy",
+      "bytes": 7308011728,
+      "sha256": "4585dca36e91fee0e124056917e7f657afc01c0f6db053bf6782254dc1b8e9fe",
+      "remote_uri": "d400:WikiThesis_714/datos/outputs/lut_band645_CH4.npy",
+      "assets_manifest_id": "lut_ch4",
+      "remote_hash_evidence": "Drive metadata via rclone lsjson --hash; remote bytes not downloaded"
+    }
+  },
+  "source_code_roles": {
+    "scene_loader": "exp0_sigma_forward.py::load_val_states and degrade_to_ch426",
+    "cloud_geo_emissivity": "exp22_recon.py::carga_mar",
+    "geo_archive_reader": "exp19_val64_unrolled.py::geo_precomputada",
+    "evaluation": "exp24_baselines.py --conjunto mar --metodo nuestro --iters-bucle 4"
+  },
+  "remote_scene_directory": "d400:WikiThesis_714/datos/valstates_full"
+}

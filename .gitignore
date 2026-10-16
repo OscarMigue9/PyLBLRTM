@@ -28,3 +28,10 @@ benchmark_*.py
 
 # Credenciales
 credentials.json
+
+# Resultados del test de descarga HAPI (tests/hapi_download_check.py)
+resultados_test_hapi/
+
+# Logs de SLURM
+scripts/logs/*
+!scripts/logs/.gitkeep
