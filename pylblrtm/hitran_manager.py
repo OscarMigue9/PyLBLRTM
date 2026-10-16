@@ -766,6 +766,15 @@ def get_tips_table(
             f"Error computing Q(T) table for {molecule} iso {iso_id}: {exc}"
         ) from exc
 
+    # A zero Q would divide by zero in the line-strength scaling (HAPI's
+    # TIPS-2025 table for atomic O, e.g., is all zeros)
+    bad = ~np.isfinite(Q_arr) | (Q_arr <= 0)
+    if bad.any():
+        raise HITRANDataError(
+            f"TIPS-{version} for {mol_name} iso {iso_id} has {int(bad.sum())}/{bad.size} "
+            f"non-finite or non-positive Q(T) values in {T_arr[0]:.0f}–{T_arr[-1]:.0f} K."
+        )
+
     return T_arr, Q_arr
 
 

@@ -323,6 +323,12 @@ class TestTipsTable:
             with pytest.raises(hm.HITRANDataError, match="No TIPS table"):
                 hm.get_tips_table("H2O", 3)
 
+    def test_non_positive_q_raises(self, tips_hapi):
+        tips_hapi.partitionSum.side_effect = lambda M, I, T, version=2021: 0.0
+        with patch.object(hm, "_get_hapi", return_value=tips_hapi):
+            with pytest.raises(hm.HITRANDataError, match="non-positive"):
+                hm.get_tips_table("H2O", 1, T_min=150, T_max=400)
+
     def test_get_tips_falls_back_too(self, tips_hapi):
         with patch.object(hm, "_get_hapi", return_value=tips_hapi):
             assert hm.get_tips("H2O", 2, 296.0, version=2021) == 296.0
