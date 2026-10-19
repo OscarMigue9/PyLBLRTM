@@ -226,9 +226,15 @@ pyproject.toml
 
 If you use HITRAN data in your work, please cite:
 
-> I.E. Gordon et al., *The HITRAN2020 molecular spectroscopic database*,
-> J. Quant. Spectrosc. Radiat. Transfer **277**, 107949 (2022).
-> https://doi.org/10.1016/j.jqsrt.2021.107949
+> I.E. Gordon et al., *The HITRAN2024 molecular spectroscopic database*,
+> J. Quant. Spectrosc. Radiat. Transfer (2026).
+> https://doi.org/10.1016/j.jqsrt.2026.109807
+
+HITRANonline serves the HITRAN2024 edition since January 2026; the partition
+sums (TIPS-2025, the default) are:
+
+> R.R. Gamache et al., J. Quant. Spectrosc. Radiat. Transfer **345**, 109568 (2025).
+> https://doi.org/10.1016/j.jqsrt.2025.109568
 
 Also cite HAPI, which is used internally:
 

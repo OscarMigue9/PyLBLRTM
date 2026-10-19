@@ -28,7 +28,7 @@ def from_hapi(
     iso_id: "int | list[int] | str" = 1,
     tips_T_min: float = 150.0,
     tips_T_max: float = 3000.0,
-    tips_version: int = 2021,
+    tips_version: int = 2025,
     **hapi_kwargs,
 ) -> SpectralData:
     """
@@ -49,7 +49,8 @@ def from_hapi(
     tips_T_min, tips_T_max : float
         Temperature range for the TIPS tables. Default 150–3000 K.
     tips_version : int
-        TIPS version: 2011, 2017, 2021 (default) or 2025.
+        TIPS version: 2011, 2017, 2021 or 2025 (default, the one that
+        accompanies HITRAN2024, the edition HITRANonline serves).
     **hapi_kwargs
         Extra arguments for get_line_parameters()
         (e.g. cache_dir, force_download).
