@@ -57,6 +57,11 @@ ATM_RANGE = (150.0, 350.0)     # temperaturas que puede ver el forward model [K]
 VERSION_DIFF_WARN = 0.01       # >1 % entre 2021 y 2025 en Q(296) se reporta
 
 OK, WARN, ERROR, MISSING = "OK", "ADVERTENCIA", "ERROR", "SIN_TABLA"
+# La librería rechazó los datos a propósito con una excepción propia (p.ej. la
+# tabla TIPS-2025 de O iso 1, que es todo ceros): manejado, no es un fallo
+EXCEPTION = "EXCEPCION"
+# Tabla cruda de HAPI con datos inválidos (Q <= 0, no cubre 150–350 K…): solo informa
+BAD_DATA = "DATOS_INVALIDOS"
 
 _FIELDS = ["molecule", "mol_id", "iso_id", "version", "status", "t_min", "t_max",
            "q296", "covers_from_hapi", "covers_atm", "problems"]
@@ -125,7 +130,7 @@ def check_one(hapi, mol: str, M: int, I: int, version: int,
         log.debug(traceback.format_exc())
 
     row["problems"] = errors + warns
-    row["status"] = ERROR if errors else (WARN if warns else OK)
+    row["status"] = BAD_DATA if errors else (WARN if warns else OK)
     return row
 
 
@@ -144,7 +149,7 @@ def check_library_path(mol: str, M: int, I: int, t_req: tuple, version: int,
     except KeyboardInterrupt:
         raise
     except BaseException as exc:  # noqa: BLE001
-        row["status"] = ERROR
+        row["status"] = EXCEPTION if isinstance(exc, hm.HITRANDataError) else ERROR
         row["problems"] = [f"{type(exc).__name__}: {' '.join(str(exc).split())[:300]}"]
         log.debug(traceback.format_exc())
     return row
@@ -158,22 +163,26 @@ def _write_summary(out: Path, rows: List[dict], cross: List[str], t_req: tuple) 
           f"- Rango atmosférico: {ATM_RANGE[0]:.0f}–{ATM_RANGE[1]:.0f} K", "",
           f"## Ruta real de la librería (`from_hapi` → `get_tips_table`, TIPS-{DEFAULT_VERSION})", "",
           f"- OK: {sum(r['status'] == OK for r in lib)} · "
-          f"**ERROR: {sum(r['status'] == ERROR for r in lib)}** de {len(lib)} isotopólogos", ""]
-    bad = [r for r in lib if r["status"] == ERROR]
+          f"EXCEPCION (manejada): {sum(r['status'] == EXCEPTION for r in lib)} · "
+          f"**ERROR: {sum(r['status'] == ERROR for r in lib)}** de {len(lib)} isotopólogos", "",
+          "EXCEPCION = la librería rechazó datos inválidos con una excepción propia "
+          "(`HITRANDataError`) y un mensaje claro. ERROR = cualquier otro fallo.", ""]
+    bad = [r for r in lib if r["status"] in (ERROR, EXCEPTION)]
     if bad:
-        md += ["| Molécula | Iso | Error |", "|---|---|---|"]
-        md += [f"| {r['molecule']} | {r['iso_id']} | {'; '.join(r['problems'])} |" for r in bad]
+        md += ["| Molécula | Iso | Estado | Detalle |", "|---|---|---|---|"]
+        md += [f"| {r['molecule']} | {r['iso_id']} | {r['status']} | {'; '.join(r['problems'])} |"
+               for r in bad]
         md.append("")
 
-    md += ["## Tablas TIPS por versión", "", "| Versión | OK | ADVERTENCIA | ERROR | SIN_TABLA |",
+    md += ["## Tablas TIPS por versión", "", "| Versión | OK | ADVERTENCIA | DATOS_INVALIDOS | SIN_TABLA |",
            "|---|---|---|---|---|"]
     for v in VERSIONS:
         rv = [r for r in tab if r["version"] == v]
         md.append(f"| {v} | " + " | ".join(str(sum(r["status"] == s for r in rv))
-                                           for s in (OK, WARN, ERROR, MISSING)) + " |")
+                                           for s in (OK, WARN, BAD_DATA, MISSING)) + " |")
     md.append("")
 
-    probs = [r for r in tab if r["status"] in (ERROR, WARN, MISSING) and r["version"] in (2021, 2025)]
+    probs = [r for r in tab if r["status"] in (BAD_DATA, WARN, MISSING) and r["version"] in (2021, 2025)]
     if probs:
         md += ["### Problemas en 2021 / 2025", "",
                "| Molécula | Iso | Versión | Estado | Tabla [K] | Detalle |", "|---|---|---|---|---|---|"]
@@ -251,7 +260,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     _write_summary(out, rows, cross, t_req)
 
     n_lib_err = sum(r["status"] == ERROR for r in rows if "from_hapi" in str(r["version"]))
-    log.info(f"\nfrom_hapi con TIPS-{DEFAULT_VERSION} falla en {n_lib_err} isotopólogos.  "
+    n_lib_exc = sum(r["status"] == EXCEPTION for r in rows if "from_hapi" in str(r["version"]))
+    log.info(f"\nfrom_hapi con TIPS-{DEFAULT_VERSION}: {n_lib_err} errores, "
+             f"{n_lib_exc} excepciones manejadas.  "
              f"Reporte: {out / 'RESUMEN.md'}")
     return 1 if n_lib_err else 0
 
