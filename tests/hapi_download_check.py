@@ -162,6 +162,19 @@ def _validate(data: dict, nu_min: float, nu_max: float) -> List[str]:
     return warns
 
 
+class _FillNotes(logging.Handler):
+    """Recoge los avisos de anchos rellenados (g_air/g_self = 0 en HITRAN)."""
+
+    def __init__(self):
+        super().__init__(logging.WARNING)
+        self.notes: List[str] = []
+
+    def emit(self, record):
+        msg = record.getMessage()
+        if "lines without g_" in msg:
+            self.notes.append(f"rellenado: {msg}")
+
+
 # ── Test de un isotopólogo ────────────────────────────────────────────────────
 
 def check_isotopologue(mol: str, mol_id: int, iso: int, nu_min: float, nu_max: float,
@@ -170,17 +183,21 @@ def check_isotopologue(mol: str, mol_id: int, iso: int, nu_min: float, nu_max: f
     t0 = time.perf_counter()
     stage = "download"
     hapi_out = io.StringIO()
+    fills = _FillNotes()
+    hm_log = logging.getLogger("pylblrtm.hitran_manager")
+    hm_log.addHandler(fills)
     try:
         # HAPI imprime mucho por pantalla: se guarda en un archivo aparte
         with contextlib.redirect_stdout(hapi_out):
             data = hm.get_line_parameters(mol, nu_min, nu_max, iso_id=iso,
                                           cache_dir=cache_dir)
+        hm_log.removeHandler(fills)
         res.n_lines = int(len(data["nu0"]))
         res.nu_min_found = float(np.min(data["nu0"]))
         res.nu_max_found = float(np.max(data["nu0"]))
 
         stage = "validate"
-        res.warnings = _validate(data, nu_min, nu_max)
+        res.warnings = fills.notes + _validate(data, nu_min, nu_max)
 
         stage = "molar_mass"
         res.molar_mass = hm.get_molar_mass(mol, iso)
@@ -202,6 +219,9 @@ def check_isotopologue(mol: str, mol_id: int, iso: int, nu_min: float, nu_max: f
         q296 = sd.Q(296.0, mol_id, iso)
         if not (np.isfinite(q296) and q296 > 0):
             raise ValueError(f"SpectralData.Q(296 K) inválido: {q296}")
+        for k in ("g_air", "g_self"):
+            if not np.all(sd.lines[k] > 0):
+                raise ValueError(f"SpectralData con {k} <= 0: el relleno no funcionó")
 
         res.status = WARN if res.warnings else OK
 
@@ -216,6 +236,7 @@ def check_isotopologue(mol: str, mol_id: int, iso: int, nu_min: float, nu_max: f
         if res.status != ERROR:
             res.traceback = ""
     finally:
+        hm_log.removeHandler(fills)
         res.seconds = round(time.perf_counter() - t0, 2)
         text = hapi_out.getvalue()
         if text.strip():

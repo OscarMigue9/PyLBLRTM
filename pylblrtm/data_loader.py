@@ -127,9 +127,10 @@ def from_files(
     ...     molar_masses={(1, 1): 18.010565},
     ... )
     """
-    lines = hm.par_to_dict(par_path)
+    # Missing g_air / g_self (0 in HITRAN) filled per isotopologue, as from_hapi does
+    lines = hm._fill_missing_broadening(hm.par_to_dict(par_path))
 
-    present = set(zip(lines["mol_id"].tolist(), lines["iso_id"].tolist()))
+    present =set(zip(lines["mol_id"].tolist(), lines["iso_id"].tolist()))
 
     missing = present - set(tips.keys())
     if missing:

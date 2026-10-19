@@ -236,3 +236,16 @@ class TestFromFiles:
              patch.object(hm, "get_molar_mass", side_effect=[18.01, 44.01]):
             sd = dl.from_files("dummy.par", tips=tips)
         assert sd.molecule is None
+
+
+class TestMissingBroadeningFromFiles:
+
+    def test_from_files_fills_zero_g_air(self):
+        """A .par with g_air = 0 (missing in HITRAN) gets the isotopologue median."""
+        T, Q = _dummy_tips()
+        lines = _make_lines(1)
+        lines["g_air"] = np.array([0.07, 0.0, 0.07, 0.07, 0.0])
+        with patch.object(hm, "par_to_dict", return_value=lines), \
+             patch.object(hm, "get_molar_mass", return_value=18.01):
+            sd = dl.from_files("dummy.par", tips={(1, 1): (T, Q)})
+        assert np.all(sd.lines["g_air"] == pytest.approx(0.07))

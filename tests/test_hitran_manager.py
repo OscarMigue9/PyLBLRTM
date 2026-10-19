@@ -423,3 +423,82 @@ class TestSkipIsotopologuesWithoutLines:
         with patch.object(hm, "_get_hapi", return_value=mock_hapi),              patch.object(hm, "_fetch_single_iso", side_effect=_side):
             with pytest.raises(hm.HITRANConnectionError):
                 hm.get_line_parameters("H2O", 714, 1250, iso_id="all", cache_dir=tmp_path)
+
+
+# ── g_air / g_self faltantes (0 en HITRAN) ────────────────────────────────────
+
+class TestFillMissingBroadening:
+
+    def _lines(self, g_air, g_self, iso=None):
+        n = len(g_air)
+        d = _make_lines(n, 1)
+        d["g_air"] = np.asarray(g_air, dtype=float)
+        d["g_self"] = np.asarray(g_self, dtype=float)
+        if iso is not None:
+            d["iso_id"] = np.asarray(iso, dtype=np.int32)
+        return d
+
+    def test_zero_g_air_gets_median_of_isotopologue(self):
+        out = hm._fill_missing_broadening(self._lines([0.07, 0.0, 0.08, 0.06], [0.3] * 4))
+        assert out["g_air"][1] == pytest.approx(0.07)
+        assert np.all(out["g_air"] > 0)
+
+    def test_nan_and_negative_count_as_missing(self):
+        out = hm._fill_missing_broadening(self._lines([0.07, np.nan, -1.0], [0.3] * 3))
+        assert np.all(out["g_air"] == 0.07)
+
+    def test_zero_g_self_gets_median(self):
+        out = hm._fill_missing_broadening(self._lines([0.07] * 3, [0.3, 0.0, 0.5]))
+        assert out["g_self"][1] == pytest.approx(0.4)
+
+    def test_no_g_air_at_all_uses_g_self(self):
+        out = hm._fill_missing_broadening(self._lines([0.0, 0.0], [0.3, 0.2]))
+        assert np.array_equal(out["g_air"], [0.3, 0.2])
+
+    def test_median_is_per_isotopologue(self):
+        out = hm._fill_missing_broadening(
+            self._lines([0.05, 0.0, 0.09, 0.0], [0.3] * 4, iso=[1, 1, 2, 2]))
+        assert out["g_air"][1] == pytest.approx(0.05)
+        assert out["g_air"][3] == pytest.approx(0.09)
+
+    def test_input_not_modified_and_clean_data_unchanged(self):
+        d = self._lines([0.07, 0.0], [0.3, 0.3])
+        hm._fill_missing_broadening(d)
+        assert d["g_air"][1] == 0.0
+        clean = self._lines([0.07, 0.08], [0.3, 0.3])
+        assert np.array_equal(hm._fill_missing_broadening(clean)["g_air"], clean["g_air"])
+
+    def test_warns(self, caplog):
+        with caplog.at_level("WARNING", logger="pylblrtm.hitran_manager"):
+            hm._fill_missing_broadening(self._lines([0.07, 0.0], [0.3, 0.3]))
+        assert "1/2 lines without g_air" in caplog.text
+
+
+# ── Excepciones con molécula e isotopólogo ────────────────────────────────────
+
+class TestIsotopologueErrorAttributes:
+
+    def test_not_available_names_isotopologue_and_cross_sections(self, tmp_path, mock_hapi):
+        mock_hapi.ISO = {(1, 1): [1, "H2(16O)", 0.997, 18.01, "H2O"]}
+        mock_hapi.fetch.side_effect = Exception("Failed to retrieve data for given parameters.")
+        with patch.object(hm, "_get_hapi", return_value=mock_hapi), \
+             patch.object(hm, "is_cached", return_value=False), \
+             patch.object(hm, "_can_reach_hitran", return_value=True), \
+             patch.object(hm, "_hitran_serves", return_value=False):
+            with pytest.raises(hm.HITRANNotAvailableError) as info:
+                hm._fetch_single_iso("H2O", 1, 1, 714.0, 1250.0, tmp_path, False)
+        assert info.value.molecule == "H2O" and info.value.iso_id == 1
+        assert "hitran.org/xsc" in str(info.value)
+
+    def test_handled_in_code(self, tmp_path, mock_hapi):
+        """The typical pattern: skip molecules HITRANonline does not serve."""
+        def _side(*a, **kw):
+            raise hm.HITRANNotAvailableError("not served", molecule="H2O", iso_id=1)
+        with patch.object(hm, "_get_hapi", return_value=mock_hapi), \
+             patch.object(hm, "_fetch_single_iso", side_effect=_side):
+            try:
+                hm.get_line_parameters("H2O", 714, 1250, cache_dir=tmp_path)
+                handled = False
+            except hm.HITRANNotAvailableError as err:
+                handled = err.molecule == "H2O"
+        assert handled

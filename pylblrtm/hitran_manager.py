@@ -107,6 +107,7 @@ MOLECULE_IDS: Dict[str, int] = {
 
 # Lookup case-insensitive: "HCL" → "HCl", "GEH4" → "GeH4", etc.
 _MOL_LOOKUP: Dict[str, str] = {k.upper(): k for k in MOLECULE_IDS}
+_ID_TO_NAME: Dict[int, str] = {v: k for k, v in MOLECULE_IDS.items()}
 
 
 def _resolve_mol_name(molecule: str) -> str:
@@ -139,11 +140,26 @@ class HITRANCredentialError(PermissionError):
 class HITRANDataError(ValueError):
     """HITRAN returned empty or unexpected data."""
 
-class HITRANNoLinesError(HITRANDataError):
+class _IsotopologueError(HITRANDataError):
+    """HITRANDataError that names the isotopologue, for handling it in code."""
+
+    def __init__(self, message: str, molecule: Optional[str] = None,
+                 iso_id: Optional[int] = None):
+        super().__init__(message)
+        self.molecule = molecule
+        self.iso_id = iso_id
+
+class HITRANNoLinesError(_IsotopologueError):
     """The isotopologue has no lines in the requested range (HITRAN serves it elsewhere)."""
 
-class HITRANNotAvailableError(HITRANDataError):
-    """HITRANonline does not serve this isotopologue through the API in any range."""
+class HITRANNotAvailableError(_IsotopologueError):
+    """
+    HITRANonline does not serve this isotopologue line by line in any range.
+
+    In HITRAN2024 this is the case for SF6, ClONO2, CF4 and NF3: they exist
+    only as absorption cross-sections (https://hitran.org/xsc/), which
+    pylblrtm does not read yet.
+    """
 
 
 # ─── Gestión de credenciales ─────────────────────────────────────────────────
@@ -321,13 +337,15 @@ def _no_data_error(mol_name: str, mol_id: int, iso_id: int,
     if serves is True:
         return HITRANNoLinesError(
             f"HITRAN has no lines for {where}. "
-            "The isotopologue has lines in other ranges; this one is empty."
+            "The isotopologue has lines in other ranges; this one is empty.",
+            molecule=mol_name, iso_id=iso_id,
         )
     if serves is False:
         return HITRANNotAvailableError(
-            f"HITRANonline does not serve {mol_name} iso {iso_id} through the API "
-            "in any range (it may exist only as cross-sections or in a "
-            "supplemental line list)."
+            f"HITRANonline does not serve {mol_name} iso {iso_id} line by line in "
+            "any range. It may be available as absorption cross-sections "
+            "(https://hitran.org/xsc/), which pylblrtm does not read yet.",
+            molecule=mol_name, iso_id=iso_id,
         )
     return HITRANDataError(
         f"HITRAN returned no data for {where}: either there are no lines in "
@@ -365,10 +383,11 @@ def _extract_line_data(
     if n == 0:
         raise HITRANNoLinesError(
             f"Table '{table}' is empty. "
-            "Check the wavenumber range (there may be no lines in that range)."
+            "Check the wavenumber range (there may be no lines in that range).",
+            molecule=_ID_TO_NAME.get(mol_id), iso_id=iso_id,
         )
 
-    return {
+    return _fill_missing_broadening({
         "nu0":    np.asarray(cols[0], dtype=np.float64),
         "Sref":   np.asarray(cols[1], dtype=np.float64),
         "g_air":  np.asarray(cols[2], dtype=np.float64),
@@ -378,7 +397,62 @@ def _extract_line_data(
         "shift":  np.asarray(cols[6], dtype=np.float64),
         "mol_id": np.full(n, mol_id,  dtype=np.int32),
         "iso_id": np.full(n, iso_id,  dtype=np.int32),
-    }
+    })
+
+
+def _fill_missing_broadening(lines: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
+    """
+    Replace missing Lorentz half-widths (HITRAN writes 0) per isotopologue.
+
+    A line with g_air = 0 would be broadened only by self-collisions, which
+    for a trace gas makes it almost pure Doppler: far too narrow in the lower
+    atmosphere. Skipping it would drop real absorption (in HITRAN2024, O3
+    iso 2 has 892 such lines in 8–14 µm, 1.5 % of its intensity). So:
+
+      g_air  ≤ 0 → median g_air of the other lines of the isotopologue
+                   (their own g_self if none has g_air)
+      g_self ≤ 0 → median g_self of the other lines (their g_air if none)
+
+    Each replacement is logged as a warning. Returns a dict with new arrays.
+    """
+    out = dict(lines)
+    g_air = np.array(lines["g_air"], dtype=np.float64)
+    g_self = np.array(lines["g_self"], dtype=np.float64)
+    pairs = sorted(set(zip(lines["mol_id"].tolist(), lines["iso_id"].tolist())))
+
+    for mol_id, iso_id in pairs:
+        grp = (lines["mol_id"] == mol_id) & (lines["iso_id"] == iso_id)
+        name = f"{_ID_TO_NAME.get(int(mol_id), mol_id)} iso {iso_id}"
+        n = int(grp.sum())
+
+        bad = grp & ~(g_air > 0)          # ~(x > 0) also catches NaN
+        if bad.any():
+            good = g_air[grp & (g_air > 0)]
+            if good.size:
+                fill = float(np.median(good))
+                g_air[bad] = fill
+                how = f"the median of the other lines ({fill:.4f} cm⁻¹/atm)"
+            else:
+                g_air[bad] = g_self[bad]
+                how = "their g_self"
+            logger.warning("%s: %d/%d lines without g_air (0 in HITRAN); filled with %s",
+                           name, int(bad.sum()), n, how)
+
+        bad = grp & ~(g_self > 0)
+        if bad.any():
+            good = g_self[grp & (g_self > 0)]
+            if good.size:
+                fill = float(np.median(good))
+                g_self[bad] = fill
+                how = f"the median of the other lines ({fill:.4f} cm⁻¹/atm)"
+            else:
+                g_self[bad] = g_air[bad]
+                how = "their g_air"
+            logger.warning("%s: %d/%d lines without g_self (0 in HITRAN); filled with %s",
+                           name, int(bad.sum()), n, how)
+
+    out["g_air"], out["g_self"] = g_air, g_self
+    return out
 
 
 def _classify_error(exc: Exception, mol_name: str) -> None:
@@ -572,7 +646,8 @@ def get_line_parameters(
             f"None of the isotopologues {iso_ids} of {mol_name} has lines in "
             f"{nu_min:.3f}–{nu_max:.3f} cm⁻¹ "
             f"(no lines: {no_lines}; not served: "
-            f"{[i for i, e in skipped if isinstance(e, HITRANNotAvailableError)]})."
+            f"{[i for i, e in skipped if isinstance(e, HITRANNotAvailableError)]}).",
+            molecule=mol_name,
         )
     if len(results) == 1:
         return results[0]
