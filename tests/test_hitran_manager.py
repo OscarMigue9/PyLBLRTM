@@ -502,3 +502,64 @@ class TestIsotopologueErrorAttributes:
             except hm.HITRANNotAvailableError as err:
                 handled = err.molecule == "H2O"
         assert handled
+
+
+@pytest.mark.skipif(not _real_hapi_available(), reason="hitran-api not installed")
+class TestAbundance:
+    """Same values as the HITRAN isotopologue page for H2O."""
+
+    @pytest.mark.parametrize("iso,abundance", [
+        (1, 9.97317e-1), (2, 1.99983e-3), (3, 3.71884e-4), (4, 3.10693e-4),
+        (5, 6.23003e-7), (6, 1.15853e-7), (7, 2.41974e-8),
+    ])
+    def test_h2o(self, iso, abundance):
+        assert hm.get_abundance("H2O", iso) == pytest.approx(abundance, rel=1e-5)
+
+    def test_unknown_isotopologue_raises(self):
+        with pytest.raises(hm.HITRANDataError):
+            hm.get_abundance("H2O", 99)
+
+
+# ── Caché con otro isotopólogo (p.ej. 'SO' bajado cuando SO tenía el ID 51) ───
+
+class TestStaleCache:
+
+    def _hapi(self, mol_ids, iso_ids):
+        m = MagicMock()
+        n = len(mol_ids)
+        m.getColumns.return_value = [np.linspace(900, 901, n)] + [np.ones(n) * 0.07] * 6 \
+            + [np.asarray(mol_ids), np.asarray(iso_ids)]
+        return m
+
+    def test_matching_table_is_used(self, tmp_path):
+        h = self._hapi([1, 1], [1, 1])
+        with patch.object(hm, "_get_hapi", return_value=h), \
+             patch.object(hm, "is_cached", return_value=True):
+            out = hm._fetch_single_iso("H2O", 1, 1, 900, 901, tmp_path, False)
+        assert len(out["nu0"]) == 2
+        h.fetch.assert_not_called()
+
+    def test_table_with_other_molecule_is_downloaded_again(self, tmp_path):
+        h = self._hapi([51, 51], [1, 1])            # holds CH3F, named as SO
+        calls = []
+
+        def _fetch(*a, **kw):
+            calls.append(a)
+            h.getColumns.return_value = h.getColumns.return_value[:7] + \
+                [np.array([50, 50]), np.array([1, 1])]
+        h.fetch.side_effect = _fetch
+        with patch.object(hm, "_get_hapi", return_value=h), \
+             patch.object(hm, "is_cached", return_value=True), \
+             patch.object(hm, "_can_reach_hitran", return_value=True), \
+             patch.object(hm, "_write_metadata"):
+            out = hm._fetch_single_iso("SO", 50, 1, 900, 901, tmp_path, False)
+        assert len(calls) == 1
+        assert set(out["mol_id"].tolist()) == {50}
+
+    def test_stale_table_offline_is_not_used(self, tmp_path):
+        h = self._hapi([51], [1])
+        with patch.object(hm, "_get_hapi", return_value=h), \
+             patch.object(hm, "is_cached", return_value=True), \
+             patch.object(hm, "_can_reach_hitran", return_value=False):
+            with pytest.raises(hm.HITRANConnectionError):
+                hm._fetch_single_iso("SO", 50, 1, 900, 901, tmp_path, False)

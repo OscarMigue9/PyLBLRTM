@@ -18,7 +18,7 @@ Quick start — data layer only:
 
 from .data_loader import from_hapi, from_files
 from .spectral_data import SpectralData
-from .atmosphere import AtmosphericProfile
+from .atmosphere import AtmosphericProfile, HomogeneousPath
 from .forward import compute_transmittance
 from .profiles import us_standard_atmosphere, list_profile_gases
 from .config import run_forward, load_config, ForwardResult
@@ -26,6 +26,7 @@ from .hitran_manager import (
     save_credentials,
     load_credentials,
     get_molar_mass,
+    get_abundance,
     cache_status,
     list_cached,
     is_cached,
@@ -48,6 +49,7 @@ __all__ = [
     "SpectralData",
     # Perfil atmosférico
     "AtmosphericProfile",
+    "HomogeneousPath",
     # Forward model (directo)
     "compute_transmittance",
     # Forward model (YAML-driven)
@@ -61,6 +63,7 @@ __all__ = [
     "save_credentials",
     "load_credentials",
     "get_molar_mass",
+    "get_abundance",
     "cache_status",
     "list_cached",
     "is_cached",

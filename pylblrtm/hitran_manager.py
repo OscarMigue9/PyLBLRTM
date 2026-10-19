@@ -140,6 +140,9 @@ class HITRANCredentialError(PermissionError):
 class HITRANDataError(ValueError):
     """HITRAN returned empty or unexpected data."""
 
+class _StaleCacheError(HITRANDataError):
+    """A cached table holds a different isotopologue than its name says."""
+
 class _IsotopologueError(HITRANDataError):
     """HITRANDataError that names the isotopologue, for handling it in code."""
 
@@ -370,7 +373,8 @@ def _extract_line_data(
       n_air  : temperature exponent for gamma_air
       shift  : air pressure-induced line shift at 1 atm (cm⁻¹/atm)
     """
-    params = ["nu", "sw", "gamma_air", "gamma_self", "elower", "n_air", "delta_air"]
+    params = ["nu", "sw", "gamma_air", "gamma_self", "elower", "n_air", "delta_air",
+              "molec_id", "local_iso_id"]
     try:
         cols = _get_hapi().getColumns(table, params)
     except Exception as exc:
@@ -385,6 +389,15 @@ def _extract_line_data(
             f"Table '{table}' is empty. "
             "Check the wavenumber range (there may be no lines in that range).",
             molecule=_ID_TO_NAME.get(mol_id), iso_id=iso_id,
+        )
+
+    # Every HITRAN line carries its molecule and isotopologue: a table saved under
+    # this name but holding another isotopologue is stale (or was renamed)
+    found = set(zip(np.asarray(cols[7]).tolist(), np.asarray(cols[8]).tolist()))
+    if found != {(mol_id, iso_id)}:
+        raise _StaleCacheError(
+            f"Cached table '{table}' holds (mol_id, iso_id) {sorted(found)}, "
+            f"not ({mol_id}, {iso_id})"
         )
 
     return _fill_missing_broadening({
@@ -505,12 +518,19 @@ def _fetch_single_iso(
     table = _table_name(mol_name, iso_id, nu_min, nu_max)
     _get_hapi().db_begin(str(cache_dir))
 
+    stale = False
     if is_cached(table, cache_dir) and not force_download:
-        logger.info("[cache] %s — no download needed", table)
-        return _extract_line_data(table, mol_id, iso_id)
+        try:
+            data = _extract_line_data(table, mol_id, iso_id)
+            logger.info("[cache] %s — no download needed", table)
+            return data
+        except _StaleCacheError as err:
+            # p.ej. una tabla 'SO_…' bajada cuando SO tenía el ID 51 (que es CH3F)
+            logger.warning("%s; downloading it again", err)
+            stale = True
 
     if not _can_reach_hitran():
-        if is_cached(table, cache_dir):
+        if is_cached(table, cache_dir) and not stale:
             logger.warning("No internet — using existing cache for %s", table)
             return _extract_line_data(table, mol_id, iso_id)
         raise HITRANConnectionError(
@@ -747,6 +767,28 @@ def get_molar_mass(molecule: str, iso_id: int = 1) -> float:
             "Check list_molecules() for valid IDs."
         )
     return float(record[3])  # ISO[(mol_id, iso_id)] = [global_id, name, abundance, mass, mol_name]
+
+
+def get_abundance(molecule: str, iso_id: int = 1) -> float:
+    """
+    Natural terrestrial abundance of an isotopologue (fraction, 0–1).
+
+    From HAPI's ISO table, the same values as the HITRAN isotopologue page
+    (e.g. H2O iso 1: 0.997317, iso 2: 1.99983e-3). HITRAN line intensities
+    already include it, so a model with the molecule's total VMR and every
+    isotopologue needs no correction; it is only needed to work with the
+    concentration of a single isotopologue (e.g. an enriched sample).
+
+    Raises
+    ------
+    HITRANDataError
+        If the isotopologue is not in HAPI's catalogue.
+    """
+    mol_name = _resolve_mol_name(molecule)
+    record = _get_hapi().ISO.get((MOLECULE_IDS[mol_name], iso_id))
+    if record is None:
+        raise HITRANDataError(f"Isotopologue not found: {molecule} iso_id={iso_id}.")
+    return float(record[2])   # ISO[(mol_id, iso_id)] = [global_id, name, abundance, mass, mol_name]
 
 
 def get_tips(

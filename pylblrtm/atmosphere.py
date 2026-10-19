@@ -142,10 +142,100 @@ class AtmosphericProfile:
 
     def __repr__(self) -> str:
         gases = list(self.vmr.keys())
+        if isinstance(self, HomogeneousPath):
+            return (f"HomogeneousPath(L={self.path_length_m:g} m, "
+                    f"P={self.pressure_hpa[0]:.4g} hPa, T={self.temperature_k[0]:.1f} K, "
+                    f"vmr={ {g: float(v[0]) for g, v in self.vmr.items()} })")
         return (
             f"AtmosphericProfile("
             f"{self.n_levels} levels, "
             f"P=[{self.pressure_hpa[0]:.4g}–{self.pressure_hpa[-1]:.4g}] hPa, "
             f"T=[{self.temperature_k.min():.1f}–{self.temperature_k.max():.1f}] K, "
             f"gases={gases})"
+        )
+
+
+_BOLTZMANN = 1.380649e-23    # J K⁻¹
+
+
+class HomogeneousPath(AtmosphericProfile):
+    """A horizontal (standoff) path: one pressure, temperature and VMR per gas.
+
+    The gas column is the number density times the path length,
+    N = VMR · P / (k_B T) · L, instead of the hydrostatic column of a vertical
+    profile. It works anywhere an AtmosphericProfile does (compute_transmittance,
+    run_forward) as a single layer; keep mu_view = 1, since L is already the
+    slant length.
+
+    VMR is the total for the molecule: HITRAN line intensities already include
+    the natural abundance of each isotopologue, so load every isotopologue
+    (from_hapi(..., iso_id="all")) and give the molecule's concentration.
+
+    Parameters
+    ----------
+    path_length_m : float
+        Path length [m].
+    vmr : dict of {gas_name: float}
+        Volume mixing ratio [mol/mol] of each gas along the path
+        (1 ppm = 1e-6). Gas names follow MOLECULE_IDS ("H2O", "SF6", ...).
+    pressure_hpa : float
+        Pressure along the path [hPa]. Default 1013.25 (sea level).
+    temperature_k : float
+        Temperature along the path [K]. Default 296 (HITRAN reference).
+
+    Examples
+    --------
+    >>> path = HomogeneousPath(100.0, {"NH3": 1e-6})        # 1 ppm over 100 m
+    >>> nu, T = compute_transmittance(sd, path, 900, 1000)
+    """
+
+    def __init__(
+        self,
+        path_length_m: float,
+        vmr: Dict[str, float],
+        pressure_hpa: float = _P_STD_HPA,
+        temperature_k: float = 296.0,
+    ) -> None:
+        L = float(path_length_m)
+        p = float(pressure_hpa)
+        t = float(temperature_k)
+        if not (np.isfinite(L) and L > 0):
+            raise ValueError("path_length_m must be finite and positive")
+        if not (np.isfinite(p) and p > 0):
+            raise ValueError("pressure_hpa must be finite and positive")
+        if not (np.isfinite(t) and t > 0):
+            raise ValueError("temperature_k must be finite and positive")
+        if not vmr:
+            raise ValueError("vmr must name at least one gas")
+        vmr_clean: Dict[str, np.ndarray] = {}
+        for gas, value in vmr.items():
+            if np.ndim(value) != 0:
+                raise ValueError(f"vmr['{gas}'] must be a single value for a homogeneous path")
+            v = float(value)
+            if not (np.isfinite(v) and 0.0 <= v <= 1.0):
+                raise ValueError(f"vmr['{gas}'] must be finite and in [0, 1]")
+            vmr_clean[gas] = np.array([v])
+        if sum(float(v[0]) for v in vmr_clean.values()) > 1.0:
+            raise ValueError("the VMRs of all gases add up to more than 1")
+
+        # Same attributes as AtmosphericProfile, with a single level
+        self.pressure_hpa = np.array([p])
+        self.temperature_k = np.array([t])
+        self.vmr = vmr_clean
+        self.path_length_m = L
+
+    @property
+    def n_layers(self) -> int:
+        return 1
+
+    def build_layers(self) -> _Layers:
+        """One layer: N_gas = VMR · P / (k_B T) · L [molec cm⁻²]."""
+        p_pa = self.pressure_hpa[0] * 100.0
+        t = self.temperature_k[0]
+        air_col_cm2 = p_pa / (_BOLTZMANN * t) * self.path_length_m / 1e4   # m⁻² → cm⁻²
+        return _Layers(
+            pressure_atm=np.array([self.pressure_hpa[0] / _P_STD_HPA]),
+            temperature_k=self.temperature_k.copy(),
+            vmr={gas: v.copy() for gas, v in self.vmr.items()},
+            column_cm2={gas: v * air_col_cm2 for gas, v in self.vmr.items()},
         )
