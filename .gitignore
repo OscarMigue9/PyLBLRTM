@@ -37,3 +37,6 @@ scripts/logs/*
 !scripts/logs/.gitkeep
 resultados_test_tips/
 resultados_test_forward/
+
+# Bitácora privada del proyecto (como DOCS.md)
+BITACORA.md

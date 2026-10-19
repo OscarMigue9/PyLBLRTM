@@ -121,6 +121,23 @@ profile = AtmosphericProfile(
 nu, T = compute_transmittance(sd, profile, 710, 740)
 ```
 
+### Standoff path (homogeneous)
+
+A horizontal path of length L with a single concentration, pressure and temperature
+per gas. The column is `N = VMR · P / (k_B T) · L`; it works wherever a profile does.
+
+```python
+from pylblrtm import from_hapi, compute_transmittance, HomogeneousPath
+
+sd   = from_hapi("NH3", 714.29, 1250.0, iso_id="all")   # every isotopologue
+path = HomogeneousPath(100.0, {"NH3": 1e-6})             # 1 ppm over 100 m, 1 atm, 296 K
+nu, T = compute_transmittance(sd, path, 714.29, 1250.0, step_cm1=0.01)
+```
+
+HITRAN line intensities already include the natural abundance of each isotopologue,
+so the VMR is the molecule's total; `get_abundance(molecule, iso_id)` returns it if a
+single isotopologue is needed.
+
 ---
 
 ## Data layer
@@ -143,6 +160,12 @@ sd = from_hapi('O3', nu_min=1000, nu_max=2500, iso_id='all')
 ```
 
 Data is downloaded from HITRAN on the first call and cached locally. Subsequent calls read from cache — no internet required.
+
+With `iso_id='all'` or a list, isotopologues without lines in the range are skipped with a
+warning. Errors are specific: `HITRANNoLinesError` (no lines in that range),
+`HITRANNotAvailableError` (HITRANonline does not serve it line by line, e.g. SF6, CF4),
+`HITRANQuotaError` (HITRAN's daily API query limit was exceeded). Missing broadening
+coefficients (0 in HITRAN) are filled with the isotopologue's median.
 
 ### Loading from files
 
@@ -168,7 +191,7 @@ sd.Q(T, mol_id, iso_id)  # partition sum interpolated at temperature T [K]
 
 ### Supported molecules
 
-55 molecules from the HITRAN database, accessed by name (case-insensitive):
+All 61 molecules of the HITRAN database (IDs 1–61, as in HAPI), accessed by name (case-insensitive):
 
 ```python
 from pylblrtm import list_molecules
@@ -211,12 +234,13 @@ tests/
 ├── test_data_loader.py
 ├── test_spectral_data.py
 ├── test_voigt.py
-├── test_atmosphere.py
-└── test_forward.py
+├── test_forward.py          forward-model physics with known answers
+├── hapi_download_check.py   script: download every molecule (cluster)
+├── tips_check.py            script: TIPS tables of every isotopologue
+└── forward_check.py         script: forward model with real HITRAN lines
 
+scripts/                 SLURM jobs for the tests and notebooks
 forward_config.yaml      editable configuration template
-prueba.ipynb             end-to-end demo notebook
-DOCS.md                  full API reference
 pyproject.toml
 ```
 
