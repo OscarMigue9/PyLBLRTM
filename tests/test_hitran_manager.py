@@ -563,3 +563,25 @@ class TestStaleCache:
              patch.object(hm, "_can_reach_hitran", return_value=False):
             with pytest.raises(hm.HITRANConnectionError):
                 hm._fetch_single_iso("SO", 50, 1, 900, 901, tmp_path, False)
+
+
+class TestDailyQuota:
+    """HAPI turns HTTP 403 into 'You have exceeded the daily limit of API queries.'"""
+
+    def test_quota_error(self, tmp_path, mock_hapi):
+        mock_hapi.fetch.side_effect = Exception("You have exceeded the daily limit of API queries.")
+        with patch.object(hm, "_get_hapi", return_value=mock_hapi), \
+             patch.object(hm, "is_cached", return_value=False), \
+             patch.object(hm, "_can_reach_hitran", return_value=True):
+            with pytest.raises(hm.HITRANQuotaError, match="daily limit"):
+                hm._fetch_single_iso("H2O", 1, 1, 714.0, 1250.0, tmp_path, False)
+
+    def test_quota_is_a_connection_error_and_not_skipped(self, tmp_path, mock_hapi):
+        assert issubclass(hm.HITRANQuotaError, hm.HITRANConnectionError)
+
+        def _side(*a, **kw):
+            raise hm.HITRANQuotaError("daily limit")
+        with patch.object(hm, "_get_hapi", return_value=mock_hapi), \
+             patch.object(hm, "_fetch_single_iso", side_effect=_side):
+            with pytest.raises(hm.HITRANQuotaError):
+                hm.get_line_parameters("H2O", 714, 1250, iso_id="all", cache_dir=tmp_path)

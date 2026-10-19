@@ -34,6 +34,7 @@ from .hitran_manager import (
     MOLECULE_IDS,
     DEFAULT_CACHE_DIR,
     HITRANConnectionError,
+    HITRANQuotaError,
     HITRANCredentialError,
     HITRANDataError,
     HITRANNoLinesError,
@@ -72,6 +73,7 @@ __all__ = [
     "DEFAULT_CACHE_DIR",
     # Excepciones
     "HITRANConnectionError",
+    "HITRANQuotaError",
     "HITRANCredentialError",
     "HITRANDataError",
     "HITRANNoLinesError",

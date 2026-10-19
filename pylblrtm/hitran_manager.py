@@ -134,6 +134,13 @@ _ISO1_FORMULA: Dict[int, str] = {
 class HITRANConnectionError(OSError):
     """Cannot reach hitran.org (no internet or server down)."""
 
+class HITRANQuotaError(HITRANConnectionError):
+    """
+    HITRAN refused the request: the daily limit of API queries was exceeded
+    (HTTP 403). Tables already in the cache keep working; the rest can be
+    downloaded again the next day.
+    """
+
 class HITRANCredentialError(PermissionError):
     """Missing or invalid HITRAN credentials."""
 
@@ -472,6 +479,14 @@ def _classify_error(exc: Exception, mol_name: str) -> None:
     """Convert HAPI exceptions into user-friendly errors."""
     msg = str(exc).lower()
     exc_type = type(exc).__name__.lower()
+
+    # HAPI's message for HTTP 403
+    if "daily limit" in msg:
+        raise HITRANQuotaError(
+            f"HITRAN refused the download of '{mol_name}': the daily limit of API "
+            "queries was exceeded. Tables already in the cache still work; try the "
+            "rest again tomorrow."
+        ) from exc
 
     if any(k in exc_type for k in ("connectionerror", "urlerror", "socketerror")):
         raise HITRANConnectionError(
