@@ -5,7 +5,7 @@ No necesita internet: las tablas TIPS vienen dentro de HAPI. Para cada
 isotopólogo que HAPI conoce (de las moléculas de MOLECULE_IDS) y cada versión
 de TIPS (2017, 2021, 2025) revisa:
 
-    cobertura    ¿existe la tabla para esa versión?
+    cobertura    ¿existe la tabla para esa versión? (default de la librería: 2025)
     rango        Tmin/Tmax de la tabla; ¿cubre lo que pide from_hapi
                  (150–3000 K por defecto) y el rango atmosférico (150–350 K)?
     q296         Q(296 K) finito y > 0
@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import inspect
 import csv
 import io
 import logging
@@ -50,6 +51,8 @@ if str(_REPO_ROOT) not in sys.path:
 from pylblrtm import hitran_manager as hm  # noqa: E402
 
 VERSIONS = (2017, 2021, 2025)
+# Lo que usa from_hapi si no se le pasa tips_version
+DEFAULT_VERSION = inspect.signature(hm.get_tips_table).parameters["version"].default
 ATM_RANGE = (150.0, 350.0)     # temperaturas que puede ver el forward model [K]
 VERSION_DIFF_WARN = 0.01       # >1 % entre 2021 y 2025 en Q(296) se reporta
 
@@ -153,7 +156,7 @@ def _write_summary(out: Path, rows: List[dict], cross: List[str], t_req: tuple) 
     md = [f"# Test TIPS — {datetime.now().isoformat(timespec='seconds')}", "",
           f"- Rango exigido (defaults de from_hapi): {t_req[0]:.0f}–{t_req[1]:.0f} K",
           f"- Rango atmosférico: {ATM_RANGE[0]:.0f}–{ATM_RANGE[1]:.0f} K", "",
-          "## Ruta real de la librería (`from_hapi` → `get_tips_table`, TIPS2021)", "",
+          f"## Ruta real de la librería (`from_hapi` → `get_tips_table`, TIPS-{DEFAULT_VERSION})", "",
           f"- OK: {sum(r['status'] == OK for r in lib)} · "
           f"**ERROR: {sum(r['status'] == ERROR for r in lib)}** de {len(lib)} isotopólogos", ""]
     bad = [r for r in lib if r["status"] == ERROR]
@@ -226,7 +229,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         for I in isos:
             by_v = {v: check_one(hapi, mol, M, I, v, t_req, log) for v in VERSIONS}
             rows.extend(by_v.values())
-            lib = check_library_path(mol, M, I, t_req, 2021, log)
+            lib = check_library_path(mol, M, I, t_req, DEFAULT_VERSION, log)
             rows.append(lib)
 
             q21, q25 = by_v[2021]["q296"], by_v[2025]["q296"]
@@ -248,7 +251,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     _write_summary(out, rows, cross, t_req)
 
     n_lib_err = sum(r["status"] == ERROR for r in rows if "from_hapi" in str(r["version"]))
-    log.info(f"\nfrom_hapi con TIPS2021 falla en {n_lib_err} isotopólogos.  "
+    log.info(f"\nfrom_hapi con TIPS-{DEFAULT_VERSION} falla en {n_lib_err} isotopólogos.  "
              f"Reporte: {out / 'RESUMEN.md'}")
     return 1 if n_lib_err else 0
 

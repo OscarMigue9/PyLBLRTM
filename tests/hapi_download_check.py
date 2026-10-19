@@ -19,7 +19,9 @@ Pasos por isotopólogo:
     3. molar_mass   get_molar_mass
     4. tips         get_tips_table 150–3000 K (lo mismo que usa from_hapi)
     5. from_hapi    construir SpectralData desde la caché
-Por molécula, al final: from_hapi con todos los isotopólogos que pasaron.
+Por molécula, al final: from_hapi(iso_id="all"), que debe saltar los isotopólogos
+sin líneas y devolver exactamente los que pasaron (o fallar si ninguno pasó).
+Antes de empezar se verifica que MOLECULE_IDS coincida con el catálogo de HAPI.
 
 Salida (una carpeta por corrida, no se borra):
     resultados_test_hapi/<fecha_hora>/
@@ -225,25 +227,30 @@ def check_isotopologue(mol: str, mol_id: int, iso: int, nu_min: float, nu_max: f
 
 def check_molecule_all(mol: str, mol_id: int, isos: List[int], nu_min: float,
                        nu_max: float, cache_dir: Path, log: logging.Logger) -> Result:
-    """from_hapi con varios isotopólogos a la vez (ruta de concatenación)."""
+    """from_hapi(iso_id="all"): salta los isotopólogos sin líneas y concatena.
+
+    *isos* son los isotopólogos que pasaron uno por uno: deben ser exactamente
+    los que devuelve. Si no pasó ninguno, debe fallar con HITRANNoLinesError o
+    HITRANNotAvailableError (y entonces la fila hereda ese estado).
+    """
     res = Result(molecule=mol, mol_id=mol_id, iso_id="all")
     t0 = time.perf_counter()
     try:
         with contextlib.redirect_stdout(io.StringIO()):
-            sd = from_hapi(mol, nu_min, nu_max, iso_id=isos, cache_dir=cache_dir)
+            sd = from_hapi(mol, nu_min, nu_max, iso_id="all", cache_dir=cache_dir)
         res.n_lines = int(len(sd.lines["nu0"]))
         found = sorted({int(i) for i in np.unique(sd.lines["iso_id"])})
         if found != sorted(isos):
-            res.warnings.append(f"isotopólogos esperados {sorted(isos)}, encontrados {found}")
-        res.status = WARN if res.warnings else OK
+            raise AssertionError(f"isotopólogos esperados {sorted(isos)}, devueltos {found}")
+        res.status = OK
     except KeyboardInterrupt:
         raise
     except BaseException as exc:  # noqa: BLE001
         res.failed_stage = "from_hapi"
         res.error_type = type(exc).__name__
         res.error_message = _short(exc)
-        res.traceback = traceback.format_exc()
-        res.status = ERROR
+        res.status = _download_status(exc) if not isos else ERROR
+        res.traceback = traceback.format_exc() if res.status == ERROR else ""
     res.seconds = round(time.perf_counter() - t0, 2)
     _log_result(log, res)
     return res
@@ -425,6 +432,22 @@ def main(argv: Optional[List[str]] = None) -> int:
             _log_result(log, r)
             return 1
 
+        # Catálogo: el ID de cada nombre debe ser la molécula que HAPI descarga
+        hapi_names = {m: rec[4] for (m, _), rec in hapi.ISO.items()}
+        ours = {mid: name.replace("+", "p") for name, mid in hm.MOLECULE_IDS.items()}
+        diffs = [f"{mid}: nuestro={ours.get(mid, '-')} HAPI={hapi_names.get(mid, '-')}"
+                 for mid in sorted(set(ours) | set(hapi_names))
+                 if ours.get(mid) != hapi_names.get(mid)]
+        cat = Result(molecule="CATALOGO", mol_id=0, iso_id="-")
+        if diffs:
+            cat.status, cat.failed_stage = ERROR, "catalog"
+            cat.error_type = "MOLECULE_IDS"
+            cat.error_message = "; ".join(diffs)[:500]
+        cat.n_lines = len(hapi_names)
+        record(cat)
+        log.info(f"Catálogo: {len(ours)} moléculas en MOLECULE_IDS, {len(hapi_names)} en HAPI"
+                 + (f" — {len(diffs)} diferencias" if diffs else " — coinciden"))
+
         if not hm._can_reach_hitran():
             log.warning("ATENCIÓN: no se alcanza hitran.org — las descargas van a fallar.")
 
@@ -470,7 +493,7 @@ def main(argv: Optional[List[str]] = None) -> int:
                 if r.status in (OK, WARN):
                     passed.append(iso)
 
-            if len(passed) > 1:
+            if len(isos) > 1:
                 record(check_molecule_all(mol, mol_id, passed, nu_min, nu_max,
                                           cache_dir, log))
 
