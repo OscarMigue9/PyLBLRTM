@@ -2,7 +2,7 @@
 #SBATCH --job-name=test_tips
 #SBATCH --output=scripts/logs/%x-%j.out
 #SBATCH --error=scripts/logs/%x-%j.err
-#SBATCH --time=00:30:00
+#SBATCH --time=00:10:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G
