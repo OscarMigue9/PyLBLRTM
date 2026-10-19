@@ -349,15 +349,77 @@ def _real_hapi_available() -> bool:
 class TestTipsRealHapi:
     """The isotopologues that broke from_hapi in the 8–14 µm download test."""
 
-    @pytest.mark.parametrize("mol,iso,t_max", [
-        ("O3", 1, 1000.0), ("NO2", 1, 1000.0), ("CH4", 1, 2500.0),
+    @pytest.mark.parametrize("mol,iso,version,t_max", [
+        ("O3", 1, 2025, 1000.0), ("CH4", 1, 2025, 2500.0), ("O2", 3, 2025, 2010.0),
+        ("NO2", 1, 2021, 1000.0),
     ])
-    def test_default_from_hapi_range_works(self, mol, iso, t_max):
-        T, Q = hm.get_tips_table(mol, iso, T_min=150.0, T_max=3000.0)
+    def test_default_from_hapi_range_works(self, mol, iso, version, t_max):
+        T, Q = hm.get_tips_table(mol, iso, T_min=150.0, T_max=3000.0, version=version)
         assert T[0] == 150.0 and T[-1] == t_max
         assert np.all(np.isfinite(Q)) and np.all(Q > 0)
 
-    @pytest.mark.parametrize("mol,iso", [("SO", 2), ("NF3", 1)])
+    @pytest.mark.parametrize("mol,iso", [("CH3F", 2), ("NO2", 3), ("HCOOH", 2)])
     def test_missing_tips2021_uses_another_version(self, mol, iso):
-        T, Q = hm.get_tips_table(mol, iso, T_min=150.0, T_max=400.0)
+        T, Q = hm.get_tips_table(mol, iso, T_min=150.0, T_max=400.0, version=2021)
         assert np.all(np.isfinite(Q)) and np.all(Q > 0)
+
+    def test_default_version_is_2025(self):
+        """HITRANonline serves HITRAN2024, which goes with TIPS-2025."""
+        import inspect
+        from pylblrtm.data_loader import from_hapi
+        assert inspect.signature(hm.get_tips_table).parameters["version"].default == 2025
+        assert inspect.signature(hm.get_tips).parameters["version"].default == 2025
+        assert inspect.signature(from_hapi).parameters["tips_version"].default == 2025
+
+
+@pytest.mark.skipif(not _real_hapi_available(), reason="hitran-api not installed")
+def test_molecule_ids_match_hapi_catalogue():
+    """MOLECULE_IDS must give the same molecule HAPI downloads for that ID
+    (51–56 were shifted by one: 'SO' downloaded CH3F)."""
+    hapi_names = {m: rec[4] for (m, _), rec in hm._get_hapi().ISO.items()}
+    ours = {mid: name.replace("+", "p") for name, mid in hm.MOLECULE_IDS.items()}
+    assert ours == hapi_names
+
+
+# ── Varios isotopólogos: se saltan los que no tienen líneas ──────────────────
+
+class TestSkipIsotopologuesWithoutLines:
+
+    def _run(self, tmp_path, mock_hapi, outcomes, iso_id="all"):
+        """outcomes: iso → 'ok' | 'none' | 'unserved'."""
+        def _side(mol, mol_id, iso, *a, **kw):
+            if outcomes[iso] == "none":
+                raise hm.HITRANNoLinesError(f"no lines iso {iso}")
+            if outcomes[iso] == "unserved":
+                raise hm.HITRANNotAvailableError(f"not served iso {iso}")
+            return _make_lines(3, iso)
+        with patch.object(hm, "_get_hapi", return_value=mock_hapi),              patch.object(hm, "_fetch_single_iso", side_effect=_side):
+            return hm.get_line_parameters("H2O", 714, 1250, iso_id=iso_id, cache_dir=tmp_path)
+
+    def test_skips_isos_without_lines(self, tmp_path, mock_hapi):
+        out = self._run(tmp_path, mock_hapi, {1: "ok", 2: "none", 3: "ok", 4: "unserved"})
+        assert sorted(set(out["iso_id"].tolist())) == [1, 3]
+        assert len(out["nu0"]) == 6
+
+    def test_single_survivor_returned(self, tmp_path, mock_hapi):
+        out = self._run(tmp_path, mock_hapi, {1: "ok", 2: "none", 3: "none", 4: "none"})
+        assert set(out["iso_id"].tolist()) == {1}
+
+    def test_none_with_lines_raises_no_lines(self, tmp_path, mock_hapi):
+        with pytest.raises(hm.HITRANNoLinesError, match="None of the isotopologues"):
+            self._run(tmp_path, mock_hapi, {1: "none", 2: "none", 3: "unserved", 4: "none"})
+
+    def test_all_unserved_raises_not_available(self, tmp_path, mock_hapi):
+        with pytest.raises(hm.HITRANNotAvailableError):
+            self._run(tmp_path, mock_hapi, {i: "unserved" for i in (1, 2, 3, 4)})
+
+    def test_single_iso_still_raises(self, tmp_path, mock_hapi):
+        with pytest.raises(hm.HITRANNoLinesError):
+            self._run(tmp_path, mock_hapi, {2: "none"}, iso_id=2)
+
+    def test_other_errors_are_not_skipped(self, tmp_path, mock_hapi):
+        def _side(mol, mol_id, iso, *a, **kw):
+            raise hm.HITRANConnectionError("down")
+        with patch.object(hm, "_get_hapi", return_value=mock_hapi),              patch.object(hm, "_fetch_single_iso", side_effect=_side):
+            with pytest.raises(hm.HITRANConnectionError):
+                hm.get_line_parameters("H2O", 714, 1250, iso_id="all", cache_dir=tmp_path)

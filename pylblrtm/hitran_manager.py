@@ -14,7 +14,9 @@ Basic usage:
     data["Sref"]   # line intensities at 296 K
 
 Data license:
-    Cite: Gordon et al. 2022, J. Quant. Spectrosc. Radiat. Transfer 277, 107949.
+    HITRANonline serves the HITRAN2024 edition (since January 2026). Cite:
+    Gordon et al. 2026, The HITRAN2024 molecular spectroscopic database,
+    J. Quant. Spectrosc. Radiat. Transfer, doi:10.1016/j.jqsrt.2026.109807.
 """
 
 # ─── Imports───────────────────────────────────────────────────────
@@ -86,6 +88,7 @@ _CREDENTIALS_FILE: Path = _LIB_HOME / "credentials.json"
 
 # ─── Catálogo de moléculas HITRAN ─────────────────────────────────────────────
 # Referencia completa: https://hitran.org/docs/iso-meta/
+# Debe coincidir con hapi.ISO (tests/test_hitran_manager.py lo verifica)
 MOLECULE_IDS: Dict[str, int] = {
     "H2O": 1,  "CO2": 2,  "O3": 3,   "N2O": 4,  "CO": 5,
     "CH4": 6,  "O2": 7,   "NO": 8,   "SO2": 9,  "NO2": 10,
@@ -96,8 +99,10 @@ MOLECULE_IDS: Dict[str, int] = {
     "H2S": 31, "HCOOH": 32,"HO2": 33,"O": 34,   "ClONO2": 35,
     "NO+": 36, "HOBr": 37,"C2H4": 38,"CH3OH": 39,"CH3Br": 40,
     "CH3CN": 41,"CF4": 42,"C4H2": 43,"HC3N": 44,"H2": 45,
-    "CS": 46,  "SO3": 47, "C2N2": 48,"COCl2": 49,"SO": 51,
-    "CH3F": 52,"GeH4": 53,"CS2": 54, "CH3I": 55,"NF3": 56,
+    "CS": 46,  "SO3": 47, "C2N2": 48,"COCl2": 49,"SO": 50,
+    "CH3F": 51,"GeH4": 52,"CS2": 53, "CH3I": 54,"NF3": 55,
+    "H3+": 56, "CH3": 57, "S2": 58,  "COFCl": 59,"HONO": 60,
+    "ClNO2": 61,
 }
 
 # Lookup case-insensitive: "HCL" → "HCl", "GEH4" → "GeH4", etc.
@@ -485,7 +490,9 @@ def get_line_parameters(
         - list[int]: specific isotopologues, e.g. [1, 2, 3].
         - 'all': all isotopologues available for the molecule.
         When multiple isotopologues are requested, the returned arrays are
-        concatenated in ascending iso_id order.
+        concatenated in ascending iso_id order, and isotopologues with no
+        lines in the range (or not served by HITRANonline) are skipped with
+        a warning; the call fails only if none of them has lines.
     cache_dir : Path, optional
         Cache directory. Default: ~/.pylblrtm/hitran_cache.
     force_download : bool
@@ -508,7 +515,8 @@ def get_line_parameters(
         If HITRAN requires authentication and the credentials are invalid.
     HITRANDataError
         If the requested range has no lines, the data is corrupted, or no
-        isotopologues are found for the molecule.
+        isotopologues are found for the molecule. HITRANNoLinesError and
+        HITRANNotAvailableError (subclasses) tell the first two apart.
 
     Examples
     --------
@@ -542,11 +550,30 @@ def get_line_parameters(
         )
 
     # ── Descarga / caché por isotopólogo ─────────────────────────────────────
-    results = [
-        _fetch_single_iso(mol_name, mol_id, i, nu_min, nu_max, cache_dir, force_download)
-        for i in iso_ids
-    ]
+    if len(iso_ids) == 1:
+        return _fetch_single_iso(mol_name, mol_id, iso_ids[0], nu_min, nu_max,
+                                 cache_dir, force_download)
 
+    # Varios: los que no tienen líneas en el rango se saltan (p.ej. NO2 iso 2 y 3
+    # en 8–14 µm); solo falla si no queda ninguno
+    results, skipped = [], []
+    for i in iso_ids:
+        try:
+            results.append(_fetch_single_iso(mol_name, mol_id, i, nu_min, nu_max,
+                                             cache_dir, force_download))
+        except (HITRANNoLinesError, HITRANNotAvailableError) as exc:
+            logger.warning("Skipping %s iso %d: %s", mol_name, i, exc)
+            skipped.append((i, exc))
+
+    if not results:
+        no_lines = [i for i, e in skipped if isinstance(e, HITRANNoLinesError)]
+        cls = HITRANNoLinesError if no_lines else HITRANNotAvailableError
+        raise cls(
+            f"None of the isotopologues {iso_ids} of {mol_name} has lines in "
+            f"{nu_min:.3f}–{nu_max:.3f} cm⁻¹ "
+            f"(no lines: {no_lines}; not served: "
+            f"{[i for i, e in skipped if isinstance(e, HITRANNotAvailableError)]})."
+        )
     if len(results) == 1:
         return results[0]
 
@@ -557,9 +584,11 @@ def get_line_parameters(
 
 
 # ─── Funciones de partición (TIPS) ───────────────────────────────────────────
-# HAPI 1.3 incluye TIPS-2011/2017/2021/2025 embebidas.
+# HAPI 1.3 incluye TIPS-2011/2017/2021/2025 embebidas. Default: 2025, la que
+# acompaña a HITRAN2024 (la edición que sirve HITRANonline desde enero 2026).
 # No se necesita descargar archivos .txt adicionales.
-# Referencia: Gamache et al. 2021, JQSRT 271, 107713.
+# Referencia: Gamache et al. 2025, JQSRT 345, 109568 (TIPS-2025);
+#             Gamache et al. 2021, JQSRT 271, 107713 (TIPS-2021).
 
 _TIPS_VERSIONS = (2025, 2021, 2017, 2011)
 # Versions tried, in order, when the requested one has no table for an isotopologue
@@ -583,8 +612,7 @@ def _resolve_tips_version(
     The TIPS version to use and its temperature range.
 
     Returns *version* when it has a table for the isotopologue; otherwise the
-    first of 2025, 2021, 2017 that does, with a warning (e.g. SO iso 2 and
-    NF3 have no TIPS-2021 table).
+    first of 2025, 2021, 2017 that does, with a warning.
     """
     rng = _tips_range(mol_id, iso_id, version)
     if rng is not None:
@@ -650,7 +678,7 @@ def get_tips(
     molecule: str,
     iso_id: int,
     T: float,
-    version: int = 2021,
+    version: int = 2025,
 ) -> float:
     """
     Return Q(T) — the total internal partition sum at temperature T.
@@ -668,7 +696,7 @@ def get_tips(
     T : float
         Temperature in Kelvin.
     version : int
-        TIPS version to use: 2011, 2017, 2021, or 2025. Default: 2021.
+        TIPS version to use: 2011, 2017, 2021, or 2025. Default: 2025.
 
     Returns
     -------
@@ -702,7 +730,7 @@ def get_tips_table(
     iso_id: int,
     T_min: float = 1.0,
     T_max: float = 3000.0,
-    version: int = 2021,
+    version: int = 2025,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Return the full Q(T) table over [T_min, T_max] at 1 K steps.
@@ -998,7 +1026,7 @@ def tips_to_txt(
     output_path: "str | Path",
     T_min: float = 1.0,
     T_max: float = 3000.0,
-    version: int = 2021,
+    version: int = 2025,
 ) -> Path:
     """
     Write the TIPS table embedded in HAPI as a standard two-column .txt file.
