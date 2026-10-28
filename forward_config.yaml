@@ -57,6 +57,13 @@ calculation:
                         # El centro de las líneas y el corte de 25 cm-1 siguen
                         # exactos. Requiere voigt: humlicek.
 
+  h2o_continuum: false  # Continuo de vapor de agua MT_CKD 4.3 (self + foreign)
+                        #   false → solo líneas
+                        #   true  → lo suma a τ de cada capa; necesita H2O en
+                        #           el perfil
+                        # MT_CKD supone que a cada línea se le resta su valor
+                        # en 25 cm-1 (pedestal de AER); pylblrtm no lo hace.
+
 
 output:
   transmittance: true          # T(ν) ∈ [0,1] — la firma espectral principal

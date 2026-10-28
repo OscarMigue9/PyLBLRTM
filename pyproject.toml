@@ -28,3 +28,6 @@ Repository = "https://github.com/OscarMigue9/PyLBLRTM"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pylblrtm*"]
+
+[tool.setuptools.package-data]
+pylblrtm = ["data/*.npz"]

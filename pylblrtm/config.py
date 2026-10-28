@@ -16,6 +16,7 @@ import numpy as np
 
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile
+from .continuum import _check_h2o_continuum, h2o_continuum_optical_depth
 from .forward import _build_optical_depth, _check_wing_tolerance, _resolve_n_jobs
 from .voigt import VOIGT_BACKENDS
 
@@ -34,6 +35,7 @@ _DEFAULTS: dict = {
         "voigt": "wofz",
         "n_jobs": 1,
         "wing_tolerance": None,
+        "h2o_continuum": False,
     },
     "output": {
         "transmittance": True,
@@ -128,6 +130,10 @@ def _validate(cfg: dict) -> None:
         _check_wing_tolerance(ca["wing_tolerance"], ca["voigt"])
     except ValueError as err:
         raise ValueError(f"calculation.{err}") from None
+    if not isinstance(ca["h2o_continuum"], bool):
+        raise ValueError(
+            f"calculation.h2o_continuum must be true or false; got {ca['h2o_continuum']!r}"
+        )
 
     requested = [out["transmittance"], out["optical_depth"], out["optical_depth_layers"]]
     if not any(requested):
@@ -267,6 +273,8 @@ def run_forward(
 
     # Build layer arrays
     layers = profile.build_layers()
+    if ca["h2o_continuum"]:
+        _check_h2o_continuum(nu, layers)   # before the line loop, which takes the time
 
     # Core line-by-line optical depth computation
     od = _build_optical_depth(
@@ -279,6 +287,8 @@ def run_forward(
         n_jobs=ca["n_jobs"],
         wing_tolerance=ca["wing_tolerance"],
     )
+    if ca["h2o_continuum"]:
+        h2o_continuum_optical_depth(nu, layers, add_to=od)
 
     mu = float(ca["mu_view"])
 

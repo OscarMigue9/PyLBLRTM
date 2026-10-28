@@ -138,6 +138,21 @@ HITRAN line intensities already include the natural abundance of each isotopolog
 so the VMR is the molecule's total; `get_abundance(molecule, iso_id)` returns it if a
 single isotopologue is needed.
 
+### Water-vapour continuum
+
+```python
+nu, T = compute_transmittance(sd, profile, 714, 1250, h2o_continuum=True)
+```
+
+`h2o_continuum=True` adds the MT_CKD 4.3 continuum of H₂O (self + foreign) to the optical
+depth of every layer, profile or standoff path; it needs `"H2O"` in the profile and a range
+within −20…20 000 cm⁻¹. Default `False`: lines only. It is the only continuum (no CO₂, no
+O₂/N₂ collision-induced absorption). MT_CKD assumes each line has its value at 25 cm⁻¹
+subtracted (AER's pedestal), which pylblrtm does not do, so those pedestals of the H₂O
+lines are counted twice. `h2o_continuum_optical_depth(nu, profile.build_layers())` in
+`pylblrtm.continuum` returns the continuum alone. Same key under `calculation:` in
+`forward_config.yaml`.
+
 ---
 
 ## Data layer
@@ -227,6 +242,8 @@ pylblrtm/
 ├── profiles.py          us_standard_atmosphere (USSA76 + AFGL VMR)
 ├── forward.py           compute_transmittance: Voigt LBL by layer
 ├── voigt.py             Voigt backends: wofz (scipy), humlicek (numba)
+├── continuum.py         MT_CKD H2O continuum (self + foreign)
+├── data/mt_ckd_h2o.npz  MT_CKD 4.3 coefficients (AER)
 └── config.py            run_forward, load_config, ForwardResult
 
 tests/
@@ -235,11 +252,13 @@ tests/
 ├── test_spectral_data.py
 ├── test_voigt.py
 ├── test_forward.py          forward-model physics with known answers
+├── test_continuum.py        H2O continuum with known answers
 ├── hapi_download_check.py   script: download every molecule (cluster)
 ├── tips_check.py            script: TIPS tables of every isotopologue
 └── forward_check.py         script: forward model with real HITRAN lines
 
-scripts/                 SLURM jobs for the tests and notebooks
+scripts/                 SLURM jobs for the tests and notebooks;
+                         mt_ckd_h2o_table.py rebuilds data/mt_ckd_h2o.npz
 forward_config.yaml      editable configuration template
 pyproject.toml
 ```
@@ -266,8 +285,16 @@ Also cite HAPI, which is used internally:
 > J. Quant. Spectrosc. Radiat. Transfer **177**, 15–30 (2016).
 > https://doi.org/10.1016/j.jqsrt.2016.03.005
 
+With `h2o_continuum=True`, the MT_CKD water-vapour continuum of AER
+(https://github.com/AER-RC/MT_CKD_H2O):
+
+> E.J. Mlawer et al., *Development and recent evaluation of the MT_CKD model of
+> continuum absorption*, Phil. Trans. R. Soc. A **370**, 2520–2556 (2012).
+> https://doi.org/10.1098/rsta.2011.0295
+
 ---
 
 ## License
 
-MIT
+MIT. The MT_CKD coefficients in `pylblrtm/data/mt_ckd_h2o.npz` are © AER and are
+redistributed under AER's terms, whose notice is kept in the file (key `copyright`).

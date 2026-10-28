@@ -5,7 +5,7 @@ Physics reference: AER line-by-line (LBLRTM JRAD=0 convention).
   - Voigt profile via the Faddeeva function: scipy wofz or Humlicek W4 (voigt.py).
   - HITRAN line-strength temperature scaling with partition function ratio.
   - Radiation term nu·tanh(c₂·nu / 2T) applied at each frequency (JRAD=0).
-  - No line mixing; no continuum (pure line absorption).
+  - No line mixing. The only continuum is MT_CKD H2O, optional (continuum.py).
 
 The only required external inputs are a SpectralData object (from from_hapi or
 from_files) and an AtmosphericProfile. The spectral data carries all line
@@ -25,6 +25,7 @@ import numpy as np
 
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile, _Layers
+from .continuum import _check_h2o_continuum, h2o_continuum_optical_depth
 from .hitran_manager import MOLECULE_IDS
 from .voigt import (
     VOIGT_BACKENDS,
@@ -98,6 +99,7 @@ def compute_transmittance(
     voigt: str = "wofz",
     n_jobs: int = 1,
     wing_tolerance: Optional[float] = None,
+    h2o_continuum: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Compute monochromatic transmittance via line-by-line integration.
 
@@ -143,6 +145,10 @@ def compute_transmittance(
         error of the exact result (measured 3–10× below it) at several times
         the speed. The line cores and the 25 cm⁻¹ cutoff stay exact. Needs
         voigt="humlicek".
+    h2o_continuum : bool
+        Add the MT_CKD 4.3 water-vapour continuum (self + foreign) to the
+        optical depth of every layer. Default False. Needs "H2O" in the
+        profile and a range within −20…20 000 cm⁻¹. See continuum.py.
 
     Returns
     -------
@@ -156,8 +162,10 @@ def compute_transmittance(
     - HITRAN line strengths encode terrestrial isotopic abundance, so the full
       column is used for each isotopologue without abundance weighting.
     - CO2 line mixing is not applied; the result is pure Voigt line-by-line.
-    - No continuum absorption is included. For H₂O or CO₂ continua, the
-      transmittance will be slightly too high in their respective windows.
+    - The only continuum is H₂O's, and only with h2o_continuum=True; CO₂ and
+      the O₂/N₂ collision-induced ones are not included. MT_CKD assumes each
+      line has its value at 25 cm⁻¹ subtracted (AER's pedestal), which
+      pylblrtm does not do.
 
     Examples
     --------
@@ -191,12 +199,16 @@ def compute_transmittance(
 
     # Build layer arrays from profile
     layers = profile.build_layers()
+    if h2o_continuum:
+        _check_h2o_continuum(nu, layers)   # before the line loop, which takes the time
 
     # Optical depth stack [n_layers, n_nu]
     od = _build_optical_depth(
         nu, spectral_data, layers, line_cutoff_cm1, tile_width_cm1,
         voigt=voigt, n_jobs=n_jobs, wing_tolerance=wing_tolerance,
     )
+    if h2o_continuum:
+        h2o_continuum_optical_depth(nu, layers, add_to=od)
 
     # Column transmittance (slant path via 1/mu_view)
     transmittance = np.exp(-od.sum(axis=0) / mu_view)
