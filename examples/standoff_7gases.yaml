@@ -24,6 +24,8 @@ calculation:
   n_jobs: -1              # todos los núcleos
   line_cutoff_cm1: 25.0   # cada línea aporta hasta 25 cm⁻¹ de su centro
                           # (FORWARD usa tiles de 20 cm⁻¹ con guard de 5 cm⁻¹)
+  continuum: true         # continuo MT_CKD de H2O (620–2780 cm⁻¹) y CO2 (< 2000 cm⁻¹),
+                          # el de photonix (Forward_repo); FORWARD no tiene continuo
 
 path:
   length_m: 1.0           # L_m

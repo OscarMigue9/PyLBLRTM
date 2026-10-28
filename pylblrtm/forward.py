@@ -14,6 +14,7 @@ parameters and TIPS tables; the profile carries pressures, temperatures, and VMR
 
 from __future__ import annotations
 
+import logging
 import math
 import os
 import threading
@@ -34,6 +35,8 @@ from .voigt import (
     humlicek_levels,
     humlicek_prepare,
 )
+
+logger = logging.getLogger(__name__)
 
 # Reverse map: HITRAN molecule integer ID → gas name string
 _MOL_ID_TO_NAME: dict[int, str] = {v: k for k, v in MOLECULE_IDS.items()}
@@ -98,6 +101,7 @@ def compute_transmittance(
     voigt: str = "wofz",
     n_jobs: int = 1,
     wing_tolerance: Optional[float] = None,
+    continuum: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Compute monochromatic transmittance via line-by-line integration.
 
@@ -143,6 +147,10 @@ def compute_transmittance(
         error of the exact result (measured 3–10× below it) at several times
         the speed. The line cores and the 25 cm⁻¹ cutoff stay exact. Needs
         voigt="humlicek".
+    continuum : bool
+        Add the MT_CKD continuum of H2O (620–2780 cm⁻¹) and CO2 (below
+        2000 cm⁻¹) when those gases are in the profile (see continuum.py).
+        Default False: pure line absorption.
 
     Returns
     -------
@@ -156,8 +164,9 @@ def compute_transmittance(
     - HITRAN line strengths encode terrestrial isotopic abundance, so the full
       column is used for each isotopologue without abundance weighting.
     - CO2 line mixing is not applied; the result is pure Voigt line-by-line.
-    - No continuum absorption is included. For H₂O or CO₂ continua, the
-      transmittance will be slightly too high in their respective windows.
+    - Without ``continuum=True`` no continuum absorption is included, and the
+      transmittance is too high in the H₂O window (8–13 µm), above all on long
+      or humid paths. O₂/N₂ collision-induced absorption is never included.
 
     Examples
     --------
@@ -197,6 +206,9 @@ def compute_transmittance(
         nu, spectral_data, layers, line_cutoff_cm1, tile_width_cm1,
         voigt=voigt, n_jobs=n_jobs, wing_tolerance=wing_tolerance,
     )
+    if continuum:
+        from .continuum import add_continuum
+        od = od + sum(add_continuum({}, nu, layers, logger).values(), np.zeros_like(od))
 
     # Column transmittance (slant path via 1/mu_view)
     transmittance = np.exp(-od.sum(axis=0) / mu_view)

@@ -18,6 +18,7 @@ import numpy as np
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile, HomogeneousPath
 from .binning import bin_by_wavelength
+from .continuum import add_continuum
 from .forward import _build_optical_depth, _check_wing_tolerance, _resolve_n_jobs
 from .hitran_manager import DEFAULT_CACHE_DIR, MOLECULE_IDS
 from .voigt import VOIGT_BACKENDS
@@ -40,6 +41,7 @@ _DEFAULTS: dict = {
         "voigt": "wofz",
         "n_jobs": 1,
         "wing_tolerance": None,
+        "continuum": False,         # MT_CKD continuum of H2O and CO2 (continuum.py)
     },
     # Standoff scenario for run_path(); run_forward() takes the profile instead
     "path": None,
@@ -139,6 +141,8 @@ def _validate(cfg: dict) -> None:
         _check_wing_tolerance(ca["wing_tolerance"], ca["voigt"])
     except ValueError as err:
         raise ValueError(f"calculation.{err}") from None
+    if not isinstance(ca["continuum"], bool):
+        raise ValueError(f"calculation.continuum must be true or false; got {ca['continuum']!r}")
 
     requested = [out["transmittance"], out["optical_depth"], out["optical_depth_layers"],
                  out["per_gas"], out["attenuation_db_m"]]
@@ -393,9 +397,13 @@ def run_forward(
             name = _ID_TO_NAME.get(mol_id, str(mol_id))
             if name in layers.column_cm2:
                 od_gas[name] = optical_depth(spectral_data.for_molecule(mol_id))
+        if ca["continuum"]:
+            od_gas = add_continuum(od_gas, nu, layers, logger)
         od = sum(od_gas.values()) if od_gas else np.zeros((layers.n_layers, nu.size))
     else:
         od = optical_depth(spectral_data)
+        if ca["continuum"]:
+            od = od + sum(add_continuum({}, nu, layers, logger).values(), np.zeros_like(od))
 
     # Assemble requested outputs
     result = ForwardResult(wavenumber_cm1=nu, config=cfg)

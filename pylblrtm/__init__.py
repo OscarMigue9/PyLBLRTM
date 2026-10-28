@@ -23,6 +23,7 @@ from .forward import compute_transmittance
 from .profiles import us_standard_atmosphere, list_profile_gases
 from .config import run_forward, run_path, load_config, ForwardResult
 from .binning import bin_by_wavelength
+from .continuum import continuum_optical_depth, ContinuumTables
 from .hitran_manager import (
     save_credentials,
     load_credentials,
@@ -58,6 +59,8 @@ __all__ = [
     "run_forward",
     "run_path",
     "bin_by_wavelength",
+    "continuum_optical_depth",
+    "ContinuumTables",
     "load_config",
     "ForwardResult",
     # Perfiles de referencia
