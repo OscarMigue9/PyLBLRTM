@@ -21,6 +21,8 @@ Data license:
 
 # ─── Imports───────────────────────────────────────────────────────
 import numpy as np
+import contextlib
+import io
 import json
 import os
 import socket
@@ -61,7 +63,8 @@ def _load_hapi_from_sitepackages():
             )
             _mod = _iutil.module_from_spec(_spec)
             _sys.modules["hapi"] = _mod
-            _spec.loader.exec_module(_mod)
+            with _hapi_quiet():
+                _spec.loader.exec_module(_mod)
             return _mod
 
     raise ImportError(
@@ -72,6 +75,25 @@ def _load_hapi_from_sitepackages():
 
 
 _hapi = None  # cargado solo cuando se llama una función que lo necesita
+
+
+@contextlib.contextmanager
+def _hapi_quiet():
+    """Silence what HAPI prints (banner, "Lines parsed", download progress).
+
+    The text goes to the log at DEBUG level; PYLBLRTM_HAPI_VERBOSE=1 shows it.
+    """
+    if os.environ.get("PYLBLRTM_HAPI_VERBOSE"):
+        yield
+        return
+    buf = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(buf):
+            yield
+    finally:
+        text = buf.getvalue().strip()
+        if text:
+            logging.getLogger(__name__).debug("HAPI: %s", text)
 
 def _get_hapi():
     """Load HAPI from site-packages on first call (lazy import)."""
@@ -383,7 +405,8 @@ def _extract_line_data(
     params = ["nu", "sw", "gamma_air", "gamma_self", "elower", "n_air", "delta_air",
               "molec_id", "local_iso_id"]
     try:
-        cols = _get_hapi().getColumns(table, params)
+        with _hapi_quiet():
+            cols = _get_hapi().getColumns(table, params)
     except Exception as exc:
         raise HITRANDataError(
             f"Could not read table '{table}'. "
@@ -531,7 +554,8 @@ def _fetch_single_iso(
 ) -> Dict[str, np.ndarray]:
     """Download or load from cache the line parameters for one isotopologue."""
     table = _table_name(mol_name, iso_id, nu_min, nu_max)
-    _get_hapi().db_begin(str(cache_dir))
+    with _hapi_quiet():
+        _get_hapi().db_begin(str(cache_dir))
 
     stale = False
     if is_cached(table, cache_dir) and not force_download:
@@ -559,7 +583,8 @@ def _fetch_single_iso(
     # HAPI 1.3 fetch() — descarga anónima. Credenciales guardadas para versiones futuras.
     logger.info("[download] %s  %.1f–%.1f cm⁻¹  iso=%d", mol_name, nu_min, nu_max, iso_id)
     try:
-        _get_hapi().fetch(table, mol_id, iso_id, nu_min, nu_max)
+        with _hapi_quiet():
+            _get_hapi().fetch(table, mol_id, iso_id, nu_min, nu_max)
         _write_metadata(table, cache_dir, mol_name, mol_id, iso_id, nu_min, nu_max)
     except (HITRANConnectionError, HITRANCredentialError, HITRANDataError):
         raise
@@ -1011,12 +1036,14 @@ def hapi_to_par(
     output_path = Path(output_path)
 
     table = _table_name(mol_name, iso_id, nu_min, nu_max)
-    _get_hapi().db_begin(str(cache_dir))
+    with _hapi_quiet():
+        _get_hapi().db_begin(str(cache_dir))
 
     if not is_cached(table, cache_dir) or force_download:
         if not _can_reach_hitran():
             raise HITRANConnectionError("No connection to hitran.org.")
-        _get_hapi().fetch(table, mol_id, iso_id, nu_min, nu_max)
+        with _hapi_quiet():
+            _get_hapi().fetch(table, mol_id, iso_id, nu_min, nu_max)
         _write_metadata(table, cache_dir, mol_name, mol_id, iso_id, nu_min, nu_max)
 
     # Extraer todos los campos necesarios para el .par completo
@@ -1026,7 +1053,8 @@ def hapi_to_par(
         "local_upper_quanta", "local_lower_quanta",
         "ierr", "iref", "line_mixing_flag", "gp", "gpp",
     ]
-    cols = _get_hapi().getColumns(table, all_params)
+    with _hapi_quiet():
+        cols = _get_hapi().getColumns(table, all_params)
     (nu, sw, a, g_air, g_self, elow, n_air, d_air,
      gu, gl, lu, ll, ierr, iref, flag, gp, gpp) = cols
 
