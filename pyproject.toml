@@ -18,9 +18,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-plot = ["matplotlib>=3.7"]
-fast = ["numba>=0.59"]
-dev  = ["pytest>=7", "sphinx>=7", "sphinx-rtd-theme"]
+plot     = ["matplotlib>=3.7"]
+fast     = ["numba>=0.59"]
+notebook = ["matplotlib>=3.7", "ipykernel>=6", "nbconvert>=7"]
+dev      = ["pytest>=7", "sphinx>=7", "sphinx-rtd-theme"]
 
 [project.urls]
 Repository = "https://github.com/OscarMigue9/PyLBLRTM"

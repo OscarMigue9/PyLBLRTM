@@ -29,11 +29,30 @@ Forward model
 
 ## Installation
 
+From the repository (the current version; PyPI still has 0.1.1, without the forward model):
+
 ```bash
-pip install pylblrtm
+git clone https://github.com/OscarMigue9/PyLBLRTM.git
+cd PyLBLRTM
+git checkout dev
+python -m venv .venv
+.venv/bin/python -m pip install -e ".[fast,notebook]"   # Windows: .venv\Scripts\python
 ```
 
-**Requirements:** Python ≥ 3.9, numpy ≥ 1.24, scipy ≥ 1.10, hitran-api ≥ 1.3, pyyaml ≥ 6.0
+**Python ≥ 3.9** (tested on 3.11 and 3.12). The base install brings everything the
+library needs; the extras are optional:
+
+| Install | Adds | Needed for |
+|---|---|---|
+| `pip install -e .` | numpy ≥ 1.24, scipy ≥ 1.10, hitran-api ≥ 1.3, pyyaml ≥ 6.0 | Downloading HITRAN lines and the forward model (`voigt="wofz"`) |
+| `.[fast]` | numba ≥ 0.59 | `voigt="humlicek"` and `wing_tolerance` — tens of times faster |
+| `.[plot]` | matplotlib ≥ 3.7 | Plotting |
+| `.[notebook]` | matplotlib, ipykernel, nbconvert | Opening and running the notebooks in `notebooks/` |
+| `.[dev]` | pytest, sphinx | Running the tests (`python -m pytest tests`) and building docs |
+
+Extras combine: `pip install -e ".[fast,notebook,dev]"`. Downloading lines needs
+internet access to hitran.org (no account); HITRAN limits the number of queries per
+day and per IP, and downloaded tables are cached in `~/.pylblrtm/hitran_cache`.
 
 ---
 
