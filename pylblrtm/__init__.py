@@ -20,6 +20,7 @@ from .data_loader import from_hapi, from_files
 from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile, HomogeneousPath
 from .forward import compute_transmittance
+from .transfer import compute_tud, planck
 from .profiles import us_standard_atmosphere, list_profile_gases
 from .config import run_forward, load_config, ForwardResult
 from .hitran_manager import (
@@ -53,6 +54,9 @@ __all__ = [
     "HomogeneousPath",
     # Forward model (directo)
     "compute_transmittance",
+    # Transferencia radiativa térmica: T, U, D
+    "compute_tud",
+    "planck",
     # Forward model (YAML-driven)
     "run_forward",
     "load_config",

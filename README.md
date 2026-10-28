@@ -161,6 +161,24 @@ was 1.6×10⁻² in a humid tropical profile.
 MT_CKD alone; passing the spectral data as third argument subtracts the pedestal, as the
 forward model does. Same key under `calculation:` in `forward_config.yaml`.
 
+### Thermal radiance terms: T, U, D
+
+```python
+from pylblrtm import compute_tud, planck
+
+nu, T, U, D = compute_tud(sd, profile, 714, 1250, mu_view=0.8, h2o_continuum=True)
+L = eps * planck(nu, T_skin) * T + U + (1 - eps) * T * D     # top-of-atmosphere radiance
+```
+
+`T` is the surface-to-top transmittance and `U` the upwelling radiance at the top, both
+along the view (`mu_view`); `D` is the downwelling radiance at the surface along the
+diffusivity secant (`diffusivity=1.67`), so it does not depend on the view. None of them
+depends on the surface. Layers are integrated with LBLRTM's linear-in-tau scheme; the layer
+Planck radiance is `layer_planck="layer"` (B of the layer temperature the lines use, what
+LBLRTM does with user layers), `"density"` (B of the mass-weighted temperature) or
+`"arithmetic"` (mean of B at the two levels). Radiances in W/(cm² sr cm⁻¹), as LBLRTM.
+Needs a vertical profile, not a `HomogeneousPath`.
+
 ---
 
 ## Data layer
@@ -251,6 +269,7 @@ pylblrtm/
 ├── forward.py           compute_transmittance: Voigt LBL by layer
 ├── voigt.py             Voigt backends: wofz (scipy), humlicek (numba)
 ├── continuum.py         MT_CKD H2O continuum (self + foreign)
+├── transfer.py          compute_tud: T, U, D (linear-in-tau), planck
 ├── data/mt_ckd_h2o.npz  MT_CKD 4.3 coefficients (AER)
 └── config.py            run_forward, load_config, ForwardResult
 
@@ -261,6 +280,7 @@ tests/
 ├── test_voigt.py
 ├── test_forward.py          forward-model physics with known answers
 ├── test_continuum.py        H2O continuum with known answers
+├── test_tud.py              T, U, D with known answers
 ├── hapi_download_check.py   script: download every molecule (cluster)
 ├── tips_check.py            script: TIPS tables of every isotopologue
 └── forward_check.py         script: forward model with real HITRAN lines
