@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Camino standoff con 7 gases: el mismo caso que run_simulation() de FORWARD
+# (final_forward_attenuation.py), escrito para pylblrtm.
+#
+#   from pylblrtm import run_path
+#   res = run_path("examples/standoff_7gases.yaml")
+#
+#   res.wavelength_um                        ← lambda_centers
+#   res.transmittance_binned                 ← T_prod_samp  (todos los gases)
+#   res.transmittance_per_gas_binned["CO2"]  ← T_each_samp[1]
+#   res.attenuation_per_gas_db_m["CO2"]      ← atenuación de CO2 [dB/m]
+#
+# Las líneas se piden a HITRAN (edición HITRAN2024, todos los isotopólogos) y
+# quedan en caché; las TIPS son TIPS-2025.
+# ─────────────────────────────────────────────────────────────────────────────
+
+spectral:
+  nu_min_cm1: 600.0       # 16.67 µm
+  nu_max_cm1: 2500.0      # 4 µm
+  step_cm1:   0.01        # dnu
+
+calculation:
+  voigt: wofz             # wofz (exacto) | humlicek (más rápido, necesita numba)
+  n_jobs: -1              # todos los núcleos
+  line_cutoff_cm1: 25.0   # cada línea aporta hasta 25 cm⁻¹ de su centro
+                          # (FORWARD usa tiles de 20 cm⁻¹ con guard de 5 cm⁻¹)
+
+path:
+  length_m: 1.0           # L_m
+  pressure_hpa: 1013.0    # convert_atm(1013, "mbar")
+  temperature_k: 288.2    # T
+  isotopologues: all      # use_all_isotopologues=True
+  gas_units: atm          # Pmol de FORWARD = presión parcial [atm]
+                          #   (vmr = fracción molar, ppm = partes por millón)
+  gases:
+    H2O: 0.0187553713298791
+    CO2: 0.0003299185788304959
+    O3:  3.016255613126079e-08
+    N2O: 3.1992104613866274e-07
+    CO:  1.4996299037749815e-07
+    CH4: 1.6995805576116458e-06
+    O2:  0.2089484332593141
+
+output:
+  transmittance: true     # total en la rejilla de 0.01 cm⁻¹
+  per_gas: true           # transmitancia de cada gas (T_each)
+  bin_um: 0.02            # delta_um: promedio en bines de 0.02 µm
+  attenuation_db_m: true  # att=True: A = -10/L·log10(T) [dB/m]
+  save:
+    enabled: true         # save_csv=True
+    path: "OUT/"          # outdir
+    format: csv           # npz | csv | txt; csv escribe OUT/<prefix>.csv y OUT/<prefix>_binned.csv
+    prefix: "standoff_7gases"

@@ -40,3 +40,7 @@ resultados_test_forward/
 
 # Bitácora privada del proyecto (como DOCS.md)
 BITACORA.md
+
+# Resultados de los ejemplos (examples/*.yaml)
+OUT/
+results/

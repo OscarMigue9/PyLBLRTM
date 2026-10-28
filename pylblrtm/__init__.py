@@ -21,7 +21,8 @@ from .spectral_data import SpectralData
 from .atmosphere import AtmosphericProfile, HomogeneousPath
 from .forward import compute_transmittance
 from .profiles import us_standard_atmosphere, list_profile_gases
-from .config import run_forward, load_config, ForwardResult
+from .config import run_forward, run_path, load_config, ForwardResult
+from .binning import bin_by_wavelength
 from .hitran_manager import (
     save_credentials,
     load_credentials,
@@ -55,6 +56,8 @@ __all__ = [
     "compute_transmittance",
     # Forward model (YAML-driven)
     "run_forward",
+    "run_path",
+    "bin_by_wavelength",
     "load_config",
     "ForwardResult",
     # Perfiles de referencia
