@@ -50,7 +50,12 @@ library needs; the extras are optional:
 | `.[notebook]` | matplotlib, ipykernel, nbconvert | Opening and running the notebooks in `notebooks/` |
 | `.[dev]` | pytest, sphinx | Running the tests (`python -m pytest tests`) and building docs |
 
-Extras combine: `pip install -e ".[fast,notebook,dev]"`. Downloading lines needs
+Extras combine: `pip install -e ".[fast,notebook,dev]"`. If that Python ever had
+`pip install pylblrtm` (0.1.1 from PyPI), it keeps importing the old version until
+`pip install -e .` is run from the repository in that same Python.
+
+**Getting started:** [`notebooks/guia_forward.ipynb`](notebooks/guia_forward.ipynb) walks
+through installing, calling the forward model and its parameters. Downloading lines needs
 internet access to hitran.org (no account); HITRAN limits the number of queries per
 day and per IP, and downloaded tables are cached in `~/.pylblrtm/hitran_cache`.
 
