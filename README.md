@@ -147,11 +147,19 @@ nu, T = compute_transmittance(sd, profile, 714, 1250, h2o_continuum=True)
 `h2o_continuum=True` adds the MT_CKD 4.3 continuum of H₂O (self + foreign) to the optical
 depth of every layer, profile or standoff path; it needs `"H2O"` in the profile and a range
 within −20…20 000 cm⁻¹. Default `False`: lines only. It is the only continuum (no CO₂, no
-O₂/N₂ collision-induced absorption). MT_CKD assumes each line has its value at 25 cm⁻¹
-subtracted (AER's pedestal), which pylblrtm does not do, so those pedestals of the H₂O
-lines are counted twice. `h2o_continuum_optical_depth(nu, profile.build_layers())` in
-`pylblrtm.continuum` returns the continuum alone. Same key under `calculation:` in
-`forward_config.yaml`.
+O₂/N₂ collision-induced absorption).
+
+MT_CKD already contains the pedestal of each line, its value at the 25 cm⁻¹ cutoff, which
+LBLRTM subtracts from every line. pylblrtm keeps it in the lines, so with
+`h2o_continuum=True` the pedestal of the H₂O lines is taken out of the continuum instead:
+lines plus continuum count it once. It is defined for `line_cutoff_cm1=25` and warns
+otherwise. Against LBLRTM 12.17 with the same HITRAN2024 H₂O lines, 714–1250 cm⁻¹, the
+transmittance at IASI resolution agrees within 1.5×10⁻³; without the pedestal subtracted it
+was 1.6×10⁻² in a humid tropical profile.
+
+`h2o_continuum_optical_depth(nu, profile.build_layers())` in `pylblrtm.continuum` returns
+MT_CKD alone; passing the spectral data as third argument subtracts the pedestal, as the
+forward model does. Same key under `calculation:` in `forward_config.yaml`.
 
 ---
 

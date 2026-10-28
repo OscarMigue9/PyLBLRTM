@@ -274,7 +274,8 @@ def run_forward(
     # Build layer arrays
     layers = profile.build_layers()
     if ca["h2o_continuum"]:
-        _check_h2o_continuum(nu, layers)   # before the line loop, which takes the time
+        # before the line loop, which takes the time
+        _check_h2o_continuum(nu, layers, float(ca["line_cutoff_cm1"]))
 
     # Core line-by-line optical depth computation
     od = _build_optical_depth(
@@ -288,7 +289,9 @@ def run_forward(
         wing_tolerance=ca["wing_tolerance"],
     )
     if ca["h2o_continuum"]:
-        h2o_continuum_optical_depth(nu, layers, add_to=od)
+        # MT_CKD minus the pedestal of these H2O lines: counted once, as in LBLRTM
+        h2o_continuum_optical_depth(nu, layers, spectral_data,
+                                    float(ca["line_cutoff_cm1"]), add_to=od)
 
     mu = float(ca["mu_view"])
 

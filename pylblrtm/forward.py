@@ -5,7 +5,8 @@ Physics reference: AER line-by-line (LBLRTM JRAD=0 convention).
   - Voigt profile via the Faddeeva function: scipy wofz or Humlicek W4 (voigt.py).
   - HITRAN line-strength temperature scaling with partition function ratio.
   - Radiation term nu·tanh(c₂·nu / 2T) applied at each frequency (JRAD=0).
-  - No line mixing. The only continuum is MT_CKD H2O, optional (continuum.py).
+  - No line mixing. The only continuum is MT_CKD H2O, optional, net of the
+    pedestal of the H2O lines (continuum.py).
 
 The only required external inputs are a SpectralData object (from from_hapi or
 from_files) and an AtmosphericProfile. The spectral data carries all line
@@ -55,6 +56,44 @@ def _radiation_term(nu: np.ndarray, T: float) -> np.ndarray:
     convention where line wings scale as R(nu,T) / R(nu_c,T).
     """
     return nu * np.tanh(0.5 * _C2 * nu / T)
+
+
+def _layer_line_terms(
+    lines: dict, idx: np.ndarray, q_ratio: float, col: float, T: float, P: float, vmr_gas: float,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Centres, pressure-shifted centres, strengths and Lorentz HWHM of lines *idx* in one layer.
+
+    The strengths carry the column and the JRAD=0 normalization (divided by the
+    radiation term at the shifted centre). Shared by the line loop and by the
+    H2O pedestal of continuum.py, so both use the same S, γ and centres.
+    """
+    P_self = vmr_gas * P      # partial pressure of absorber [atm]
+    P_air  = P - P_self       # partial pressure of air [atm]
+
+    centers  = lines["nu0"][idx]                                 # [cm⁻¹]
+    shifted  = centers + lines["shift"][idx] * P_air            # pressure-shifted centres
+
+    # ── Line strength at temperature T ─────────────────────────────────────
+    # Standard HITRAN formula × column density × JRAD=0 normalization:
+    #   S(T) = S_ref · (Q_ref/Q_T) · exp(-c₂·E"·(1/T - 1/T_ref))
+    #         · (1 - exp(-c₂·nu₀/T)) / (1 - exp(-c₂·nu₀/T_ref))
+    #         · N_col / radiation_term(nu_shifted, T)
+    strength = (
+        lines["Sref"][idx]
+        * q_ratio
+        * np.exp(-_C2 * lines["Elow"][idx] * (1.0 / T - 1.0 / _T_REF))
+        * (-np.expm1(-_C2 * centers / T))
+        / (-np.expm1(-_C2 * centers / _T_REF))
+        * col
+        / _radiation_term(shifted, T)
+    )
+
+    # ── Lorentz HWHM [cm⁻¹] ────────────────────────────────────────────────
+    lorentz = (
+        (_T_REF / T) ** lines["n_air"][idx]
+        * (lines["g_air"][idx] * P_air + lines["g_self"][idx] * P_self)
+    )
+    return centers, shifted, strength, lorentz
 
 
 def _resolve_n_jobs(n_jobs: int) -> int:
@@ -147,8 +186,11 @@ def compute_transmittance(
         voigt="humlicek".
     h2o_continuum : bool
         Add the MT_CKD 4.3 water-vapour continuum (self + foreign) to the
-        optical depth of every layer. Default False. Needs "H2O" in the
-        profile and a range within −20…20 000 cm⁻¹. See continuum.py.
+        optical depth of every layer, minus the pedestal of the H2O lines
+        (each line's value at 25 cm⁻¹), which MT_CKD already contains: lines
+        plus continuum then match LBLRTM. Default False: lines only, pedestal
+        included. Needs "H2O" in the profile and a range within
+        −20…20 000 cm⁻¹; warns if line_cutoff_cm1 is not 25. See continuum.py.
 
     Returns
     -------
@@ -163,9 +205,9 @@ def compute_transmittance(
       column is used for each isotopologue without abundance weighting.
     - CO2 line mixing is not applied; the result is pure Voigt line-by-line.
     - The only continuum is H₂O's, and only with h2o_continuum=True; CO₂ and
-      the O₂/N₂ collision-induced ones are not included. MT_CKD assumes each
-      line has its value at 25 cm⁻¹ subtracted (AER's pedestal), which
-      pylblrtm does not do.
+      the O₂/N₂ collision-induced ones are not included. The line shape keeps
+      its pedestal (LBLRTM subtracts it from every line); with the continuum,
+      that of the H₂O lines is taken out of the continuum instead.
 
     Examples
     --------
@@ -200,7 +242,8 @@ def compute_transmittance(
     # Build layer arrays from profile
     layers = profile.build_layers()
     if h2o_continuum:
-        _check_h2o_continuum(nu, layers)   # before the line loop, which takes the time
+        # before the line loop, which takes the time
+        _check_h2o_continuum(nu, layers, line_cutoff_cm1)
 
     # Optical depth stack [n_layers, n_nu]
     od = _build_optical_depth(
@@ -208,7 +251,8 @@ def compute_transmittance(
         voigt=voigt, n_jobs=n_jobs, wing_tolerance=wing_tolerance,
     )
     if h2o_continuum:
-        h2o_continuum_optical_depth(nu, layers, add_to=od)
+        # MT_CKD minus the pedestal of these H2O lines: counted once, as in LBLRTM
+        h2o_continuum_optical_depth(nu, layers, spectral_data, line_cutoff_cm1, add_to=od)
 
     # Column transmittance (slant path via 1/mu_view)
     transmittance = np.exp(-od.sum(axis=0) / mu_view)
@@ -265,13 +309,8 @@ def _build_optical_depth(
     tile_starts = range(0, n_nu, tile_samples)
     n_workers = min(_resolve_n_jobs(n_jobs), max(n_layers * len(tile_starts), 1))
 
-    # Pull line arrays out of SpectralData once
+    # Line arrays for the band mask (_layer_line_terms reads the rest)
     nu0     = sd.lines["nu0"]       # line centres [cm⁻¹]
-    S_ref   = sd.lines["Sref"]      # line strength at T_ref [cm⁻¹/(molec cm⁻²)]
-    g_air   = sd.lines["g_air"]     # air-broadened HWHM [cm⁻¹ atm⁻¹]
-    g_self  = sd.lines["g_self"]    # self-broadened HWHM [cm⁻¹ atm⁻¹]
-    E_low   = sd.lines["Elow"]      # lower-state energy [cm⁻¹]
-    n_air   = sd.lines["n_air"]     # temperature exponent
     delta   = sd.lines["shift"]     # pressure shift [cm⁻¹ atm⁻¹]
     mol_ids = sd.lines["mol_id"]    # HITRAN molecule ID
     iso_ids = sd.lines["iso_id"]    # HITRAN isotopologue ID
@@ -347,38 +386,14 @@ def _build_optical_depth(
                 continue
 
             vmr_gas = float(layers.vmr[gas_name][k])
-            P_self = vmr_gas * P      # partial pressure of absorber [atm]
-            P_air  = P - P_self       # partial pressure of air [atm]
-
-            idx      = np.flatnonzero(line_mask)
-            centers  = nu0[idx]                                  # [cm⁻¹]
-            shifted  = centers + delta[idx] * P_air             # pressure-shifted centres
-
-            # ── Line strength at temperature T ─────────────────────────────────
-            # Standard HITRAN formula × column density × JRAD=0 normalization:
-            #   S(T) = S_ref · (Q_ref/Q_T) · exp(-c₂·E"·(1/T - 1/T_ref))
-            #         · (1 - exp(-c₂·nu₀/T)) / (1 - exp(-c₂·nu₀/T_ref))
-            #         · N_col / radiation_term(nu_shifted, T)
-            strength = (
-                S_ref[idx]
-                * q_ratios[k]
-                * np.exp(-_C2 * E_low[idx] * (1.0 / T - 1.0 / _T_REF))
-                * (-np.expm1(-_C2 * centers / T))
-                / (-np.expm1(-_C2 * centers / _T_REF))
-                * col
-                / _radiation_term(shifted, T)
+            centers, shifted, strength, lorentz = _layer_line_terms(
+                sd.lines, np.flatnonzero(line_mask), q_ratios[k], col, T, P, vmr_gas,
             )
 
             if not np.isfinite(strength).all() or np.any(strength < 0):
                 raise FloatingPointError(
                     f"Layer {k}, gas '{gas_name}': non-finite or negative line strength"
                 )
-
-            # ── Lorentz HWHM [cm⁻¹] ────────────────────────────────────────────
-            lorentz = (
-                (_T_REF / T) ** n_air[idx]
-                * (g_air[idx] * P_air + g_self[idx] * P_self)
-            )
 
             # ── Doppler HWHM [cm⁻¹] ────────────────────────────────────────────
             doppler = centers * _DOPPLER * math.sqrt(T / molar_mass)

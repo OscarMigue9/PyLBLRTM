@@ -61,8 +61,10 @@ calculation:
                         #   false → solo líneas
                         #   true  → lo suma a τ de cada capa; necesita H2O en
                         #           el perfil
-                        # MT_CKD supone que a cada línea se le resta su valor
-                        # en 25 cm-1 (pedestal de AER); pylblrtm no lo hace.
+                        # MT_CKD ya contiene el pedestal de cada línea (su valor
+                        # en 25 cm-1): con true se le resta el de las líneas de
+                        # H2O, para no contarlo dos veces, como hace LBLRTM.
+                        # Está definido para line_cutoff_cm1 = 25.
 
 
 output:

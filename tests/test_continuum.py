@@ -87,7 +87,7 @@ class TestForward:
         nu, t_off = compute_transmittance(_sd(), profile, 880.0, 920.0, **kw)
         _, t_on = compute_transmittance(_sd(), profile, 880.0, 920.0,
                                         h2o_continuum=True, **kw)
-        cont = h2o_continuum_optical_depth(nu, profile.build_layers()).sum(axis=0)
+        cont = h2o_continuum_optical_depth(nu, profile.build_layers(), _sd()).sum(axis=0)
         np.testing.assert_allclose(t_on, t_off * np.exp(-cont / mu), rtol=1e-12)
 
     def test_run_forward_matches(self):
@@ -96,7 +96,7 @@ class TestForward:
                "output": {"transmittance": False, "optical_depth_layers": True}}
         off = run_forward(_sd(), profile, cfg)
         on = run_forward(_sd(), profile, {**cfg, "calculation": {"h2o_continuum": True}})
-        cont = h2o_continuum_optical_depth(off.wavenumber_cm1, profile.build_layers())
+        cont = h2o_continuum_optical_depth(off.wavenumber_cm1, profile.build_layers(), _sd())
         np.testing.assert_allclose(on.optical_depth_layers - off.optical_depth_layers,
                                    cont, rtol=1e-12, atol=0.0)
 
@@ -107,6 +107,57 @@ class TestForward:
         out = h2o_continuum_optical_depth(nu, layers, add_to=od)
         assert out is od
         np.testing.assert_allclose(od - 1.0, h2o_continuum_optical_depth(nu, layers))
+
+
+class TestPedestal:
+    """Given the lines, the pedestal of the H2O lines comes out of the continuum."""
+
+    def test_value_of_one_line(self):
+        """At T_ref and 1 atm: R(ν)·S·N/R(c)·γ/(π(25² + γ²)) within the cutoff, 0 beyond."""
+        x = 0.01
+        layers = HomogeneousPath(100.0, {"H2O": x}, temperature_k=296.0).build_layers()
+        nu = np.array([880.0, 900.0, 924.0, 926.0])
+        pure = h2o_continuum_optical_depth(nu, layers)[0]
+        net = h2o_continuum_optical_depth(nu, layers, _sd())[0]
+        gamma = 0.07 * (1.0 - x) + 0.35 * x
+        radiation = lambda v: v * np.tanh(0.5 * _C2 * v / 296.0)
+        expected = (radiation(nu) * 1e-21 * layers.column_cm2["H2O"][0] / radiation(900.0)
+                    * gamma / (np.pi * (25.0 ** 2 + gamma ** 2)))
+        expected[nu > 925.0] = 0.0
+        np.testing.assert_allclose(pure - net, expected, rtol=1e-12, atol=0.0)
+
+    def test_lines_have_no_step_at_the_cutoff(self):
+        """Lines + net continuum − MT_CKD is AER's line shape V(d) − L(25): it goes to 0 at 25."""
+        path = HomogeneousPath(100.0, {"H2O": 0.01})
+        sd = _sd()
+        sd.lines["nu0"] = np.array([900.0005])            # no grid point exactly at the cutoff
+        nu, t_off = compute_transmittance(sd, path, 870.0, 930.0, step_cm1=0.01)
+        _, t_on = compute_transmittance(sd, path, 870.0, 930.0, step_cm1=0.01, h2o_continuum=True)
+        net_lines = -np.log(t_on) - h2o_continuum_optical_depth(nu, path.build_layers())[0]
+        d = np.abs(nu - 900.0005)
+        edge = (d > 24.95) & (d < 25.0)
+        assert edge.any()
+        assert np.all(np.abs(net_lines[edge]) < 5e-3 * -np.log(t_off[edge]))
+        np.testing.assert_allclose(net_lines[d > 25.0], 0.0, atol=1e-15)
+
+    def test_only_h2o_lines(self):
+        """A CO2 line leaves the H2O continuum as it is."""
+        one = lambda v: np.array([v], dtype=float)
+        lines = {"nu0": one(900.0), "Sref": one(1e-20), "g_air": one(0.07), "g_self": one(0.09),
+                 "Elow": one(200.0), "n_air": one(0.7), "shift": one(0.0),
+                 "mol_id": np.full(1, 2, np.int32), "iso_id": np.ones(1, np.int32)}
+        T = np.arange(100.0, 401.0)
+        sd = SpectralData(lines=lines, tips={(2, 1): (T, 300.0 * T / 296.0)},
+                          molar_masses={(2, 1): 43.99}, molecule="CO2")
+        layers = HomogeneousPath(100.0, {"H2O": 0.01, "CO2": 4e-4}).build_layers()
+        nu = np.array([890.0, 900.0, 910.0])
+        np.testing.assert_array_equal(h2o_continuum_optical_depth(nu, layers, sd),
+                                      h2o_continuum_optical_depth(nu, layers))
+
+    def test_warns_on_another_cutoff(self):
+        with pytest.warns(RuntimeWarning, match="25"):
+            compute_transmittance(_sd(), _profile(), 880.0, 920.0, step_cm1=0.01,
+                                  line_cutoff_cm1=20.0, h2o_continuum=True)
 
 
 class TestErrors:
