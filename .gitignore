@@ -44,3 +44,7 @@ BITACORA.md
 # Resultados de los ejemplos (examples/*.yaml)
 OUT/
 results/
+
+# Pruebas de clúster, jobs SLURM y notebooks de trabajo: solo locales
+scripts/
+tests/*_check.py

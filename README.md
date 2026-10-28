@@ -251,7 +251,10 @@ pylblrtm/
 ├── profiles.py          us_standard_atmosphere (USSA76 + AFGL VMR)
 ├── forward.py           compute_transmittance: Voigt LBL by layer
 ├── voigt.py             Voigt backends: wofz (scipy), humlicek (numba)
-└── config.py            run_forward, load_config, ForwardResult
+├── continuum.py         MT_CKD continuum of H2O and CO2
+├── binning.py           bin_by_wavelength: averages over wavelength bins
+├── config.py            run_forward, run_path, load_config, ForwardResult
+└── data/                continuum_mtckd.npz (MT_CKD tables)
 
 tests/
 ├── test_hitran_manager.py
@@ -259,11 +262,15 @@ tests/
 ├── test_spectral_data.py
 ├── test_voigt.py
 ├── test_forward.py          forward-model physics with known answers
-├── hapi_download_check.py   script: download every molecule (cluster)
-├── tips_check.py            script: TIPS tables of every isotopologue
-└── forward_check.py         script: forward model with real HITRAN lines
+├── test_config.py           YAML scenarios, per-gas outputs, bins, dB/m
+└── test_continuum.py        MT_CKD continuum
 
-scripts/                 SLURM jobs for the tests and notebooks
+examples/
+└── standoff_7gases.yaml     a standoff case described entirely in YAML (run_path)
+
+notebooks/
+└── guia_forward.ipynb       guide: installing and calling the forward model
+
 forward_config.yaml      editable configuration template
 pyproject.toml
 ```
